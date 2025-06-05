@@ -2,6 +2,21 @@
 
 Visual Studio Code extension that allows you to create, edit, publish, download, and synchronize Confluence pages directly from your editor, using `.confluence` files in a custom XML format named Confluence Storage Format.
 
+## 🎬 Extension in Action
+
+### 🩺 Real-time Diagnostics
+<div align="left">
+  <img src="https://antoniocarelli.github.io/confluence-smart-publisher/images/diagnostics.gif" alt="Diagnosis" width="500"/>
+</div>
+Visualize problemas de estrutura e tags em tempo real, com dicas e correções automáticas diretamente no editor.
+
+### 🛠️ Smart Formatter
+<div align="left">
+  <img src="https://antoniocarelli.github.io/confluence-smart-publisher/images/formater.gif" alt="Formatter" width="500"/>
+</div>
+Formate seus arquivos `.confluence` automaticamente, com numeração de capítulos e padronização de tags.
+
+
 ## 📋 Table of Contents
 
 - [Features](#-features)
