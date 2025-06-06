@@ -23,7 +23,6 @@ Formate seus arquivos `.confluence` automaticamente, com numeração de capítul
   - [Smart Formatter](#-smart-formatter)
 - [Features](#-features)
   - [Commands](#-commands)
-    - [Publish Document Command Flow](#publish-document-command-flow)
   - [Unique Feature](#-unique-feature)
   - [Validations and Diagnostics](#-validations-and-diagnostics)
     - [Structure Validation](#-structure-validation)
@@ -45,61 +44,19 @@ Formate seus arquivos `.confluence` automaticamente, com numeração de capítul
 ## ✨ Features
 
 ### 🎮 Commands
-- **Direct publishing**: Publish `.confluence` files as pages on Confluence with a single click. Refer to the ["Publish Document" Command Flow](#publish-document-command-flow) for more information.
-- **Page downloading**: Download Confluence pages by title or ID, converting them to local editable format.
-- **Synchronization**: Compare and synchronize local content with what's published on Confluence, choosing which version to keep.
-- **Template-based creation**: Create new files based on Confluence template pages.
-- **Markdown conversion**: Convert Markdown files to Confluence Storage Format, supporting common syntax like headers, lists, code blocks, and tables.
-- **Automatic formatting**: Format `.confluence` files with specific rules, including automatic chapter numbering.
-- **Structure validation**: Real-time diagnostics of required tags, structure, and attributes, displaying issues in VSCode.
-- **Tag auto-completion**: Smart suggestions for Confluence custom tags and attributes.
-- **Smart snippets**: Automatic suggestions of XML code blocks for custom tags, with completion of required and optional attributes, speeding up document writing. Just type `csp` and the options will appear like magic!
-- **Html Entities Decode**: Automatic conversion of HTML entities to special characters when downloading pages.
-- **Set title emoji**: Easily add emojis to your page titles directly in VSCode.
+- **Direct publishing**: Publish `.confluence` files as pages on Confluence with a single click. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/publish-document)
+- **Page downloading**: Download Confluence pages by title or ID, converting them to local editable format. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/download-by-title) | [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/download-by-id)
+- **Synchronization**: Compare and synchronize local content with what's published on Confluence, choosing which version to keep. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/sync-with-published)
+- **Template-based creation**: Create new files based on Confluence template pages. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/create-document)
+- **Markdown conversion**: Convert Markdown files to Confluence Storage Format, supporting common syntax like headers, lists, code blocks, and tables. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-markdown)
+- **Automatic formatting**: Format `.confluence` files with specific rules, including automatic chapter numbering. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/format-document)
+- **Structure validation**: Real-time diagnostics of required tags, structure, and attributes, displaying issues in VSCode. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/structure-validation)
+- **Tag auto-completion**: Smart suggestions for Confluence custom tags and attributes. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/tag-auto-completion)
+- **Smart snippets**: Automatic suggestions of XML code blocks for custom tags, with completion of required and optional attributes, speeding up document writing. Just type `csp` and the options will appear like magic! [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/smart-snippets)
+- **Html Entities Decode**: Automatic conversion of HTML entities to special characters when downloading pages. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/decode-html)
+- **Set title emoji**: Easily add emojis to your page titles directly in VSCode. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/set-title-emoji)
 
 > All commands are available in the file explorer context menu when right-clicking on `.confluence` files or folders, in the "Confluence Smart Publisher" submenu.
-
-#### "Publish Document" Command Flow
-
-The **Publish Document** command (`publishConfluence`) executes a series of steps to ensure that the content of the `.confluence` file is correctly published or updated on Confluence, keeping metadata and properties synchronized. See the detailed flow:
-
-1. **User Action**
-   - The user right-clicks on a `.confluence` file and selects "Publish Document" or executes the corresponding command from the VSCode command menu.
-
-2. **Initial Validation**
-   - The command checks if the selected file has the `.confluence` extension. If not, it displays an error message.
-
-3. **File Reading**
-   - The file content is read for analysis and information extraction.
-
-4. **Page ID Verification**
-   - The system looks for the `<csp:file_id>` tag in the `<csp:parameters>` block.
-     - **If it exists**: understands that the page was previously published and performs an update on Confluence.
-     - **If it doesn't exist**: creates a new page on Confluence.
-
-5. **Page Creation or Update**
-   - Creation:
-     - Extracts information such as title, parentId, labels, and properties from the <csp:parameters> block.
-     - Removes the <csp:parameters> block from the content before sending to Confluence.
-     - Creates the page via Confluence REST API.
-     - If there are referenced local images, performs a second update to attach them correctly.
-   - Update:
-     - Extracts the page ID.
-     - Removes the <csp:parameters> block from the content.
-     - Updates the page content via REST API.
-     - If there are referenced local images, performs a second update to attach them correctly.
-
-6. **Metadata Synchronization**
-   - Adds labels defined in the <csp:labels_list> tag.
-   - Updates properties defined in the <csp:properties> tag.
-
-7. **ID Persistence**
-   - If the page was created (no <csp:file_id> existed), writes the new ID at the beginning of the local file, inside the <csp:parameters> block.
-
-8. **User Feedback**
-   - Displays a success message with the ID of the published page or an error message if something fails.
->Note: The entire flow is executed transparently, with logs in the "Output | CSP" panel of VSCode to facilitate diagnosis in case of problems.
-
 
 ### 🔄 UNIQUE FEATURE: Metadata synchronization!
 
