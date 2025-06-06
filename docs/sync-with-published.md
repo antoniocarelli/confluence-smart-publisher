@@ -48,7 +48,7 @@ The **Sync with Published** command (`syncWithPublished`) executes a series of s
    - Displays a success message or an error message if something fails
    - Shows a summary of changes made
 
->Note: The entire flow is executed transparently, with logs in the "Output | CSP" panel of VSCode to facilitate diagnosis in case of problems.
+>Note: The entire flow is executed transparently, with logs in the "Output (CSP)" panel of VSCode to facilitate diagnosis in case of problems.
 
 ## Benefits
 - Visual diff comparison

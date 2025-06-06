@@ -39,7 +39,7 @@ The **Set Title Emoji** command (`setEmojiTitle`) executes a series of steps to 
 6. **User Feedback**
    - Displays a success message or an error message if something fails
 
->Note: The entire flow is executed transparently, with logs in the "Output | CSP" panel of VSCode to facilitate diagnosis in case of problems.
+>Note: The entire flow is executed transparently, with logs in the "Output (CSP)" panel of VSCode to facilitate diagnosis in case of problems.
 
 ## Technical Details
 - The emoji is configured in the CSP (Confluence Smart Publisher) tag

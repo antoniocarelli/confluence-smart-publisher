@@ -39,7 +39,7 @@ The **Convert to Confluence Format** command (`convertMarkdown`) executes a seri
 6. **User Feedback**
    - Displays a success message with the path of the created file or an error message if something fails
 
->Note: The entire flow is executed transparently, with logs in the "Output | CSP" panel of VSCode to facilitate diagnosis in case of problems.
+>Note: The entire flow is executed transparently, with logs in the "Output (CSP)" panel of VSCode to facilitate diagnosis in case of problems.
 
 ## Benefits
 - Easy migration from Markdown

@@ -45,7 +45,7 @@ Formate seus arquivos `.confluence` automaticamente, com numeração de capítul
 
 ### 🎮 Commands
 - **Direct publishing**: Publish `.confluence` files as pages on Confluence with a single click. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/publish-document)
-- **Page downloading**: Download Confluence pages by title or ID, converting them to local editable format. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/download-by-title) | [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/download-by-id)
+- **Page downloading**: Download Confluence pages by title or ID, converting them to local editable format. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/download-by-title)
 - **Synchronization**: Compare and synchronize local content with what's published on Confluence, choosing which version to keep. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/sync-with-published)
 - **Template-based creation**: Create new files based on Confluence template pages. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/create-document)
 - **Markdown conversion**: Convert Markdown files to Confluence Storage Format, supporting common syntax like headers, lists, code blocks, and tables. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-markdown)
@@ -91,7 +91,7 @@ The Confluence Smart Publisher extension offers several validation and diagnosti
 - **Tag Normalization**: Standardizes tag formatting to maintain document consistency.
 
 #### 📊 Logs and Diagnostics
-- **Log Panel**: All operations are logged in the VS Code "Output | CSP" panel.
+- **Log Panel**: All operations are logged in the VS Code "Output (CSP)" panel.
 - **Error Diagnostics**: In case of publication or synchronization failure, detailed logs are generated to facilitate problem identification.
 - **Operation Status**: Visual feedback on ongoing operations.
 

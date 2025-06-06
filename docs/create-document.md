@@ -36,7 +36,7 @@ The **Create Document** command (`createPage`) executes a series of steps to cre
    - Displays a success message with the path of the created file
    - Shows an error message if something fails
 
->Note: The entire flow is executed transparently, with logs in the "Output | CSP" panel of VSCode to facilitate diagnosis in case of problems.
+>Note: The entire flow is executed transparently, with logs in the "Output (CSP)" panel of VSCode to facilitate diagnosis in case of problems.
 
 ## Benefits
 - Quick creation of new documents

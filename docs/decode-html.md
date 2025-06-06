@@ -33,7 +33,7 @@ The **Decode HTML Entities** command (`decodeHtml`) executes a series of steps t
 5. **User Feedback**
    - Displays a success message or an error message if something fails
 
->Note: The entire flow is executed transparently, with logs in the "Output | CSP" panel of VSCode to facilitate diagnosis in case of problems.
+>Note: The entire flow is executed transparently, with logs in the "Output (CSP)" panel of VSCode to facilitate diagnosis in case of problems.
 
 ## Benefits
 - Improved readability

@@ -40,7 +40,7 @@ The **Download Document by ID** command (`getPageById`) executes a series of ste
    - Displays a success message with the path of the created file
    - Shows an error message if something fails
 
->Note: The entire flow is executed transparently, with logs in the "Output | CSP" panel of VSCode to facilitate diagnosis in case of problems.
+>Note: The entire flow is executed transparently, with logs in the "Output (CSP)" panel of VSCode to facilitate diagnosis in case of problems.
 
 ## Benefits
 - Precise page retrieval using unique ID

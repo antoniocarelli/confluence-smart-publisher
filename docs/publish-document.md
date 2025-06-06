@@ -43,7 +43,7 @@ The **Publish Document** command (`publishConfluence`) executes a series of step
 
 7. **User Feedback**
    - Displays a success message with the ID of the published page or an error message if something fails.
->Note: The entire flow is executed transparently, with logs in the "Output | CSP" panel of VSCode to facilitate diagnosis in case of problems.
+>Note: The entire flow is executed transparently, with logs in the "Output (CSP)" panel of VSCode to facilitate diagnosis in case of problems.
 
 
 ## Benefits
