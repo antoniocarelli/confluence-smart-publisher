@@ -16,17 +16,24 @@ Visualize problemas de estrutura e tags em tempo real, com dicas e correções a
 </div>
 Formate seus arquivos `.confluence` automaticamente, com numeração de capítulos e padronização de tags.
 
-
 ## 📋 Table of Contents
 
+- [Extension in Action](#-extension-in-action)
+  - [Real-time Diagnostics](#-real-time-diagnostics)
+  - [Smart Formatter](#-smart-formatter)
 - [Features](#-features)
   - [Commands](#-commands)
+    - [Publish Document Command Flow](#publish-document-command-flow)
   - [Unique Feature](#-unique-feature)
   - [Validations and Diagnostics](#-validations-and-diagnostics)
+    - [Structure Validation](#-structure-validation)
+    - [Visual Diagnostics](#-visual-diagnostics)
+    - [Specific Validations](#-specific-validations)
+    - [Auto-correction](#-auto-correction)
+    - [Logs and Diagnostics](#-logs-and-diagnostics)
 - [Requirements](#️-requirements)
 - [Installation](#-installation)
 - [Extension Settings](#️-extension-settings)
-- [Available Commands](#️-available-commands)
 - [File Structure](#-confluence-file-structure)
 - [Dependencies](#-dependencies)
 - [Known Issues](#-known-issues)
@@ -42,6 +49,7 @@ Formate seus arquivos `.confluence` automaticamente, com numeração de capítul
 - **Page downloading**: Download Confluence pages by title or ID, converting them to local editable format.
 - **Synchronization**: Compare and synchronize local content with what's published on Confluence, choosing which version to keep.
 - **Template-based creation**: Create new files based on Confluence template pages.
+- **Markdown conversion**: Convert Markdown files to Confluence Storage Format, supporting common syntax like headers, lists, code blocks, and tables.
 - **Automatic formatting**: Format `.confluence` files with specific rules, including automatic chapter numbering.
 - **Structure validation**: Real-time diagnostics of required tags, structure, and attributes, displaying issues in VSCode.
 - **Tag auto-completion**: Smart suggestions for Confluence custom tags and attributes.
@@ -158,15 +166,19 @@ This extension adds the following settings to VSCode:
 | `confluenceSmartPublisher.format.numberChapters` | Automatically numbers chapters when formatting the `.confluence` document (default: true)    |
 | `confluenceSmartPublisher.htmlEntitiesDecode`    | Activates automatic conversion of HTML entities to special characters when downloading pages (default: false) |
 
-📄 .confluence File Structure
-This extension adds a <csp:parameters> block to the document, which is used internally by the Confluence Smart Publisher extension, and whose values can be modified.
+## 📄 .confluence File Structure
+This extension adds a `<csp:parameters>` block to the document, which is used internally by the Confluence Smart Publisher extension, and whose values can be modified.
 
-<csp:file_id>: Page ID in Confluence (automatically filled after publication).
-<csp:labels_list>: List of labels separated by commas. Additions and changes will be reflected on the online page.
-<csp:parent_id>: Parent page ID in Confluence.
-<csp:properties>: Page properties (key/value). These properties can be changed, deleted, or new ones included. But be careful as changes may cause unexpected effects.
+`<csp:file_id>`: Page ID in Confluence (automatically filled after publication).
+
+`<csp:labels_list>`: List of labels separated by commas. Additions and changes will be reflected on the online page.
+
+`<csp:parent_id>`: Parent page ID in Confluence.
+
+`<csp:properties>`: Page properties (key/value). These properties can be changed, deleted, or new ones included. But be careful as changes may cause unexpected effects.
+
 Example:
-
+```xml
 <csp:parameters xmlns:csp="https://confluence.smart.publisher/csp">
   <csp:file_id>123456</csp:file_id>
   <csp:labels_list>user-story,scope,pending</csp:labels_list>
@@ -177,22 +189,23 @@ Example:
   </csp:properties>
 </csp:parameters>
 <!-- Page content in Confluence Storage format -->
+```
 
 ## 🧩 Dependencies
 
-- cheerio
+- [cheerio](https://cheerio.js.org/)
    - Manipulation and parsing of HTML/XML in jQuery style, facilitating the extraction and modification of elements.
-- fast-xml-parser
+- [fast-xml-parser](https://github.com/NaturalIntelligence/fast-xml-parser)
    - Fast conversion between XML and JSON, essential for reading and validating .confluence files.
-- form-data
+- [form-data](https://github.com/form-data/form-data)
    - Creation of multipart forms for file uploads (e.g., attaching images to Confluence via API).
-- node-fetch
+- [node-fetch](https://github.com/node-fetch/node-fetch)
    - Performs HTTP/HTTPS requests, allowing communication with the Confluence API.
-- xml-escape
+- [xml-escape](https://github.com/miketheprogrammer/xml-escape)
    - Escapes special characters to ensure valid XML when publishing or downloading content.
-- entities
+- [entities](https://github.com/fb55/entities)
    - Library for decoding HTML entities, used in the decoding functionality.
-- emoji-mart
+- [emoji-mart](https://github.com/missive/emoji-mart)
    - Emoji picker used to add emojis to titles.
 
 ## 🚧 Known Issues
