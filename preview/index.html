@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<h1 id="confluence-smart-publisher">🚀 Confluence Smart Publisher</h1>
+<p>Visual Studio Code extension that allows you to create, edit,
+publish, download, and synchronize Confluence pages directly from your
+editor, using <code>.confluence</code> files in a custom XML format
+named Confluence Storage Format.</p>
+<h2 id="extension-in-action">🎬 Extension in Action</h2>
+<h3 id="real-time-diagnostics">🩺 Real-time Diagnostics</h3>
+<div data-align="left">
+<p><img src="https://antoniocarelli.github.io/confluence-smart-publisher/images/diagnostics.gif" alt="Diagnosis" width="500"/></p>
+</div>
+<p>Visualize problemas de estrutura e tags em tempo real, com dicas e
+correções automáticas diretamente no editor.</p>
+<h3 id="smart-formatter">🛠️ Smart Formatter</h3>
+<div data-align="left">
+<p><img src="https://antoniocarelli.github.io/confluence-smart-publisher/images/formater.gif" alt="Formatter" width="500"/></p>
+</div>
+<p>Formate seus arquivos <code>.confluence</code> automaticamente, com
+numeração de capítulos e padronização de tags.</p>
+<h2 id="buy-me-a-coffe">☕️ Buy me a coffe</h2>
+<p>Enjoying the Confluence Smart Publisher extension? <a
+href="https://www.paypal.com/donate/?business=ESQ3RSFYC6JMY&amp;no_recurring=0&amp;item_name=Enjoying+the+Confluence+Smart+Publisher+extension?%0ASupport+its+development+by+buying+me+a+coffee+and+help+keep+it+running%21&amp;currency_code=BRL">Support
+its development by buying me a coffee and help keep it running!</a></p>
+<h2 id="table-of-contents">📋 Table of Contents</h2>
+<ul>
+<li><a href="#-extension-in-action">Extension in Action</a>
+<ul>
+<li><a href="#-real-time-diagnostics">Real-time Diagnostics</a></li>
+<li><a href="#-smart-formatter">Smart Formatter</a></li>
+</ul></li>
+<li><a href="#-features">Features</a>
+<ul>
+<li><a href="#-commands">Commands</a></li>
+<li><a href="#-unique-feature">Unique Feature</a></li>
+<li><a href="#-validations-and-diagnostics">Validations and
+Diagnostics</a>
+<ul>
+<li><a href="#-structure-validation">Structure Validation</a></li>
+<li><a href="#-visual-diagnostics">Visual Diagnostics</a></li>
+<li><a href="#-specific-validations">Specific Validations</a></li>
+<li><a href="#-auto-correction">Auto-correction</a></li>
+<li><a href="#-logs-and-diagnostics">Logs and Diagnostics</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#️-requirements">Requirements</a></li>
+<li><a href="#-installation">Installation</a></li>
+<li><a href="#️-extension-settings">Extension Settings</a></li>
+<li><a href="#-confluence-file-structure">File Structure</a></li>
+<li><a href="#-dependencies">Dependencies</a></li>
+<li><a href="#-known-issues">Known Issues</a></li>
+<li><a href="#-contributing">Contributing</a></li>
+<li><a href="#ℹ️-more-information">More Information</a></li>
+<li><a href="#-license">License</a></li>
+<li><a href="#-current-version">Current Version</a></li>
+</ul>
+<h2 id="features">✨ Features</h2>
+<h3 id="commands">🎮 Commands</h3>
+<ul>
+<li><strong>Direct publishing</strong>: Publish <code>.confluence</code>
+files as pages on Confluence with a single click. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/publish-document">📚
+Documentation</a></li>
+<li><strong>Page downloading</strong>: Download Confluence pages by
+title or ID, converting them to local editable format. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/download-by-title">📚
+Documentation by title</a> <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/download-by-id">📚
+Documentation by id</a></li>
+<li><strong>Synchronization</strong>: Compare and synchronize local
+content with what’s published on Confluence, choosing which version to
+keep. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/sync-with-published">📚
+Documentation</a></li>
+<li><strong>Template-based creation</strong>: Create new files based on
+Confluence template pages. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/create-document">📚
+Documentation</a></li>
+<li><strong>Markdown to Confluence</strong>: Convert Markdown files to
+Confluence Storage Format, supporting common syntax like headers, lists,
+code blocks, and tables. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-markdown">📚
+Documentation</a></li>
+<li><strong>Confluence to Markdown</strong>: Convert Confluence Storage
+Format files to Markdown, preserving metadata, macros, and formatting.
+<a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-confluence-markdown">📚
+Documentation</a></li>
+<li><strong>Automatic formatting</strong>: Format
+<code>.confluence</code> files with specific rules, including automatic
+chapter numbering. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/format-document">📚
+Documentation</a></li>
+<li><strong>Structure validation</strong>: Real-time diagnostics of
+required tags, structure, and attributes, displaying issues in VSCode.
+<a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/structure-validation">📚
+Documentation</a></li>
+<li><strong>Tag auto-completion</strong>: Smart suggestions for
+Confluence custom tags and attributes. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/tag-auto-completion">📚
+Documentation</a></li>
+<li><strong>Smart snippets</strong>: Automatic suggestions of XML code
+blocks for custom tags, with completion of required and optional
+attributes, speeding up document writing. Just type <code>csp</code> and
+the options will appear like magic! <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/smart-snippets">📚
+Documentation</a></li>
+<li><strong>Html Entities Decode</strong>: Automatic conversion of HTML
+entities to special characters when downloading pages. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/decode-html">📚
+Documentation</a></li>
+<li><strong>Set title emoji</strong>: Easily add emojis to your page
+titles directly in VSCode. <a
+href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/set-title-emoji">📚
+Documentation</a></li>
+</ul>
+<blockquote>
+<p>All commands are available in the file explorer context menu when
+right-clicking on <code>.confluence</code> files or folders, in the
+“Confluence Smart Publisher” submenu.</p>
+</blockquote>
+<h3 id="unique-feature-metadata-synchronization">🔄 UNIQUE FEATURE:
+Metadata synchronization!</h3>
+<blockquote>
+<p><code>Labels</code>, <code>Properties</code>, <code>PageId</code>,
+and <code>ParentId</code> are always kept up-to-date between the local
+file and the remote page on Confluence.<br />
+<strong>Any changes made locally (or in Confluence) are transparently
+reflected, avoiding inconsistencies and facilitating version control and
+organization of your documents.</strong></p>
+</blockquote>
+<blockquote>
+<p><strong>Important Note:</strong> To ensure metadata synchronization,
+you need to use the “Sync with Published on Confluence” command. This
+command will compare and synchronize all metadata between your local
+file and the remote page, allowing you to choose which version to keep.
+Without using this command, metadata changes made in Confluence won’t be
+automatically reflected in your local file.</p>
+</blockquote>
+<h3 id="validations-and-diagnostics">🔍 Validations and Diagnostics</h3>
+<p>The Confluence Smart Publisher extension offers several validation
+and diagnostic features to ensure the integrity and quality of your
+documents:</p>
+<h4 id="structure-validation">📝 Structure Validation</h4>
+<ul>
+<li><strong>Real-time Validation</strong>: Checks the document structure
+as you type, ensuring all required tags are present and properly
+formatted.</li>
+<li><strong>Tag Diagnostics</strong>: Identifies missing, malformed, or
+invalid attributes, displaying warnings directly in the editor.</li>
+<li><strong>Attribute Validation</strong>: Verifies if required
+attributes are present and if their values are valid.</li>
+</ul>
+<h4 id="visual-diagnostics">👁️ Visual Diagnostics</h4>
+<ul>
+<li><strong>Error Markers</strong>: Structure issues are highlighted
+with red underlines in the editor.</li>
+<li><strong>Correction Tips</strong>: Hovering over errors displays
+suggestions on how to fix the problem.</li>
+<li><strong>Problems List</strong>: All issues found are listed in the
+VS Code “Problems” panel.</li>
+</ul>
+<h4 id="specific-validations">✅ Specific Validations</h4>
+<ul>
+<li><strong>Metadata Validation</strong>: Checks if the
+<code>&lt;csp:parameters&gt;</code> block is present and properly
+formatted.</li>
+<li><strong>ID Validation</strong>: Confirms if page and parent IDs are
+in valid format.</li>
+<li><strong>Label Validation</strong>: Verifies if labels are in correct
+format and don’t contain invalid characters.</li>
+<li><strong>Properties Validation</strong>: Ensures page properties are
+in valid format.</li>
+</ul>
+<h4 id="auto-correction">🔧 Auto-correction</h4>
+<ul>
+<li><strong>Automatic Formatting</strong>: When saving the file, the
+extension can automatically fix formatting issues.</li>
+<li><strong>Indentation Correction</strong>: Automatically adjusts XML
+indentation for better readability.</li>
+<li><strong>Tag Normalization</strong>: Standardizes tag formatting to
+maintain document consistency.</li>
+</ul>
+<h4 id="logs-and-diagnostics">📊 Logs and Diagnostics</h4>
+<ul>
+<li><strong>Log Panel</strong>: All operations are logged in the VS Code
+“Output | CSP” panel.</li>
+<li><strong>Error Diagnostics</strong>: In case of publication or
+synchronization failure, detailed logs are generated to facilitate
+problem identification.</li>
+<li><strong>Operation Status</strong>: Visual feedback on ongoing
+operations.</li>
+</ul>
+<h2 id="requirements">⚙️ Requirements</h2>
+<ul>
+<li>VS Code version 1.96.0 or higher.</li>
+<li>Confluence Cloud (Atlassian) account with edit permission.</li>
+<li>Confluence API Token (generate at <a
+href="https://id.atlassian.com/manage-profile/security/api-tokens">https://id.atlassian.com/manage-profile/security/api-tokens</a>).</li>
+</ul>
+<h2 id="installation">📥 Installation</h2>
+<ol type="1">
+<li>Open VS Code</li>
+<li>Go to the extensions tab (Ctrl+Shift+X)</li>
+<li>Search for “Confluence Smart Publisher”</li>
+<li>Click “Install”</li>
+<li>After installation, configure the necessary options in VS Code
+settings</li>
+</ol>
+<p>Alternatively, you can install from the VS Code Marketplace: <a
+href="https://marketplace.visualstudio.com/items?itemName=AntonioCarelli.confluence-smart-publisher">Confluence
+Smart Publisher</a></p>
+<h2 id="extension-settings">🔧 Extension Settings</h2>
+<p>This extension adds the following settings to VSCode:</p>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 65%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Key</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>confluenceSmartPublisher.baseUrl</code></td>
+<td>Base URL of your Confluence instance (e.g.,
+https://company.atlassian.net/wiki)</td>
+</tr>
+<tr class="even">
+<td><code>confluenceSmartPublisher.username</code></td>
+<td>Confluence username (usually email)</td>
+</tr>
+<tr class="odd">
+<td><code>confluenceSmartPublisher.apiToken</code></td>
+<td>Confluence API Token</td>
+</tr>
+<tr class="even">
+<td><code>confluenceSmartPublisher.format.numberChapters</code></td>
+<td>Automatically numbers chapters when formatting the
+<code>.confluence</code> document (default: true)</td>
+</tr>
+<tr class="odd">
+<td><code>confluenceSmartPublisher.htmlEntitiesDecode</code></td>
+<td>Activates automatic conversion of HTML entities to special
+characters when downloading pages (default: false)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="confluence-file-structure">📄 .confluence File Structure</h2>
+<p>This extension adds a <code>&lt;csp:parameters&gt;</code> block to
+the document, which is used internally by the Confluence Smart Publisher
+extension, and whose values can be modified.</p>
+<p><code>&lt;csp:file_id&gt;</code>: Page ID in Confluence
+(automatically filled after publication).</p>
+<p><code>&lt;csp:labels_list&gt;</code>: List of labels separated by
+commas. Additions and changes will be reflected on the online page.</p>
+<p><code>&lt;csp:parent_id&gt;</code>: Parent page ID in Confluence.</p>
+<p><code>&lt;csp:properties&gt;</code>: Page properties (key/value).
+These properties can be changed, deleted, or new ones included. But be
+careful as changes may cause unexpected effects.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">csp:parameters</span><span class="ot"> xmlns:csp=</span><span class="st">&quot;https://confluence.smart.publisher/csp&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">csp:file_id</span>&gt;123456&lt;/<span class="kw">csp:file_id</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">csp:labels_list</span>&gt;user-story,scope,pending&lt;/<span class="kw">csp:labels_list</span>&gt;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">csp:parent_id</span>&gt;654321&lt;/<span class="kw">csp:parent_id</span>&gt;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">csp:properties</span>&gt;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">csp:key</span>&gt;content-appearance-published&lt;/<span class="kw">csp:key</span>&gt;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">csp:value</span>&gt;fixed-width&lt;/<span class="kw">csp:value</span>&gt;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">csp:properties</span>&gt;</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">csp:parameters</span>&gt;</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Page content in Confluence Storage format --&gt;</span></span></code></pre></div>
+<h2 id="dependencies">🧩 Dependencies</h2>
+<ul>
+<li><a href="https://cheerio.js.org/">cheerio</a>
+<ul>
+<li>Manipulation and parsing of HTML/XML in jQuery style, facilitating
+the extraction and modification of elements.</li>
+</ul></li>
+<li><a
+href="https://github.com/NaturalIntelligence/fast-xml-parser">fast-xml-parser</a>
+<ul>
+<li>Fast conversion between XML and JSON, essential for reading and
+validating .confluence files.</li>
+</ul></li>
+<li><a href="https://github.com/form-data/form-data">form-data</a>
+<ul>
+<li>Creation of multipart forms for file uploads (e.g., attaching images
+to Confluence via API).</li>
+</ul></li>
+<li><a href="https://github.com/node-fetch/node-fetch">node-fetch</a>
+<ul>
+<li>Performs HTTP/HTTPS requests, allowing communication with the
+Confluence API.</li>
+</ul></li>
+<li><a
+href="https://github.com/miketheprogrammer/xml-escape">xml-escape</a>
+<ul>
+<li>Escapes special characters to ensure valid XML when publishing or
+downloading content.</li>
+</ul></li>
+<li><a href="https://github.com/fb55/entities">entities</a>
+<ul>
+<li>Library for decoding HTML entities, used in the decoding
+functionality.</li>
+</ul></li>
+<li><a href="https://github.com/missive/emoji-mart">emoji-mart</a>
+<ul>
+<li>Emoji picker used to add emojis to titles.</li>
+</ul></li>
+</ul>
+<h2 id="known-issues">🚧 Known Issues</h2>
+<ul>
+<li>The format of <code>.confluence</code> files must strictly follow
+the expected structure, otherwise publication may fail.</li>
+<li>Only Confluence Cloud (Atlassian) is supported. There is no support
+for Confluence Server/Data Center.</li>
+<li>There is no support for password authentication, only API
+Token.</li>
+<li>Pages with very large attachments may experience slowness during
+download or synchronization.</li>
+<li>Special characters in file names can cause attachment problems.</li>
+</ul>
+<h2 id="contributing">🧑‍💻 Contributing</h2>
+<p>Contributions are welcome! Follow the Extension Guidelines to ensure
+best practices.</p>
+<ol type="1">
+<li>Fork the repository</li>
+<li>Create a branch for your feature (git checkout -b
+feature/your-feature)</li>
+<li>Commit your changes (git commit -m ‘Add new feature’)</li>
+<li>Push to the branch (git push origin feature/your-feature)</li>
+<li>Open a Pull Request</li>
+</ol>
+<h2 id="ℹ-more-information">ℹ️ More Information</h2>
+<ul>
+<li><a href="https://code.visualstudio.com/api">Official VSCode
+documentation for extensions</a></li>
+<li><a href="developer.atlassian.com/cloud/confluence/rest/">Official
+Confluence Cloud REST API documentation</a></li>
+<li><a
+href="https://confluence.atlassian.com/doc/confluence-storage-format-790796544.html">Official
+Confluence Storage Format documentation</a>
+<ul>
+<li>This documentation is for the Data Center version, but much of it
+applies to the Cloud version.</li>
+</ul></li>
+</ul>
+<h2 id="license">📄 License</h2>
+<p>This extension is distributed under the MIT license. See the LICENSE
+file for more details.</p>
+<hr />
+<p><em>Have fun publishing to Confluence smartly!</em></p>
+</body>
+</html>

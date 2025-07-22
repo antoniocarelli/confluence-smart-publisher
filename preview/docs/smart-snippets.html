@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>smart-snippets</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1 id="smart-snippets">✨ Smart Snippets</h1>
+<p>Automatic suggestions of XML code blocks for custom tags, with
+completion of required and optional attributes, speeding up document
+writing.</p>
+<h2 id="how-to-use">How to Use</h2>
+<ol type="1">
+<li>Open any <code>.confluence</code> file</li>
+<li>Type <code>csp</code> to trigger the snippet suggestions</li>
+<li>Select the desired snippet from the list</li>
+<li>Use Tab to navigate through the required fields</li>
+</ol>
+<h2 id="available-snippets">Available Snippets</h2>
+<h3 id="basic-structure">Basic Structure</h3>
+<ul>
+<li><code>csp-parameters</code> - Creates the CSP parameters block with
+file ID, labels, parent ID and properties</li>
+<li><code>csp-layout</code> - Creates page layouts with different
+section types (single, two columns, three columns, etc.)</li>
+</ul>
+<h3 id="content-elements">Content Elements</h3>
+<ul>
+<li><code>csp-table</code> - Creates a complete table with headers, body
+and footer</li>
+<li><code>csp-code</code> - Adds a code block with language
+selection</li>
+<li><code>csp-image</code> - Inserts an image with filename and width
+parameters</li>
+<li><code>csp-link</code> - Creates a link with appearance options
+(inline, block, embed)</li>
+<li><code>csp-quote</code> - Adds a blockquote</li>
+</ul>
+<h3 id="confluence-macros">Confluence Macros</h3>
+<ul>
+<li><code>csp-info</code> - Adds information panels (info, tip, note,
+warning, error)</li>
+<li><code>csp-task</code> - Creates a task list with status and
+assignee</li>
+<li><code>csp-expand</code> - Creates an expandable section with
+title</li>
+<li><code>csp-user</code> - Inserts a user mention</li>
+<li><code>csp-date</code> - Adds a date/time element</li>
+<li><code>csp-status</code> - Adds a status indicator with color
+options</li>
+<li><code>csp-emoji</code> - Inserts an emoticon with various
+options</li>
+</ul>
+<h3 id="confluence-specific">Confluence Specific</h3>
+<ul>
+<li><code>csp:status</code> - Adds a status macro</li>
+<li><code>csp:expand</code> - Creates an expandable section</li>
+<li><code>csp:column</code> - Adds a column layout</li>
+<li><code>csp:ac</code> - Inserts an Atlassian Connect macro</li>
+<li><code>csp:jira</code> - Adds a Jira issues macro</li>
+<li><code>csp:children</code> - Inserts a children display macro</li>
+<li><code>csp:attachments</code> - Adds an attachments macro</li>
+</ul>
+<h3 id="metadata">Metadata</h3>
+<ul>
+<li><code>csp:parameters</code> - Creates the CSP parameters block</li>
+<li><code>csp:labels</code> - Adds labels to the page</li>
+<li><code>csp:properties</code> - Adds page properties</li>
+</ul>
+<h3 id="smart-snippets-flow">“Smart Snippets” Flow</h3>
+<p>The <strong>Smart Snippets</strong> feature provides intelligent code
+snippets for common Confluence Storage Format patterns. See the detailed
+flow:</p>
+<ol type="1">
+<li><strong>Snippet Trigger</strong>
+<ul>
+<li>Monitors typing in <code>.confluence</code> files</li>
+<li>Detects the <code>csp</code> trigger</li>
+<li>Shows available snippets</li>
+<li>Provides snippet descriptions</li>
+</ul></li>
+<li><strong>Snippet Selection</strong>
+<ul>
+<li>Displays categorized snippets</li>
+<li>Shows snippet previews</li>
+<li>Provides usage examples</li>
+<li>Allows quick selection</li>
+</ul></li>
+<li><strong>Template Insertion</strong>
+<ul>
+<li>Inserts complete tag structure</li>
+<li>Includes required attributes</li>
+<li>Adds optional attributes</li>
+<li>Maintains proper formatting</li>
+</ul></li>
+<li><strong>Field Navigation</strong>
+<ul>
+<li>Highlights required fields</li>
+<li>Allows tab navigation</li>
+<li>Provides field descriptions</li>
+<li>Validates input values</li>
+</ul></li>
+<li><strong>Context Awareness</strong>
+<ul>
+<li>Adapts to document structure</li>
+<li>Maintains proper nesting</li>
+<li>Ensures valid placement</li>
+<li>Prevents invalid insertions</li>
+</ul></li>
+</ol>
+<blockquote>
+<p>Note: The snippets feature is always available in
+<code>.confluence</code> files, just type <code>csp</code> to see the
+available options.</p>
+</blockquote>
+<h2 id="benefits">Benefits</h2>
+<ul>
+<li>Rapid document creation</li>
+<li>Consistent tag structure</li>
+<li>Reduced typing errors</li>
+<li>Better code organization</li>
+</ul>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Only works with <code>.confluence</code> files</li>
+<li>Requires proper XML formatting</li>
+<li>May need manual adjustment for complex cases</li>
+</ul>
+</body>
+</html>

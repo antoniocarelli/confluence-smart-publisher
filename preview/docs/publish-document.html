@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>publish-document</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1 id="publish-document">📤 Publish Document</h1>
+<p>Publishes a <code>.confluence</code> file to your Confluence space.
+This command will either create a new page or update an existing one if
+the file has been previously published.</p>
+<p><strong>Command ID:</strong>
+<code>confluence-smart-publisher.publishConfluence</code></p>
+<h2 id="how-to-use">How to Use</h2>
+<ol type="1">
+<li>Right-click on a <code>.confluence</code> file in the VS Code
+explorer</li>
+<li>Select “Confluence Smart Publisher” &gt; “Publish Document”</li>
+</ol>
+<h3 id="publish-document-command-flow">“Publish Document” Command
+Flow</h3>
+<p>The <strong>Publish Document</strong> command
+(<code>publishConfluence</code>) executes a series of steps to ensure
+that the content of the <code>.confluence</code> file is correctly
+published or updated on Confluence, keeping metadata and properties
+synchronized. See the detailed flow:</p>
+<ol type="1">
+<li><strong>Initial Validation</strong>
+<ul>
+<li>The command checks if the selected file has the
+<code>.confluence</code> extension. If not, it displays an error
+message.</li>
+</ul></li>
+<li><strong>File Reading</strong>
+<ul>
+<li>The file content is read for analysis and information
+extraction.</li>
+</ul></li>
+<li><strong>Page ID Verification</strong>
+<ul>
+<li>The system looks for the <code>&lt;csp:file_id&gt;</code> tag in the
+<code>&lt;csp:parameters&gt;</code> block.
+<ul>
+<li><strong>If it exists</strong>: understands that the page was
+previously published and performs an update on Confluence.</li>
+<li><strong>If it doesn’t exist</strong>: creates a new page on
+Confluence.</li>
+</ul></li>
+</ul></li>
+<li><strong>Page Creation or Update</strong>
+<ul>
+<li>Creation:
+<ul>
+<li>Extracts information such as title, parentId, labels, and properties
+from the <csp:parameters> block.</li>
+<li>Removes the <csp:parameters> block from the content before sending
+to Confluence.</li>
+<li>Creates the page via Confluence REST API.</li>
+<li>If there are referenced local images, performs a second update to
+attach them correctly.</li>
+</ul></li>
+<li>Update:
+<ul>
+<li>Extracts the page ID.</li>
+<li>Removes the <csp:parameters> block from the content.</li>
+<li>Updates the page content via REST API.</li>
+<li>If there are referenced local images, performs a second update to
+attach them correctly.</li>
+</ul></li>
+</ul></li>
+<li><strong>Metadata Synchronization</strong>
+<ul>
+<li>Adds labels defined in the <csp:labels_list> tag.</li>
+<li>Updates properties defined in the <csp:properties> tag.</li>
+</ul></li>
+<li><strong>ID Persistence</strong>
+<ul>
+<li>If the page was created (no <csp:file_id> existed), writes the new
+ID at the beginning of the local file, inside the <csp:parameters>
+block.</li>
+</ul></li>
+<li><strong>User Feedback</strong>
+<ul>
+<li>Displays a success message with the ID of the published page or an
+error message if something fails. &gt;Note: The entire flow is executed
+transparently, with logs in the “Output | CSP” panel of VSCode to
+facilitate diagnosis in case of problems.</li>
+</ul></li>
+</ol>
+<h2 id="benefits">Benefits</h2>
+<ul>
+<li>One-click publishing to Confluence</li>
+<li>Automatic handling of new pages and updates</li>
+<li>Maintains metadata and properties synchronization</li>
+<li>Supports image attachments</li>
+</ul>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Requires a valid <code>.confluence</code> file</li>
+<li>Needs proper Confluence credentials configured</li>
+<li>Internet connection required</li>
+</ul>
+</body>
+</html>

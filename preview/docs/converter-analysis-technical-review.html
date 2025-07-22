@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>converter-analysis-technical-review</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<h1
+id="technical-analysis-adf-to-markdown-converter-patterns-and-inconsistencies">Technical
+Analysis: ADF-to-Markdown Converter Patterns and Inconsistencies</h1>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>This document provides a comprehensive technical analysis of the
+ADF-to-Markdown converter architecture, identifying patterns,
+inconsistencies, and areas for improvement across the specialized
+converter implementations.</p>
+<h2 id="analysis-overview">Analysis Overview</h2>
+<p>After examining the converter implementations in
+<code>src/adf-md-converter/converters/</code>, we found that <strong>not
+all converters follow the same flow patterns</strong>. There are at
+least <strong>6 distinct architectural variations</strong> with varying
+levels of complexity and different implementation approaches.</p>
+<hr />
+<h2 id="converter-pattern-categories">Converter Pattern Categories</h2>
+<h3 id="simple-synchronous-converters-pattern-a">1. Simple Synchronous
+Converters (Pattern A)</h3>
+<p><strong>Examples:</strong> <code>text-converter.ts</code>,
+<code>strong-converter.ts</code>, <code>code-converter.ts</code>,
+<code>paragraph-converter.ts</code></p>
+<p><strong>Signature:</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertElement</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  node<span class="op">:</span> AdfNode<span class="op">,</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  children<span class="op">:</span> MarkdownBlock[]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>)<span class="op">:</span> ConverterResult {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Simple conversion logic</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { markdown<span class="op">:</span> result }<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Characteristics:</strong> - ✅ Synchronous function - ✅
+Returns <code>ConverterResult</code> - ✅ Accepts only
+<code>(node, children)</code> parameters - ✅ Standardized documentation
+comment about centralized YAML - ✅ Minimal complexity (~10-30
+lines)</p>
+<p><strong>Example Implementation:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertStrong</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[])<span class="op">:</span> ConverterResult {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> text <span class="op">=</span> children<span class="op">.</span><span class="fu">map</span>(child <span class="kw">=&gt;</span> child<span class="op">.</span><span class="at">markdown</span>)<span class="op">.</span><span class="fu">join</span>(<span class="st">&#39;&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> markdown <span class="op">=</span> <span class="vs">`**</span><span class="sc">${</span>text<span class="sc">}</span><span class="vs">**`</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { markdown }<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="asynchronous-converters-pattern-b">2. Asynchronous Converters
+(Pattern B)</h3>
+<p><strong>Examples:</strong> <code>link-converter.ts</code></p>
+<p><strong>Signature:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">async</span> <span class="kw">function</span> <span class="fu">convertLink</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  node<span class="op">:</span> AdfNode<span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  children<span class="op">:</span> MarkdownBlock[]<span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  _level<span class="op">?:</span> <span class="dt">number</span><span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  confluenceBaseUrl<span class="op">:</span> <span class="dt">string</span> <span class="op">=</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>ConverterResult<span class="op">&gt;</span> {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Async conversion logic with external dependencies</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { markdown<span class="op">:</span> result }<span class="op">;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Characteristics:</strong> - ⚠️ <strong>Asynchronous</strong>
+- returns <code>Promise&lt;ConverterResult&gt;</code> - ⚠️ Accepts
+additional parameters (<code>confluenceBaseUrl</code>) - ⚠️ Uses
+external utility functions (<code>resolveLinkTextAndYaml</code>) - ⚠️
+Requires I/O operations or external API calls</p>
+<p><strong>Inconsistencies:</strong> - Different parameter signature
+from simple converters - Async nature not consistently documented -
+External dependencies not standardized</p>
+<h3 id="level-aware-converters-pattern-c">3. Level-Aware Converters
+(Pattern C)</h3>
+<p><strong>Examples:</strong> <code>bullet-list-converter.ts</code>,
+<code>ordered-list-converter.ts</code>,
+<code>task-list-converter.ts</code></p>
+<p><strong>Signature:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertBulletList</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  node<span class="op">:</span> AdfNode<span class="op">,</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  children<span class="op">:</span> MarkdownBlock[]<span class="op">,</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  level<span class="op">:</span> <span class="dt">number</span> <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)<span class="op">:</span> ConverterResult {</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Level-specific logic for nested structures</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    markdown<span class="op">:</span> result<span class="op">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    context<span class="op">:</span> { hasComplexContent<span class="op">:</span> <span class="dt">boolean</span> }</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Characteristics:</strong> - ⚠️ Accepts <code>level</code>
+parameter for nesting hierarchy - ⚠️ Returns additional
+<code>context</code> information - ⚠️ Contains complex helper functions
+for rendering - ⚠️ Handles nested structure logic</p>
+<p><strong>Example Helper Function:</strong></p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">renderBulletList</span>(children<span class="op">:</span> MarkdownBlock[]<span class="op">,</span> level<span class="op">:</span> <span class="dt">number</span> <span class="op">=</span> <span class="dv">0</span>)<span class="op">:</span> <span class="dt">string</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> indent <span class="op">=</span> <span class="st">&#39;  &#39;</span><span class="op">.</span><span class="fu">repeat</span>(level)<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> bulletChar <span class="op">=</span> level <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">&#39;-&#39;</span> <span class="op">:</span> <span class="st">&#39;*&#39;</span><span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Complex rendering logic...</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="context-aware-converters-pattern-d">4. Context-Aware Converters
+(Pattern D)</h3>
+<p><strong>Examples:</strong> <code>toc-converter.ts</code> (373 lines),
+<code>extension-converter.ts</code></p>
+<p><strong>Signature:</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertToc</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  node<span class="op">:</span> AdfNode<span class="op">,</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  children<span class="op">:</span> MarkdownBlock[]<span class="op">,</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  level<span class="op">?:</span> <span class="dt">number</span><span class="op">,</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  confluenceBaseUrl<span class="op">?:</span> <span class="dt">string</span><span class="op">,</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  documentContext<span class="op">?:</span> DocumentContext</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)<span class="op">:</span> ConverterResult {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Document-wide analysis and processing</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { markdown<span class="op">:</span> result }<span class="op">;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Characteristics:</strong> - ⚠️ <strong>Five different
+parameters</strong> with optional types - ⚠️ Uses
+<code>DocumentContext</code> for document-wide analysis - ⚠️ Extremely
+complex internal logic (300+ lines) - ⚠️ Multiple internal helper
+functions - ⚠️ Analyzes entire document structure</p>
+<p><strong>Internal Complexity:</strong></p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">// TOC converter has 15+ internal functions</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">extractHeadings</span>(allNodes<span class="op">:</span> AdfNode[]<span class="op">,</span> params<span class="op">:</span> TocParameters)<span class="op">:</span> HeadingInfo[]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">generateOutlineNumbers</span>(headings<span class="op">:</span> HeadingInfo[])<span class="op">:</span> <span class="dt">string</span>[]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getBulletStyle</span>(style<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> level<span class="op">:</span> <span class="dt">number</span>)<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">generateListToc</span>(headings<span class="op">:</span> HeadingInfo[]<span class="op">,</span> params<span class="op">:</span> TocParameters)<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">// ... and many more</span></span></code></pre></div>
+<h3 id="delegating-converters-pattern-e">5. Delegating Converters
+(Pattern E)</h3>
+<p><strong>Examples:</strong> <code>extension-converter.ts</code></p>
+<p><strong>Characteristics:</strong> - ⚠️ Acts as a
+<strong>dispatcher</strong> rather than direct converter - ⚠️ Routes to
+specialized sub-converters based on extension type - ⚠️ Contains
+fallback generation logic - ⚠️ Mixes delegation with direct
+conversion</p>
+<p><strong>Example Delegation:</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertExtension</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> <span class="op">...</span>)<span class="op">:</span> ConverterResult {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> extensionKey <span class="op">=</span> node<span class="op">.</span><span class="at">attrs</span><span class="op">?.</span><span class="at">extensionKey</span> <span class="im">as</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Delegate to TOC converter</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (extensionKey <span class="op">===</span> <span class="st">&#39;toc&#39;</span>) {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">convertToc</span>(node<span class="op">,</span> children<span class="op">,</span> level<span class="op">,</span> confluenceBaseUrl<span class="op">,</span> documentContext)<span class="op">;</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Delegate to math converter</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (extensionKey <span class="op">===</span> <span class="st">&#39;easy-math-block&#39;</span>) {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">convertMathBlock</span>(mathNode<span class="op">,</span> children)<span class="op">;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Generate fallback for unknown extensions</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { markdown<span class="op">:</span> <span class="fu">generateExtensionFallback</span>(node) }<span class="op">;</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="specialized-logic-converters-pattern-f">6. Specialized Logic
+Converters (Pattern F)</h3>
+<p><strong>Examples:</strong> <code>table-converter.ts</code>,
+<code>list-item-converter.ts</code></p>
+<p><strong>Characteristics:</strong> - ⚠️ <strong>Multiple conversion
+paths</strong> within same converter - ⚠️ Business logic branching based
+on node attributes - ⚠️ Custom helper functions for specific scenarios -
+⚠️ Complex content processing logic</p>
+<p><strong>Example Multi-Path Logic:</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertTable</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[])<span class="op">:</span> ConverterResult {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Property Table: all rows have 2 cells (1 header, 1 cell)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">isPropertyTable</span>(node)) {</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Special logic for property tables</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> markdown <span class="op">=</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span><span class="op">;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> row <span class="kw">of</span> children) {</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> cells <span class="op">=</span> row<span class="op">.</span><span class="at">markdown</span><span class="op">.</span><span class="fu">split</span>(<span class="st">&#39;|&#39;</span>)<span class="op">.</span><span class="fu">map</span>(s <span class="kw">=&gt;</span> s<span class="op">.</span><span class="fu">trim</span>())<span class="op">.</span><span class="fu">filter</span>(<span class="bu">Boolean</span>)<span class="op">;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (cells<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">2</span>) {</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> cleanKey <span class="op">=</span> <span class="fu">cleanPropertyKey</span>(cells[<span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        markdown <span class="op">+=</span> <span class="vs">`**</span><span class="sc">${</span>cleanKey<span class="sc">}</span><span class="vs">:** </span><span class="sc">${</span>cells[<span class="dv">1</span>]<span class="sc">}\n\n</span><span class="vs">`</span><span class="op">;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> { markdown<span class="op">,</span> context<span class="op">:</span> { hasComplexContent<span class="op">:</span> <span class="kw">true</span> } }<span class="op">;</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Normal Table: detect header in first row</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Completely different logic path...</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="identified-inconsistencies">Identified Inconsistencies</h2>
+<h3 id="function-signatures">1. Function Signatures</h3>
+<p><strong>Inconsistent Parameter Lists:</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Simple converters (2 params)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">convertText</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[])<span class="op">:</span> ConverterResult</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Level-aware converters (3 params)</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">convertBulletList</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[]<span class="op">,</span> level<span class="op">:</span> <span class="dt">number</span>)<span class="op">:</span> ConverterResult</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Async converters (4 params)</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">convertLink</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[]<span class="op">,</span> level<span class="op">?:</span> <span class="dt">number</span><span class="op">,</span> confluenceBaseUrl<span class="op">?:</span> <span class="dt">string</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>ConverterResult<span class="op">&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Context-aware converters (5 params)</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">convertToc</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[]<span class="op">,</span> level<span class="op">?:</span> <span class="dt">number</span><span class="op">,</span> confluenceBaseUrl<span class="op">?:</span> <span class="dt">string</span><span class="op">,</span> documentContext<span class="op">?:</span> DocumentContext)<span class="op">:</span> ConverterResult</span></code></pre></div>
+<h3 id="return-type-variations">2. Return Type Variations</h3>
+<p><strong>Context Usage Inconsistency:</strong></p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Some converters return context</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> { markdown<span class="op">,</span> context<span class="op">:</span> { hasComplexContent<span class="op">:</span> <span class="kw">true</span> } }<span class="op">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Others don&#39;t</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> { markdown }<span class="op">;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">// No clear pattern for when context is needed</span></span></code></pre></div>
+<h3 id="asynchronous-handling">3. Asynchronous Handling</h3>
+<p><strong>Mixed Sync/Async Patterns:</strong> - Most converters are
+synchronous - <code>link-converter.ts</code> is asynchronous for
+external API calls - No consistent strategy for handling async
+operations - Main converter must handle both patterns</p>
+<h3 id="helper-function-patterns">4. Helper Function Patterns</h3>
+<p><strong>Inconsistent Helper Organization:</strong></p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Some converters have internal helpers</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">smartJoinListItemContent</span>(children<span class="op">:</span> MarkdownBlock[])<span class="op">:</span> <span class="dt">string</span> { }</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Others use external utilities</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { resolveLinkTextAndYaml } <span class="im">from</span> <span class="st">&#39;../link-utils&#39;</span><span class="op">;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Some have no helpers at all</span></span></code></pre></div>
+<h3 id="error-handling">5. Error Handling</h3>
+<p><strong>No Standardized Error Handling:</strong> - No consistent
+error handling strategy - Some converters fail silently - Others might
+throw exceptions - No error context preservation</p>
+<hr />
+<h2 id="architectural-problems">Architectural Problems</h2>
+<h3 id="lack-of-interface-standardization">1. <strong>Lack of Interface
+Standardization</strong></h3>
+<p>The converters don’t implement a common interface, leading to: - Type
+safety issues in the main converter - Difficult maintenance and testing
+- Inconsistent behavior expectations</p>
+<h3 id="scalability-concerns">2. <strong>Scalability
+Concerns</strong></h3>
+<p>The current architecture doesn’t scale well: - Adding new parameters
+requires updating all converters - No versioning strategy for converter
+APIs - Difficult to add cross-cutting concerns</p>
+<h3 id="testing-complexity">3. <strong>Testing Complexity</strong></h3>
+<p>Different patterns make testing challenging: - Mock strategies vary
+by converter type - Async converters need different test setup -
+Context-dependent converters require complex test data</p>
+<h3 id="documentation-gaps">4. <strong>Documentation Gaps</strong></h3>
+<p>Missing documentation for: - When to use each pattern - Parameter
+requirements for each converter type - Error handling expectations -
+Performance characteristics</p>
+<hr />
+<h2 id="recommended-improvements">Recommended Improvements</h2>
+<h3 id="define-standard-converter-interface">1. <strong>Define Standard
+Converter Interface</strong></h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> BaseConverter {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(context<span class="op">:</span> ConversionContext)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>ConverterResult<span class="op">&gt;;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> ConversionContext {</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  node<span class="op">:</span> AdfNode<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  children<span class="op">:</span> MarkdownBlock[]<span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  level<span class="op">?:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  confluenceBaseUrl<span class="op">?:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  documentContext<span class="op">?:</span> DocumentContext<span class="op">;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  options<span class="op">?:</span> ConversionOptions<span class="op">;</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="implement-converter-classification">2. <strong>Implement
+Converter Classification</strong></h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">enum</span> ConverterType {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  SIMPLE <span class="op">=</span> <span class="st">&#39;simple&#39;</span><span class="op">,</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  ASYNC <span class="op">=</span> <span class="st">&#39;async&#39;</span><span class="op">,</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  LEVEL_AWARE <span class="op">=</span> <span class="st">&#39;level-aware&#39;</span><span class="op">,</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  CONTEXT_AWARE <span class="op">=</span> <span class="st">&#39;context-aware&#39;</span><span class="op">,</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  DELEGATING <span class="op">=</span> <span class="st">&#39;delegating&#39;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> ConverterMetadata {</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  type<span class="op">:</span> ConverterType<span class="op">;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  requirements<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  capabilities<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="standardize-error-handling">3. <strong>Standardize Error
+Handling</strong></h3>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> ConversionResult {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  markdown<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  context<span class="op">?:</span> ConversionContext<span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  errors<span class="op">?:</span> ConversionError[]<span class="op">;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  warnings<span class="op">?:</span> ConversionWarning[]<span class="op">;</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="create-converter-base-classes">4. <strong>Create Converter Base
+Classes</strong></h3>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">abstract</span> <span class="kw">class</span> BaseConverter {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">abstract</span> <span class="fu">convert</span>(context<span class="op">:</span> ConversionContext)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>ConverterResult<span class="op">&gt;;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">protected</span> <span class="fu">handleError</span>(error<span class="op">:</span> <span class="bu">Error</span><span class="op">,</span> context<span class="op">:</span> ConversionContext)<span class="op">:</span> ConversionError {</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Standardized error handling</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">protected</span> <span class="fu">validateInput</span>(context<span class="op">:</span> ConversionContext)<span class="op">:</span> <span class="dt">boolean</span> {</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Common validation logic</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SimpleConverter <span class="kw">extends</span> BaseConverter {</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Implementation for simple converters</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AsyncConverter <span class="kw">extends</span> BaseConverter {</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Implementation for async converters</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="implement-converter-registry">5. <strong>Implement Converter
+Registry</strong></h3>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ConverterRegistry {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> converters <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> BaseConverter<span class="op">&gt;</span>()<span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">register</span>(nodeType<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> converter<span class="op">:</span> BaseConverter)<span class="op">:</span> <span class="dt">void</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getConverter</span>(nodeType<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> BaseConverter <span class="op">|</span> <span class="dt">undefined</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getAllConverters</span>()<span class="op">:</span> <span class="bu">Map</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> BaseConverter<span class="op">&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="migration-strategy">Migration Strategy</h2>
+<h3 id="phase-1-interface-standardization">Phase 1: Interface
+Standardization</h3>
+<ol type="1">
+<li>Define common interfaces</li>
+<li>Update existing converters to implement interfaces</li>
+<li>Add type safety to main converter</li>
+</ol>
+<h3 id="phase-2-error-handling">Phase 2: Error Handling</h3>
+<ol type="1">
+<li>Implement standardized error handling</li>
+<li>Add error context preservation</li>
+<li>Improve error reporting</li>
+</ol>
+<h3 id="phase-3-pattern-consolidation">Phase 3: Pattern
+Consolidation</h3>
+<ol type="1">
+<li>Identify and extract common patterns</li>
+<li>Create base classes for each pattern</li>
+<li>Migrate converters to use base classes</li>
+</ol>
+<h3 id="phase-4-testing-and-documentation">Phase 4: Testing and
+Documentation</h3>
+<ol type="1">
+<li>Create comprehensive test suite</li>
+<li>Document converter patterns and usage</li>
+<li>Add performance benchmarks</li>
+</ol>
+<hr />
+<h2 id="conclusion">Conclusion</h2>
+<p>The current ADF-to-Markdown converter system works but suffers from
+<strong>architectural inconsistencies</strong> that impact
+maintainability, testability, and extensibility. The identified
+<strong>6 different patterns</strong> demonstrate a lack of
+standardization that should be addressed through:</p>
+<ol type="1">
+<li><strong>Interface standardization</strong></li>
+<li><strong>Pattern consolidation</strong></li>
+<li><strong>Error handling improvement</strong></li>
+<li><strong>Documentation enhancement</strong></li>
+</ol>
+<p>Implementing these improvements would result in a more robust,
+maintainable, and extensible conversion system while preserving the
+existing functionality and performance characteristics.</p>
+<hr />
+<p><strong>Technical Debt Impact:</strong> - <strong>High</strong> -
+Maintenance difficulty - <strong>Medium</strong> - Testing
+complexity<br />
+- <strong>Medium</strong> - Onboarding new developers -
+<strong>Low</strong> - Current functionality (system works despite
+inconsistencies)</p>
+<p><strong>Recommended Priority:</strong> Address interface
+standardization first, as it provides the foundation for other
+improvements while having minimal impact on existing functionality.</p>
+</body>
+</html>

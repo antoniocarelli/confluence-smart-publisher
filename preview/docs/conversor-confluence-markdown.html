@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>conversor-confluence-markdown</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<h1 id="confluence-markdown-conversion-flow-documentation">🔄 Confluence
+↔︎ Markdown Conversion Flow Documentation</h1>
+<h2 id="overview">Overview</h2>
+<p>This document provides a comprehensive guide for bidirectional
+conversion between Confluence Storage Format and Markdown, covering both
+technical implementation details and usage instructions for the
+Confluence Smart Publisher extension.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol type="1">
+<li><a href="#confluence-to-markdown-conversion">Confluence to Markdown
+Conversion</a></li>
+<li><a href="#markdown-to-confluence-conversion">Markdown to Confluence
+Conversion</a></li>
+<li><a href="#supported-elements">Supported Elements</a></li>
+<li><a href="#technical-implementation">Technical
+Implementation</a></li>
+<li><a href="#usage-instructions">Usage Instructions</a></li>
+<li><a href="#limitations-and-considerations">Limitations and
+Considerations</a></li>
+</ol>
+<hr />
+<h2 id="confluence-to-markdown-conversion">Confluence to Markdown
+Conversion</h2>
+<h3 id="process-overview">Process Overview</h3>
+<p>The Confluence to Markdown converter transforms Confluence Storage
+Format files (<code>.confluence</code>) into Markdown format
+(<code>.html</code>), preserving document structure and formatting through
+a sophisticated ADF (Atlassian Document Format) to Markdown conversion
+process.</p>
+<h3 id="conversion-flow">Conversion Flow</h3>
+<ol type="1">
+<li><strong>Document Analysis</strong>
+<ul>
+<li>Read Confluence Storage Format file</li>
+<li>Parse ADF (Atlassian Document Format) structure</li>
+<li>Extract metadata from <code>&lt;csp:parameters&gt;</code>
+blocks</li>
+<li>Identify document elements and hierarchy</li>
+</ul></li>
+<li><strong>Element Processing</strong>
+<ul>
+<li>Process each ADF node recursively</li>
+<li>Apply type-specific converters for each element</li>
+<li>Maintain hierarchical relationships</li>
+<li>Generate unique IDs for internal links</li>
+</ul></li>
+<li><strong>Markdown Generation</strong>
+<ul>
+<li>Create YAML front matter from metadata</li>
+<li>Apply Markdown formatting rules</li>
+<li>Generate table of contents automatically</li>
+<li>Validate output syntax</li>
+</ul></li>
+<li><strong>File Output</strong>
+<ul>
+<li>Save converted content as <code>.html</code> file</li>
+<li>Preserve original file</li>
+<li>Maintain directory structure</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="markdown-to-confluence-conversion">Markdown to Confluence
+Conversion</h2>
+<h3 id="process-overview-1">Process Overview</h3>
+<p>The Markdown to Confluence converter transforms Markdown files
+(<code>.html</code>) into Confluence Storage Format, enabling easy
+migration and publishing to Confluence.</p>
+<h3 id="conversion-flow-1">Conversion Flow</h3>
+<ol type="1">
+<li><strong>Initial Validation</strong>
+<ul>
+<li>Verify file has <code>.html</code> extension</li>
+<li>Check file accessibility and permissions</li>
+</ul></li>
+<li><strong>File Reading and Parsing</strong>
+<ul>
+<li>Read Markdown content</li>
+<li>Parse YAML front matter (if present)</li>
+<li>Analyze document structure</li>
+</ul></li>
+<li><strong>Markdown Parsing</strong>
+<ul>
+<li>Identify and categorize elements:
+<ul>
+<li>Headers and their levels</li>
+<li>Lists (ordered and unordered)</li>
+<li>Code blocks with language specification</li>
+<li>Tables with alignment</li>
+<li>Links and images</li>
+<li>Text formatting (bold, italic, strikethrough)</li>
+<li>Blockquotes and special blocks</li>
+</ul></li>
+</ul></li>
+<li><strong>Confluence Format Conversion</strong>
+<ul>
+<li>Convert each Markdown element to Confluence Storage Format
+equivalent</li>
+<li>Maintain document structure and hierarchy</li>
+<li>Preserve formatting and styling attributes</li>
+<li>Generate appropriate ADF nodes</li>
+</ul></li>
+<li><strong>File Creation</strong>
+<ul>
+<li>Create new <code>.confluence</code> file with same base name</li>
+<li>Write converted content with proper XML structure</li>
+<li>Add CSP metadata blocks</li>
+<li>Preserve original Markdown file</li>
+</ul></li>
+<li><strong>User Feedback</strong>
+<ul>
+<li>Display success message with file path</li>
+<li>Show error messages for failed conversions</li>
+<li>Log detailed information to “Output | CSP” panel</li>
+</ul></li>
+</ol>
+<hr />
+<h2 id="supported-elements">Supported Elements</h2>
+<h3 id="metadata-handling">1. Metadata Handling</h3>
+<p><strong>YAML Front Matter:</strong></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">file_id</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;123456&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">labels</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;user-story&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;scope&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;pending&quot;</span><span class="kw">]</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">version</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1.0&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">status</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;current&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lastModified</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;2025-06-09&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">properties</span><span class="kw">:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">author</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;John Doe&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">department</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Engineering&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="pp">---</span></span></code></pre></div>
+<h3 id="headers">2. Headers</h3>
+<p>Converts between Confluence headers and Markdown format:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># H1 Title</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">## H2 Title</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">### H3 Title</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">#### H4 Title</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">##### H5 Title</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">###### H6 Title</span></span></code></pre></div>
+<h3 id="tables">3. Tables</h3>
+<p><strong>Markdown Format:</strong></p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>| Header 1 | Header 2 | Header 3 |</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>|----------|:--------:|---------:|</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>| Left     | Center   | Right    |</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>| Cell 1   | Cell 2   | Cell 3   |</span></code></pre></div>
+<p><strong>Features:</strong> - Column alignment preservation - Header
+detection and formatting - Property table support (key-value pairs) -
+Complex cell content handling</p>
+<h3 id="lists">4. Lists</h3>
+<p><strong>Unordered Lists:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Item 1</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Subitem 1.1</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>Subitem 1.2</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Item 2</span></code></pre></div>
+<p><strong>Ordered Lists:</strong></p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>First item</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Second item</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ss">   1. </span>Nested item 1</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ss">   2. </span>Nested item 2</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Third item</span></code></pre></div>
+<p><strong>Task Lists:</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Completed task</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[ ]</span> Incomplete task</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="va">[x]</span> Another completed task</span></code></pre></div>
+<h3 id="code-blocks">5. Code Blocks</h3>
+<p><strong>Inline Code:</strong></p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`console.log()`</span> for debugging</span></code></pre></div>
+<p><strong>Code Blocks:</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="in">```typescript</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> code <span class="op">=</span> <span class="st">&quot;example&quot;</span><span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">hello</span>() {</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">&quot;world&quot;</span><span class="op">;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>
+### 6. Info Blocks and Panels
+
+| Confluence Macro | Markdown Output |
+|-----------------|----------------|
+| `ac:name=&quot;info&quot;` | `&gt; ℹ️ **Info**: Text` |
+| `ac:name=&quot;tip&quot;` | `&gt; 💡 **Tip**: Text` |
+| `ac:name=&quot;note&quot;` | `&gt; 📝 **Note**: Text` |
+| `ac:name=&quot;warning&quot;` | `&gt; ⚠️ **Warning**: Text` |
+| `ac:name=&quot;error&quot;` | `&gt; ⛔ **Error**: Text` |
+
+### 7. Expandable Sections
+
+```markdown
+&lt;details&gt;
+&lt;summary&gt;Expandable Title&lt;/summary&gt;
+
+Content inside the expandable section
+&lt;/details&gt;</code></pre>
+<h3 id="links-and-references">8. Links and References</h3>
+<p><strong>Internal Links:</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Section Reference</span><span class="co">](#section-id)</span></span></code></pre></div>
+<p><strong>External Links:</strong></p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">External Link</span><span class="co">](https://example.com)</span></span></code></pre></div>
+<p><strong>Link Resolution:</strong> - Automatic slug generation for
+headings - Confluence page link conversion - URL validation and
+correction</p>
+<h3 id="mathematical-expressions">9. Mathematical Expressions</h3>
+<p><strong>Inline Math:</strong></p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>The formula is <span class="sc">\(</span>E = mc^2<span class="sc">\)</span></span></code></pre></div>
+<p><strong>Block Math:</strong></p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>$$</span></code></pre></div>
+<h3 id="special-elements">10. Special Elements</h3>
+<p><strong>Horizontal Rules:</strong></p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span></code></pre></div>
+<p><strong>Mentions:</strong></p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>@username</span></code></pre></div>
+<p><strong>Emojis:</strong></p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>:smile: :heart: :thumbsup:</span></code></pre></div>
+<hr />
+<h2 id="technical-implementation">Technical Implementation</h2>
+<h3 id="core-architecture">Core Architecture</h3>
+<p>The conversion system uses a modular architecture with specialized
+converters:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> ConverterResult {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  markdown<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  context<span class="op">?:</span> {</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    hasComplexContent<span class="op">?:</span> <span class="dt">boolean</span><span class="op">;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    originalType<span class="op">?:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    needsYaml<span class="op">?:</span> <span class="dt">boolean</span><span class="op">;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> AdfToMarkdownConverter {</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convertNode</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> level<span class="op">:</span> <span class="dt">number</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>MarkdownBlock<span class="op">&gt;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convertChildren</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> level<span class="op">:</span> <span class="dt">number</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>MarkdownBlock[]<span class="op">&gt;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getConverter</span>(type<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> ConverterFunction</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="detailed-code-flow-adf-to-markdown-conversion">Detailed Code
+Flow: ADF to Markdown Conversion</h3>
+<p>The ADF to Markdown conversion follows a sophisticated recursive
+processing pattern. Here’s the detailed flow through the codebase:</p>
+<pre class="mermaid"><code>flowchart TD
+    A[ADF Document JSON] --&gt; B[AdfToMarkdownConverter]
+    B --&gt; C[convertNode method]
+    C --&gt; D{Node Type?}
+    
+    D --&gt;|doc| E[doc-converter.ts]
+    D --&gt;|paragraph| F[paragraph-converter.ts]
+    D --&gt;|heading| G[heading-converter.ts]
+    D --&gt;|table| H[table-converter.ts]
+    D --&gt;|text| I[text-converter.ts]
+    D --&gt;|bulletList| J[bullet-list-converter.ts]
+    D --&gt;|extension| K[extension-converter.ts]
+    D --&gt;|outros| L[Outros conversores específicos]
+    
+    E --&gt; M[convertChildren recursively]
+    F --&gt; M
+    G --&gt; M
+    H --&gt; M
+    I --&gt; N[No children - leaf node]
+    J --&gt; M
+    K --&gt; M
+    L --&gt; M
+    
+    M --&gt; O[convertWithCentralizedYaml]
+    N --&gt; O
+    O --&gt; P[processConverterResult]
+    P --&gt; Q{Needs YAML?}
+    
+    Q --&gt;|Yes| R[generateYamlBlock or createSmartYamlBlock]
+    Q --&gt;|No| S[Only markdown content]
+    
+    R --&gt; T[MarkdownBlock with YAML]
+    S --&gt; U[MarkdownBlock without YAML]
+    
+    T --&gt; V[renderBlock method]
+    U --&gt; V
+    V --&gt; W[HTML Comments + Markdown + ADF metadata]
+    W --&gt; X[Final Markdown with ADF-START/ADF-END comments]</code></pre>
+<h4 id="entry-point-adftomarkdownconverter">1. Entry Point:
+<code>AdfToMarkdownConverter</code></h4>
+<p><strong>File:</strong>
+<code>src/adf-md-converter/adf-to-md-converter.ts</code></p>
+<p>This is the main orchestrator class that implements a <strong>Visitor
+Pattern</strong> to traverse the ADF tree:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">class</span> AdfToMarkdownConverter {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> rootDocument<span class="op">?:</span> AdfNode<span class="op">;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">private</span> allNodes<span class="op">:</span> AdfNode[] <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">async</span> <span class="fu">convertNode</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> level<span class="op">:</span> <span class="dt">number</span> <span class="op">=</span> <span class="dv">0</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>MarkdownBlock<span class="op">&gt;</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">async</span> <span class="fu">convertChildren</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> level<span class="op">:</span> <span class="dt">number</span> <span class="op">=</span> <span class="dv">0</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>MarkdownBlock[]<span class="op">&gt;</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">getConverter</span>(type<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> ConverterFunction</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Why this file exists:</strong> - Centralize conversion logic
+in a single class - Implement controlled recursive processing - Separate
+YAML generation responsibility from specific converters - Provide
+document-wide context for converters that need it</p>
+<h4 id="processing-flow-convertnode-and-convertchildren">2. Processing
+Flow: <code>convertNode()</code> and <code>convertChildren()</code></h4>
+<p>The conversion process follows this sequence:</p>
+<ol type="1">
+<li><strong><code>convertNode()</code></strong> is called for each ADF
+node</li>
+<li><strong>First step:</strong> Call <code>convertChildren()</code> to
+process child nodes recursively (bottom-up approach)</li>
+<li><strong>Second step:</strong> Select appropriate converter using
+<code>getConverter()</code></li>
+<li><strong>Third step:</strong> Apply
+<code>convertWithCentralizedYaml()</code> to generate final result</li>
+</ol>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="fu">convertNode</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> level<span class="op">:</span> <span class="dt">number</span> <span class="op">=</span> <span class="dv">0</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>MarkdownBlock<span class="op">&gt;</span> {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// If root document, collect all nodes for context</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (node<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&#39;doc&#39;</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="kw">this</span><span class="op">.</span><span class="at">rootDocument</span>) {</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="at">rootDocument</span> <span class="op">=</span> node<span class="op">;</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">this</span><span class="op">.</span><span class="fu">collectAllNodes</span>(node)<span class="op">;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Process children first (bottom-up)</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> children <span class="op">=</span> <span class="cf">await</span> <span class="kw">this</span><span class="op">.</span><span class="fu">convertChildren</span>(node<span class="op">,</span> level)<span class="op">;</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Get specific converter for this node type</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> converter <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">getConverter</span>(node<span class="op">.</span><span class="at">type</span>)<span class="op">;</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Apply converter with centralized YAML generation</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> block <span class="op">=</span> <span class="cf">await</span> <span class="kw">this</span><span class="op">.</span><span class="fu">convertWithCentralizedYaml</span>(node<span class="op">,</span> converter<span class="op">,</span> children<span class="op">,</span> level)<span class="op">;</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> block<span class="op">;</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Why this approach:</strong> - <strong>Bottom-up
+processing:</strong> Children are converted before parents, ensuring
+proper data flow - <strong>Context preservation:</strong> Document
+structure is maintained throughout conversion - <strong>Centralized
+control:</strong> All conversions go through the same pipeline</p>
+<h4 id="converter-selection-getconverter">3. Converter Selection:
+<code>getConverter()</code></h4>
+<p>This method implements a <strong>Factory Pattern</strong>, mapping
+ADF node types to specific converters:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getConverter</span>(type<span class="op">:</span> <span class="dt">string</span>)<span class="op">:</span> ConverterFunction {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="kw">type</span> <span class="op">===</span> <span class="st">&#39;paragraph&#39;</span>) <span class="cf">return</span> convertParagraph<span class="op">;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="kw">type</span> <span class="op">===</span> <span class="st">&#39;heading&#39;</span>) <span class="cf">return</span> convertHeading<span class="op">;</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="kw">type</span> <span class="op">===</span> <span class="st">&#39;table&#39;</span>) <span class="cf">return</span> convertTable<span class="op">;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="kw">type</span> <span class="op">===</span> <span class="st">&#39;bulletList&#39;</span>) <span class="cf">return</span> convertBulletList<span class="op">;</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ... 25+ other mappings</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Fallback for unimplemented types</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (node<span class="op">,</span> children) <span class="kw">=&gt;</span> ({</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    yamlBlock<span class="op">:</span> <span class="fu">generateYamlBlock</span>({ adfType<span class="op">:</span> <span class="st">&#39;not-implemented&#39;</span><span class="op">,</span> originalNode<span class="op">:</span> node })<span class="op">,</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    markdown<span class="op">:</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Why this design:</strong> - <strong>Extensibility:</strong>
+Easy to add new node types - <strong>Maintainability:</strong> Each
+converter has single responsibility - <strong>Testability:</strong>
+Converters can be tested independently - <strong>Fallback
+handling:</strong> Unknown types are handled gracefully</p>
+<h4 id="specialized-converters">4. Specialized Converters</h4>
+<p><strong>Directory:</strong>
+<code>src/adf-md-converter/converters/</code></p>
+<p>Each converter handles one specific ADF node type. Examples:</p>
+<p><strong><code>paragraph-converter.ts</code>:</strong></p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertParagraph</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[])<span class="op">:</span> ConverterResult {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> markdown <span class="op">=</span> children<span class="op">.</span><span class="fu">map</span>(child <span class="kw">=&gt;</span> child<span class="op">.</span><span class="at">markdown</span>)<span class="op">.</span><span class="fu">join</span>(<span class="st">&#39;&#39;</span>)<span class="op">;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { markdown }<span class="op">;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong><code>heading-converter.ts</code>:</strong></p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertHeading</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[])<span class="op">:</span> ConverterResult {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> level <span class="op">=</span> node<span class="op">.</span><span class="at">attrs</span><span class="op">?.</span><span class="at">level</span> <span class="op">||</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> text <span class="op">=</span> children<span class="op">.</span><span class="fu">map</span>(child <span class="kw">=&gt;</span> child<span class="op">.</span><span class="at">markdown</span>)<span class="op">.</span><span class="fu">join</span>(<span class="st">&#39;&#39;</span>)<span class="op">;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> markdown <span class="op">=</span> <span class="vs">`</span><span class="sc">${</span><span class="st">&#39;#&#39;</span><span class="op">.</span><span class="fu">repeat</span>(level)<span class="sc">}</span><span class="vs"> </span><span class="sc">${</span>text<span class="sc">}</span><span class="vs">`</span><span class="op">;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { markdown }<span class="op">;</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong><code>table-converter.ts</code>:</strong> (More complex)</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="kw">function</span> <span class="fu">convertTable</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> children<span class="op">:</span> MarkdownBlock[])<span class="op">:</span> ConverterResult {</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Property Table: special handling for key-value tables</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">isPropertyTable</span>(node)) {</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Convert to definition list format</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> markdown <span class="op">=</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span><span class="op">;</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> row <span class="kw">of</span> children) {</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>      <span class="kw">const</span> cells <span class="op">=</span> row<span class="op">.</span><span class="at">markdown</span><span class="op">.</span><span class="fu">split</span>(<span class="st">&#39;|&#39;</span>)<span class="op">.</span><span class="fu">filter</span>(<span class="bu">Boolean</span>)<span class="op">;</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (cells<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">2</span>) {</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>        markdown <span class="op">+=</span> <span class="vs">`**</span><span class="sc">${</span><span class="fu">cleanPropertyKey</span>(cells[<span class="dv">0</span>])<span class="sc">}</span><span class="vs">:** </span><span class="sc">${</span>cells[<span class="dv">1</span>]<span class="sc">}\n\n</span><span class="vs">`</span><span class="op">;</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> { markdown<span class="op">,</span> context<span class="op">:</span> { hasComplexContent<span class="op">:</span> <span class="kw">true</span> } }<span class="op">;</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Normal Table: standard markdown table format</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ... different logic for standard tables</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Why separate converter files:</strong> - <strong>Single
+Responsibility Principle:</strong> Each file handles one node type -
+<strong>Maintainability:</strong> Changes to one type don’t affect
+others - <strong>Code organization:</strong> Easy to locate and modify
+specific conversion logic - <strong>Team collaboration:</strong>
+Multiple developers can work on different converters</p>
+<h4 id="centralized-yaml-generation">5. Centralized YAML Generation</h4>
+<p><strong>File:</strong> <code>src/adf-md-converter/utils.ts</code></p>
+<p>The system uses intelligent YAML generation based on reversibility
+needs:</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"> * Types that always need YAML blocks for reversibility</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ALWAYS_NEEDS_YAML <span class="op">=</span> <span class="kw">new</span> <span class="bu">Set</span>([</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;extension&#39;</span><span class="op">,</span> <span class="st">&#39;bodiedExtension&#39;</span><span class="op">,</span> <span class="st">&#39;blockCard&#39;</span><span class="op">,</span> <span class="st">&#39;inlineCard&#39;</span><span class="op">,</span> <span class="st">&#39;embedCard&#39;</span><span class="op">,</span> <span class="st">&#39;toc&#39;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>])<span class="op">;</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">/**</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co"> * Critical attributes by node type</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"> */</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> CRITICAL_ATTRIBUTES<span class="op">:</span> <span class="bu">Record</span><span class="op">&lt;</span><span class="dt">string</span><span class="op">,</span> <span class="dt">string</span>[]<span class="op">&gt;</span> <span class="op">=</span> {</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  table<span class="op">:</span> [<span class="st">&#39;width&#39;</span><span class="op">,</span> <span class="st">&#39;layout&#39;</span>]<span class="op">,</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  tableCell<span class="op">:</span> [<span class="st">&#39;colspan&#39;</span><span class="op">,</span> <span class="st">&#39;rowspan&#39;</span><span class="op">,</span> <span class="st">&#39;background&#39;</span>]<span class="op">,</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  panel<span class="op">:</span> [<span class="st">&#39;panelType&#39;</span><span class="op">,</span> <span class="st">&#39;panelColor&#39;</span>]<span class="op">,</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ...</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>Two YAML generation strategies:</p>
+<ol type="1">
+<li><strong><code>generateYamlBlock()</code>:</strong> Always generates
+YAML</li>
+<li><strong><code>createSmartYamlBlock()</code>:</strong> Generates YAML
+only when needed for reversibility</li>
+</ol>
+<p><strong>Why centralized YAML generation:</strong> -
+<strong>Consistency:</strong> Same logic applied across all converters -
+<strong>Reversibility:</strong> Ensures ADF → MD → ADF preserves data -
+<strong>Performance:</strong> Avoids duplicate logic in each converter -
+<strong>Maintainability:</strong> YAML rules managed in one place</p>
+<h4 id="result-processing-processconverterresult">6. Result Processing:
+<code>processConverterResult()</code></h4>
+<p>This method bridges the gap between converter outputs and final
+blocks:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> <span class="fu">processConverterResult</span>(node<span class="op">:</span> AdfNode<span class="op">,</span> result<span class="op">:</span> MarkdownBlock <span class="op">|</span> ConverterResult)<span class="op">:</span> MarkdownBlock {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Handle legacy MarkdownBlock format</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="st">&#39;yamlBlock&#39;</span> <span class="kw">in</span> result) {</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result <span class="im">as</span> MarkdownBlock<span class="op">;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Process new ConverterResult format</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> converterResult <span class="op">=</span> result <span class="im">as</span> ConverterResult<span class="op">;</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> context <span class="op">=</span> converterResult<span class="op">.</span><span class="at">context</span> <span class="op">||</span> {}<span class="op">;</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Generate YAML based on smart logic or force generation</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> yamlBlock <span class="op">=</span> context<span class="op">.</span><span class="at">needsYaml</span> </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">?</span> <span class="fu">generateYamlBlock</span>({ adfType<span class="op">:</span> node<span class="op">.</span><span class="at">type</span><span class="op">,</span> <span class="op">...</span>node<span class="op">.</span><span class="at">attrs</span> })</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">:</span> <span class="fu">createSmartYamlBlock</span>(node<span class="op">,</span> context)<span class="op">;</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    yamlBlock<span class="op">,</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    markdown<span class="op">:</span> converterResult<span class="op">.</span><span class="at">markdown</span><span class="op">,</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    adfInfo<span class="op">:</span> { adfType<span class="op">:</span> node<span class="op">.</span><span class="at">type</span><span class="op">,</span> localId<span class="op">:</span> node<span class="op">.</span><span class="at">attrs</span><span class="op">?.</span><span class="at">localId</span> <span class="op">||</span> <span class="st">&#39;&#39;</span> }</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="final-rendering-renderblock">7. Final Rendering:
+<code>renderBlock()</code></h4>
+<p>Converts <code>MarkdownBlock</code> to final string output with ADF
+metadata:</p>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> <span class="fu">renderBlock</span>(block<span class="op">:</span> MarkdownBlock)<span class="op">:</span> <span class="dt">string</span> {</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> { yamlBlock<span class="op">,</span> markdown<span class="op">,</span> adfInfo } <span class="op">=</span> block<span class="op">;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>yamlBlock) {</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> markdown<span class="op">;</span> <span class="co">// Simple elements without metadata</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Extract localId for consistency</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> localIdMatch <span class="op">=</span> yamlBlock<span class="op">.</span><span class="fu">match</span>(<span class="ss">/localId=&quot;</span><span class="sc">([^&quot;]+)</span><span class="ss">&quot;/</span>)<span class="op">;</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> localId <span class="op">=</span> localIdMatch<span class="op">?.</span>[<span class="dv">1</span>] <span class="op">||</span> adfInfo<span class="op">?.</span><span class="at">localId</span> <span class="op">||</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> endComment <span class="op">=</span> <span class="vs">`&lt;!-- ADF-END adfType=&quot;</span><span class="sc">${</span>adfInfo<span class="op">?.</span><span class="at">adfType</span><span class="sc">}</span><span class="vs">&quot; localId=&quot;</span><span class="sc">${</span>localId<span class="sc">}</span><span class="vs">&quot; --&gt;`</span><span class="op">;</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> [yamlBlock<span class="op">,</span> markdown<span class="op">,</span> endComment]<span class="op">.</span><span class="fu">filter</span>(<span class="bu">Boolean</span>)<span class="op">.</span><span class="fu">join</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)<span class="op">;</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Final output format:</strong></p>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- ADF-START adfType=&quot;table&quot; localId=&quot;abc123&quot; --&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- YAML</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">layout: default</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">width: 760</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>| Header 1 | Header 2 |</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>|----------|----------|</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>| Cell 1   | Cell 2   |</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- ADF-</span><span class="re">END</span><span class="co"> adfType=&quot;table&quot; localId=&quot;abc123&quot; --&gt;</span></span></code></pre></div>
+<h4 id="document-context-documentcontext">8. Document Context:
+<code>DocumentContext</code></h4>
+<p><strong>File:</strong> <code>src/adf-md-converter/types.ts</code></p>
+<p>For converters that need access to the entire document (like
+TOC):</p>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> DocumentContext {</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  allNodes<span class="op">:</span> AdfNode[]<span class="op">;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  rootDocument<span class="op">:</span> AdfNode<span class="op">;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Used by complex converters like <code>toc-converter.ts</code> to
+analyze all headings in the document.</p>
+<h3 id="converter-architecture-patterns">Converter Architecture
+Patterns</h3>
+<p>The system implements 6 distinct converter patterns:</p>
+<ol type="1">
+<li><strong>Simple Converters</strong> - Basic synchronous
+conversion</li>
+<li><strong>Async Converters</strong> - For elements requiring external
+data</li>
+<li><strong>Level-Aware Converters</strong> - For nested elements
+(lists)</li>
+<li><strong>Context-Aware Converters</strong> - For document-wide
+analysis (TOC)</li>
+<li><strong>Delegating Converters</strong> - Route to specialized
+sub-converters</li>
+<li><strong>Specialized Logic Converters</strong> - Multiple conversion
+paths within same converter</li>
+</ol>
+<h3 id="yaml-generation-strategy">YAML Generation Strategy</h3>
+<p>The system uses centralized YAML generation with smart detection:</p>
+<ul>
+<li><strong>Always Generate YAML:</strong> Extensions, cards, complex
+elements</li>
+<li><strong>Conditional YAML:</strong> Based on critical attributes for
+reversibility</li>
+<li><strong>No YAML:</strong> Simple elements that can be inferred from
+Markdown</li>
+</ul>
+<h3 id="error-handling">Error Handling</h3>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> ConversionError {</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  type<span class="op">:</span> <span class="st">&#39;warning&#39;</span> <span class="op">|</span> <span class="st">&#39;error&#39;</span><span class="op">;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  element<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  message<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  context<span class="op">?:</span> <span class="dt">any</span><span class="op">;</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This architecture ensures that the conversion is
+<strong>reversible</strong>, <strong>extensible</strong>, and
+<strong>maintainable</strong>, allowing Confluence documents to be
+converted to Markdown and back without losing structural
+information.</p>
+<hr />
+<h2 id="usage-instructions">Usage Instructions</h2>
+<h3 id="converting-confluence-to-markdown">Converting Confluence to
+Markdown</h3>
+<ol type="1">
+<li><strong>Via Context Menu:</strong>
+<ul>
+<li>Right-click on a <code>.confluence</code> file in VS Code
+explorer</li>
+<li>Select “Confluence Smart Publisher” → “Convert to Markdown”</li>
+</ul></li>
+<li><strong>Via Command Palette:</strong>
+<ul>
+<li>Press <code>Ctrl+Shift+P</code> (Windows/Linux) or
+<code>Cmd+Shift+P</code> (Mac)</li>
+<li>Type “Convert to Markdown”</li>
+<li>Select the command</li>
+</ul></li>
+</ol>
+<h3 id="converting-markdown-to-confluence">Converting Markdown to
+Confluence</h3>
+<ol type="1">
+<li><strong>Via Context Menu:</strong>
+<ul>
+<li>Right-click on a <code>.html</code> file in VS Code explorer</li>
+<li>Select “Confluence Smart Publisher” → “Convert to Confluence
+Format”</li>
+</ul></li>
+<li><strong>Command ID:</strong>
+<code>confluence-smart-publisher.convertMarkdown</code></li>
+</ol>
+<h3 id="output-files">Output Files</h3>
+<ul>
+<li><strong>Confluence to Markdown:</strong> Creates
+<code>filename.html</code> alongside <code>filename.confluence</code></li>
+<li><strong>Markdown to Confluence:</strong> Creates
+<code>filename.confluence</code> alongside <code>filename.html</code></li>
+<li>Original files are never modified or deleted</li>
+</ul>
+<hr />
+<h2 id="limitations-and-considerations">Limitations and
+Considerations</h2>
+<h3 id="known-limitations">Known Limitations</h3>
+<ol type="1">
+<li><strong>Complex Formatting</strong>
+<ul>
+<li>Some Confluence-specific elements may not have direct Markdown
+equivalents</li>
+<li>Complex nested structures might require manual adjustment</li>
+<li>Advanced Confluence macros may be converted to fallback
+representations</li>
+</ul></li>
+<li><strong>Link Resolution</strong>
+<ul>
+<li>Internal Confluence links may need manual adjustment</li>
+<li>Cross-space references might not resolve correctly</li>
+<li>Attachment links require special handling</li>
+</ul></li>
+<li><strong>Media Elements</strong>
+<ul>
+<li>Images and videos require manual path adjustment</li>
+<li>Embedded content may not convert perfectly</li>
+<li>File attachments need separate handling</li>
+</ul></li>
+</ol>
+<h3 id="best-practices">Best Practices</h3>
+<ol type="1">
+<li><strong>Before Conversion</strong>
+<ul>
+<li>Backup original files</li>
+<li>Review document structure</li>
+<li>Identify potential problematic elements</li>
+</ul></li>
+<li><strong>After Conversion</strong>
+<ul>
+<li>Validate output formatting</li>
+<li>Check link functionality</li>
+<li>Test mathematical expressions</li>
+<li>Verify table structures</li>
+</ul></li>
+<li><strong>Quality Assurance</strong>
+<ul>
+<li>Compare original and converted content</li>
+<li>Test in target environment</li>
+<li>Document any manual adjustments needed</li>
+</ul></li>
+</ol>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<ul>
+<li><strong>Check Output Panel:</strong> View detailed logs in “Output |
+CSP”</li>
+<li><strong>Validate Input:</strong> Ensure source files are properly
+formatted</li>
+<li><strong>Review Errors:</strong> Address warnings and errors
+systematically</li>
+<li><strong>Manual Fixes:</strong> Some elements may require
+post-conversion adjustment</li>
+</ul>
+<hr />
+<h2 id="future-enhancements">Future Enhancements</h2>
+<ol type="1">
+<li><strong>Extended Element Support</strong>
+<ul>
+<li>Additional Confluence macros</li>
+<li>Advanced table features</li>
+<li>Enhanced media handling</li>
+</ul></li>
+<li><strong>Improved Link Resolution</strong>
+<ul>
+<li>Automatic Confluence URL detection</li>
+<li>Cross-reference validation</li>
+<li>Link health checking</li>
+</ul></li>
+<li><strong>Batch Processing</strong>
+<ul>
+<li>Multiple file conversion</li>
+<li>Directory-level operations</li>
+<li>Automated workflows</li>
+</ul></li>
+<li><strong>Enhanced Validation</strong>
+<ul>
+<li>Pre-conversion checks</li>
+<li>Post-conversion validation</li>
+<li>Quality metrics</li>
+</ul></li>
+</ol>
+<hr />
+<p>This documentation provides a comprehensive guide for using the
+Confluence ↔︎ Markdown conversion features. For technical details about
+the implementation, refer to the source code and inline
+documentation.</p>
+</body>
+</html>

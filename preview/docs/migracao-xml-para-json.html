@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>migracao-xml-para-json</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<h1 id="migração-de-xml-para-json-nos-arquivos-.confluence">Migração de
+XML para JSON nos arquivos <code>.confluence</code></h1>
+<h2 id="visão-geral">Visão Geral</h2>
+<p>Com a mudança do reconhecimento dos arquivos <code>.confluence</code>
+de XML para JSON, é necessário adaptar toda a extensão para: - Gerar,
+ler e validar blocos de metadados (CSP) em formato JSON, não mais XML. -
+Remover dependências e utilitários relacionados a XML. - Atualizar
+exemplos, documentação e validações para o novo padrão.</p>
+<hr />
+<h2 id="análise-das-mudanças-necessárias">Análise das Mudanças
+Necessárias</h2>
+<h3 id="srcconfluenceclient.ts">1. src/confluenceClient.ts</h3>
+<ul>
+<li><strong>Geração e leitura de blocos
+<code>&lt;csp:parameters&gt;</code> em XML:</strong>
+<ul>
+<li><p>O código monta, lê e espera blocos XML
+(<code>&lt;csp:parameters&gt;</code>, <code>&lt;csp:file_id&gt;</code>,
+etc).</p></li>
+<li><p><strong>Ação:</strong> Alterar para gerar, ler e manipular um
+objeto JSON equivalente, por exemplo:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;csp&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;file_id&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;labels_list&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;parent_id&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;properties&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span> <span class="dt">&quot;key&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span><span class="fu">,</span> <span class="dt">&quot;value&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span> <span class="fu">}</span><span class="ot">]</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div></li>
+</ul></li>
+<li><strong>Uso de <code>xml-escape</code>:</strong>
+<ul>
+<li>Não será mais necessário escapar strings para XML.</li>
+<li><strong>Ação:</strong> Remover dependência e uso de
+<code>xml-escape</code>.</li>
+</ul></li>
+<li><strong>Funções de extração de tags e propriedades via regex de
+XML:</strong>
+<ul>
+<li>Exemplo: <code>extractTag</code>,
+<code>extractProperties</code>.</li>
+<li><strong>Ação:</strong> Trocar para leitura direta de propriedades do
+JSON.</li>
+</ul></li>
+</ul>
+<h3 id="srcmarkdownconverter.ts">2. src/markdownConverter.ts</h3>
+<ul>
+<li><strong>Função <code>convertHtmlToConfluence</code> e uso de
+XML:</strong>
+<ul>
+<li>Adiciona cabeçalho XML ao conteúdo.</li>
+<li><strong>Ação:</strong> Alterar para adicionar bloco JSON no início
+do arquivo, se necessário.</li>
+</ul></li>
+</ul>
+<h3 id="srcdiagnostics.ts-e-srcconfluencevalidator.ts">3.
+src/diagnostics.ts e src/confluenceValidator.ts</h3>
+<ul>
+<li><strong>Validação baseada em tags XML:</strong>
+<ul>
+<li>Usa cheerio em modo XML para validar estrutura.</li>
+<li><strong>Ação:</strong> Trocar validação para estrutura de objeto
+JSON, validando chaves e tipos.</li>
+</ul></li>
+</ul>
+<h3 id="dependências">4. Dependências</h3>
+<ul>
+<li><strong>Remover dependências não utilizadas:</strong>
+<ul>
+<li><code>xml-escape</code>, <code>cheerio</code>,
+<code>fast-xml-parser</code> (se não forem mais necessários).</li>
+</ul></li>
+</ul>
+<h3 id="readme.html">5. README.html</h3>
+<ul>
+<li><strong>Atualizar exemplos e instruções:</strong>
+<ul>
+<li>Trocar exemplos de XML para JSON.</li>
+<li>Atualizar instruções sobre estrutura dos arquivos
+<code>.confluence</code>.</li>
+</ul></li>
+</ul>
+<hr />
+<h2 id="pontos-específicos-do-fluxo-de-conversão-adfmarkdown">Pontos
+Específicos do Fluxo de Conversão (ADF/Markdown)</h2>
+<h3 id="pontos-já-migradoscobertos-no-novo-fluxo-adf">Pontos já
+migrados/cobertos no novo fluxo ADF:</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />Geração do bloco CSP em
+JSON no início do arquivo Markdown.</label></li>
+<li><label><input type="checkbox" checked="" />Geração do TOC (índice) a
+partir dos headings do documento ADF.</label></li>
+<li><label><input type="checkbox" checked="" />Conversão de painéis,
+status, expand, tabelas, listas, emojis, tasks, etc., com funções
+específicas para cada tipo de nó ADF.</label></li>
+<li><label><input type="checkbox" checked="" />Remoção de dependências e
+lógica baseada em XML.</label></li>
+</ul>
+<h3 id="pontos-que-ainda-precisam-de-revisãomigraçãoadaptação">Pontos
+que ainda precisam de revisão/migração/adaptação:</h3>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" /><strong>Cobertura
+completa de macros especiais:</strong> Validar se todos os tipos de
+macros do Confluence (expand, panel, status, code, math, task, emoticon,
+etc.) e suas variações/aninhamentos estão corretamente mapeados e
+convertidos no fluxo ADF.</label></li>
+<li><label><input type="checkbox" /><strong>Conversão de tabelas de
+propriedades:</strong> Garantir que tabelas de propriedades (1 th + 1 td
+por linha) do ADF sejam convertidas para o formato Markdown especial
+(<code>**key:** value</code>).</label></li>
+<li><label><input type="checkbox" checked="" /><strong>Conversão de
+links especiais:</strong> Validar se todos os tipos de links especiais
+(Jira, Confluence, etc.) são tratados corretamente no fluxo
+ADF.</label></li>
+<li><label><input type="checkbox" checked="" /><strong>Conversão de
+datas e times:</strong> Garantir que todos os formatos de data do ADF
+sejam convertidos corretamente para texto ISO ou formato
+desejado.</label></li>
+<li><label><input type="checkbox" checked="" /><strong>Conversão de
+blocos de código:</strong> Validar se blocos de código do ADF mantêm a
+linguagem e o conteúdo fielmente.</label></li>
+<li><label><input type="checkbox" checked="" /><strong>Parágrafos vazios
+e estrutura:</strong> Garantir que parágrafos vazios não gerem Markdown
+desnecessário.</label></li>
+<li><label><input type="checkbox" checked="" /><strong>Padronização de
+reversibilidade:</strong> Avaliar se todos os blocos reversíveis devem
+ser JSON puro (em vez de YAML) e padronizar.</label></li>
+</ul>
+<hr />
+<h2 id="macros-especiais-mapeamento-e-pontos-de-atenção">Macros
+Especiais: Mapeamento e Pontos de Atenção</h2>
+<p>Abaixo estão as macros do Confluence que já estão cobertas, as que
+precisam de revisão e as que ainda precisam ser implementadas/adaptadas
+no fluxo ADF:</p>
+<h3 id="macros-já-mapeadas-e-implementadas">Macros já mapeadas e
+implementadas</h3>
+<ul>
+<li><strong>expand</strong>: Convertida para bloco markdown com título e
+conteúdo, inclui bloco YAML para reversibilidade. Verificar atributos e
+casos aninhados.</li>
+<li><strong>panel</strong>: Convertida para bloco markdown com ícone e
+texto, inclui bloco YAML. Verificar todos os tipos de painel (note, tip,
+info, warning, error, custom).</li>
+<li><strong>status</strong>: Convertida para emoji + texto, sem bloco
+YAML. Checar se todas as cores e variações estão mapeadas.</li>
+<li><strong>code</strong> (inline): Convertida para markdown inline
+<code>`code`</code>. Verificar necessidade de atributos extras.</li>
+<li><strong>codeBlock</strong>: Convertida para bloco markdown com
+linguagem, inclui YAML se houver atributos extras. Garantir fidelidade
+do conteúdo e linguagem.</li>
+<li><strong>taskList</strong> e <strong>taskItem</strong>: Convertidas
+para listas de tarefas. Checar compatibilidade com markdown de
+tasks.</li>
+<li><strong>emoji</strong>: Convertida para emoji unicode. Verificar se
+todos os atributos relevantes são considerados.</li>
+</ul>
+<h3 id="macros-que-precisam-de-atençãorevisão">Macros que precisam de
+atenção/revisão</h3>
+<ul>
+<li><strong>math</strong>: Não há função explícita para “math” ou
+“mathBlock”. Implementar conversão para blocos de fórmula (ex:
+KaTeX/LaTeX ou imagem).</li>
+<li><strong>emoticon</strong>: Pode estar parcialmente coberta por
+<code>convertEmoji</code>, mas emoticons do Confluence podem ter
+nomes/códigos diferentes dos emojis unicode. Verificar e ajustar.</li>
+<li><strong>panel</strong> (variações): Verificar se todos os tipos de
+painel estão no mapeamento. Adicionar tipos faltantes.</li>
+<li><strong>status</strong> (variações): Conferir se todas as cores
+possíveis do status estão no mapeamento. Adicionar cores faltantes.</li>
+<li><strong>task</strong> (variações): Checar suporte para tarefas
+aninhadas ou com atributos extras.</li>
+<li><strong>Macros aninhadas</strong>: Garantir que macros dentro de
+outras macros sejam processadas corretamente.</li>
+</ul>
+<h3
+id="outras-macros-comuns-do-confluence-não-mapeadas-explicitamente">Outras
+macros comuns do Confluence (não mapeadas explicitamente)</h3>
+<ul>
+<li><strong>Jira Issue/Link</strong>: Implementar tratamento especial
+para links de Jira/Confluence, se necessário.</li>
+<li><strong>User Mention</strong>: Implementar conversão para
+<code>@username</code> ou similar, se aplicável.</li>
+<li><strong>Property Table</strong>: Implementar lógica para identificar
+e converter tabelas de propriedades (1 th + 1 td por linha) para
+markdown especial.</li>
+</ul>
+<h3 id="resumo-das-ações-necessárias">Resumo das ações necessárias</h3>
+<ul>
+<li><label><input type="checkbox" checked="" />Implementar/conferir
+macro <strong>math</strong>.</label></li>
+<li><label><input type="checkbox" checked="" />Revisar/ajustar conversão
+de <strong>emoticon</strong>.</label></li>
+<li><label><input type="checkbox" checked="" />Garantir cobertura de
+todos os tipos de <strong>panel</strong> e
+<strong>status</strong>.</label></li>
+<li><label><input type="checkbox" checked="" />Checar suporte a macros
+aninhadas.</label></li>
+<li><label><input type="checkbox" checked="" />Implementar tratamento
+para <strong>links especiais</strong> (Jira, Confluence).</label></li>
+<li><label><input type="checkbox" checked="" />Implementar conversão de
+<strong>user mention</strong> (se necessário).</label></li>
+<li><label><input type="checkbox" checked="" />Implementar conversão de
+<strong>property table</strong>.</label></li>
+<li><h2
+id="x-implementar-uma-classe-de-conversão-que-garanta-que-todas-as-expecializações-delas-convertam-os-filhos-sem-que-a-conversão-em-si-precise-se-preocupar-se-ela-deve-trar-ou-não-os-seus-filhos">[x]
+Implementar uma classe de conversão, que garanta que todas as
+expecializações delas convertam os filhos, sem que a conversão em si
+precise se preocupar se ela deve trar ou não os seus filhos</h2></li>
+</ul>
+<h2 id="checklist-de-migração">Checklist de Migração</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />1. Migrar geração e
+leitura do bloco CSP em <code>confluenceClient.ts</code> para
+JSON</label></li>
+<li><label><input type="checkbox" checked="" />2. Remover uso e
+dependência de <code>xml-escape</code></label></li>
+<li><label><input type="checkbox" checked="" />3. Adaptar funções de
+extração de propriedades/tags para JSON</label></li>
+<li><label><input type="checkbox" checked="" />4. Atualizar
+<code>convertHtmlToConfluence</code> e outros pontos em
+<code>markdownConverter.ts</code> para JSON</label></li>
+<li><label><input type="checkbox" checked="" />5. Refatorar validações
+em <code>diagnostics.ts</code> e <code>confluenceValidator.ts</code>
+para JSON</label></li>
+<li><label><input type="checkbox" checked="" />6. Remover dependências
+não utilizadas (<code>xml-escape</code>, <code>cheerio</code>,
+<code>fast-xml-parser</code>)</label></li>
+<li><label><input type="checkbox" />7. Atualizar exemplos e instruções
+no <code>README.html</code> para JSON</label></li>
+<li><label><input type="checkbox" />8. Testar toda a extensão com
+arquivos <code>.confluence</code> em JSON</label></li>
+<li><label><input type="checkbox" checked="" />9. Revisar cobertura de
+macros especiais (expand, panel, status, code, math, task, emoticon,
+etc.) no fluxo ADF</label></li>
+<li><label><input type="checkbox" checked="" />10. Garantir conversão
+correta de tabelas de propriedades no fluxo ADF</label></li>
+<li><label><input type="checkbox" checked="" />11. Validar tratamento de
+links especiais (Jira, Confluence, etc.) no fluxo ADF</label></li>
+<li><label><input type="checkbox" checked="" />12. Garantir conversão
+correta de datas/times no fluxo ADF</label></li>
+<li><label><input type="checkbox" checked="" />13. Validar blocos de
+código (linguagem/conteúdo) no fluxo ADF</label></li>
+<li><label><input type="checkbox" checked="" />14. Garantir que
+parágrafos vazios não gerem Markdown desnecessário</label></li>
+<li><label><input type="checkbox" />15. Padronizar reversibilidade para
+JSON puro, se necessário</label></li>
+</ul>
+<hr />
+<blockquote>
+<p><strong>Dica:</strong> Marque cada item acima conforme for
+implementando. Se necessário, adicione sub-tarefas para pontos
+específicos.</p>
+</blockquote>
+</body>
+</html>

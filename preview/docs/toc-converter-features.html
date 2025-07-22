@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>toc-converter-features</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1
+id="conversor-de-table-of-contents-toc---funcionalidades-aprimoradas">Conversor
+de Table of Contents (TOC) - Funcionalidades Aprimoradas</h1>
+<p>O conversor de TOC foi completamente reescrito para suportar
+<strong>todas</strong> as funcionalidades do macro Table of Contents do
+Confluence, baseado na <a
+href="https://confluence.atlassian.com/doc/table-of-contents-macro-182682099.html">documentação
+oficial</a>.</p>
+<h2 id="funcionalidades-implementadas">✨ Funcionalidades
+Implementadas</h2>
+<h3 id="output-type-type">1. <strong>Output Type (type)</strong></h3>
+<ul>
+<li><code>list</code> (padrão): Produz uma lista vertical
+hierárquica</li>
+<li><code>flat</code>: Produz um menu horizontal de links</li>
+</ul>
+<h3 id="display-section-numbering-outline">2. <strong>Display Section
+Numbering (outline)</strong></h3>
+<ul>
+<li><code>true</code>: Aplica numeração hierárquica aos cabeçalhos (1.1,
+1.2, 1.3)</li>
+<li><code>false</code> (padrão): Lista normal sem numeração</li>
+</ul>
+<h3 id="list-style-style">3. <strong>List Style (style)</strong></h3>
+<p>Suporte completo para todos os estilos de bullets: -
+<code>default</code>: Estilo padrão do Confluence (diferentes por nível)
+- <code>none</code>: Sem bullets - <code>disc</code>: Círculo preenchido
+(•) - <code>circle</code>: Círculo aberto (◦) - <code>square</code>:
+Quadrado (▪) - <code>decimal</code>: Lista numerada (1, 2, 3) -
+<code>lower-alpha</code>: Lista alfabética minúscula (a, b, c) -
+<code>upper-alpha</code>: Lista alfabética maiúscula (A, B, C) -
+<code>lower-roman</code>: Numerais romanos minúsculos (i, ii, iii) -
+<code>upper-roman</code>: Numerais romanos maiúsculos (I, II, III)</p>
+<h3 id="separator-separator---para-tipo-flat">4. <strong>Separator
+(separator)</strong> - Para tipo <code>flat</code></h3>
+<ul>
+<li><code>brackets</code>: Cada item entre colchetes [ ]</li>
+<li><code>braces</code>: Cada item entre chaves { }</li>
+<li><code>parens</code>: Cada item entre parênteses ( )</li>
+<li><code>pipe</code> (padrão): Separação por pipe |</li>
+<li><strong>Custom</strong>: Qualquer texto personalizado como
+separador</li>
+</ul>
+<h3 id="heading-levels">5. <strong>Heading Levels</strong></h3>
+<ul>
+<li><code>minLevel</code>: Nível mínimo de cabeçalho (padrão: 1)</li>
+<li><code>maxLevel</code>: Nível máximo de cabeçalho (padrão: 6)</li>
+</ul>
+<h3 id="filtros-de-cabeçalhos">6. <strong>Filtros de
+Cabeçalhos</strong></h3>
+<ul>
+<li><code>include</code>: Regex para incluir cabeçalhos específicos</li>
+<li><code>exclude</code>: Regex para excluir cabeçalhos específicos</li>
+<li>Suporte completo a expressões regulares com fallback para busca
+literal</li>
+</ul>
+<h3 id="indentação-personalizada-indent">7. <strong>Indentação
+Personalizada (indent)</strong></h3>
+<ul>
+<li>Suporte a indentação customizada em pixels (ex: “10px”)</li>
+<li>Indentação progressiva automática para hierarquia</li>
+</ul>
+<h3 id="urls-absolutas-absoluteurl">8. <strong>URLs Absolutas
+(absoluteUrl)</strong></h3>
+<ul>
+<li><code>true</code>: Gera URLs completas usando confluenceBaseUrl</li>
+<li><code>false</code> (padrão): URLs relativas com âncoras</li>
+</ul>
+<h3 id="css-class-class">9. <strong>CSS Class (class)</strong></h3>
+<ul>
+<li>Adiciona classe CSS personalizada com wrapper
+<code>&lt;div&gt;</code></li>
+<li>Útil para estilização customizada</li>
+</ul>
+<h3 id="printable-printable">10. <strong>Printable
+(printable)</strong></h3>
+<ul>
+<li><code>true</code> (padrão): TOC aparece na impressão</li>
+<li><code>false</code>: TOC não aparece na impressão (com nota
+explicativa)</li>
+</ul>
+<h2 id="funcionalidades-técnicas">🔧 Funcionalidades Técnicas</h2>
+<h3 id="numeração-hierárquica-inteligente">Numeração Hierárquica
+Inteligente</h3>
+<ul>
+<li>Geração automática de numeração no formato 1.1, 1.2.1, etc.</li>
+<li>Reset automático de contadores para níveis superiores</li>
+</ul>
+<h3 id="geração-de-slugs">Geração de Slugs</h3>
+<ul>
+<li>Conversão automática de títulos para âncoras válidas</li>
+<li>Remoção de caracteres especiais e normalização</li>
+</ul>
+<h3 id="filtragem-avançada">Filtragem Avançada</h3>
+<ul>
+<li>Suporte a regex completo para include/exclude</li>
+<li>Fallback para busca literal caso regex seja inválido</li>
+<li>Filtros case-insensitive</li>
+</ul>
+<h3 id="extração-recursiva-de-texto">Extração Recursiva de Texto</h3>
+<ul>
+<li>Suporte a elementos inline complexos (strong, em, link)</li>
+<li>Extração completa de texto de cabeçalhos aninhados</li>
+</ul>
+<h2 id="exemplos-de-uso">📝 Exemplos de Uso</h2>
+<h3 id="toc-lista-simples">TOC Lista Simples</h3>
+<pre class="confluence"><code>{toc}</code></pre>
+<p>Gera uma lista hierárquica padrão com todos os cabeçalhos.</p>
+<h3 id="toc-com-numeração">TOC com Numeração</h3>
+<pre class="confluence"><code>{toc:outline=true}</code></pre>
+<p>Gera lista com numeração hierárquica (1.1, 1.2, etc.).</p>
+<h3 id="toc-horizontal">TOC Horizontal</h3>
+<pre class="confluence"><code>{toc:type=flat|separator=pipe}</code></pre>
+<p>Gera menu horizontal separado por pipes.</p>
+<h3 id="toc-filtrado">TOC Filtrado</h3>
+<pre class="confluence"><code>{toc:include=Introduction.*|exclude=.*Note|minLevel=2|maxLevel=4}</code></pre>
+<p>Inclui apenas cabeçalhos que começam com “Introduction”, exclui os
+que terminam com “Note”, níveis 2-4.</p>
+<h3 id="toc-com-estilo-romano">TOC com Estilo Romano</h3>
+<pre class="confluence"><code>{toc:style=upper-roman|outline=true}</code></pre>
+<p>Lista com numerais romanos maiúsculos e numeração hierárquica.</p>
+<h3 id="toc-flat-com-separador-personalizado">TOC Flat com Separador
+Personalizado</h3>
+<pre class="confluence"><code>{toc:type=flat|separator= → }</code></pre>
+<p>Menu horizontal com setas como separador.</p>
+<h2 id="benefícios-da-implementação">🎯 Benefícios da Implementação</h2>
+<ol type="1">
+<li><strong>Compatibilidade Total</strong>: Suporte a 100% dos
+parâmetros oficiais do Confluence</li>
+<li><strong>Flexibilidade</strong>: Adaptação automática a diferentes
+tipos de conteúdo</li>
+<li><strong>Robustez</strong>: Tratamento de erros e fallbacks
+inteligentes</li>
+<li><strong>Performance</strong>: Análise eficiente de documentos
+grandes</li>
+<li><strong>Reversibilidade</strong>: Preservação de todos os parâmetros
+via YAML</li>
+</ol>
+<h2 id="integração">🔄 Integração</h2>
+<p>O conversor se integra automaticamente ao sistema de conversão
+ADF→Markdown: - Análise completa do documento para extração de
+cabeçalhos - Preservação de metadados para conversão reversa - Suporte a
+URLs base para links absolutos - Contexto de documento para análise
+global</p>
+<p>Esta implementação garante que qualquer TOC do Confluence seja
+convertido corretamente para Markdown mantendo toda sua funcionalidade e
+configuração original.</p>
+</body>
+</html>

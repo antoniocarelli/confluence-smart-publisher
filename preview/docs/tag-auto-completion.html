@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>tag-auto-completion</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1 id="tag-auto-completion">🔄 Tag Auto-completion</h1>
+<p>Smart suggestions for Confluence custom tags and attributes as you
+type, making document creation faster and more accurate.</p>
+<h2 id="how-to-use">How to Use</h2>
+<p>The auto-completion feature is automatically activated when typing in
+any <code>.confluence</code> file. Just start typing a tag or attribute
+name to see suggestions.</p>
+<h3 id="tag-auto-completion-flow">“Tag Auto-completion” Flow</h3>
+<p>The <strong>Tag Auto-completion</strong> feature provides intelligent
+suggestions for Confluence tags and attributes. See the detailed
+flow:</p>
+<ol type="1">
+<li><strong>Trigger Detection</strong>
+<ul>
+<li>Monitors typing in <code>.confluence</code> files</li>
+<li>Detects tag and attribute triggers</li>
+<li>Identifies context for suggestions</li>
+</ul></li>
+<li><strong>Suggestion Generation</strong>
+<ul>
+<li>Analyzes current document context</li>
+<li>Identifies relevant tags and attributes</li>
+<li>Generates appropriate suggestions</li>
+<li>Prioritizes most commonly used options</li>
+</ul></li>
+<li><strong>Context-Aware Suggestions</strong>
+<ul>
+<li>Provides tag suggestions based on parent tag</li>
+<li>Suggests required attributes</li>
+<li>Offers optional attributes</li>
+<li>Maintains proper nesting structure</li>
+</ul></li>
+<li><strong>Documentation Integration</strong>
+<ul>
+<li>Shows tag descriptions</li>
+<li>Displays attribute requirements</li>
+<li>Provides usage examples</li>
+<li>Links to relevant documentation</li>
+</ul></li>
+<li><strong>Smart Filtering</strong>
+<ul>
+<li>Filters suggestions based on context</li>
+<li>Prioritizes most relevant options</li>
+<li>Removes invalid suggestions</li>
+<li>Adapts to user typing patterns</li>
+</ul></li>
+</ol>
+<blockquote>
+<p>Note: The auto-completion feature runs continuously in the
+background, providing suggestions as you type.</p>
+</blockquote>
+<h2 id="benefits">Benefits</h2>
+<ul>
+<li>Faster document creation</li>
+<li>Reduced typing errors</li>
+<li>Better tag and attribute awareness</li>
+<li>Improved document quality</li>
+</ul>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Only works with <code>.confluence</code> files</li>
+<li>Requires proper XML formatting</li>
+<li>May need manual intervention for complex cases</li>
+</ul>
+</body>
+</html>

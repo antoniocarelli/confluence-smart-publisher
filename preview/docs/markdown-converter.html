@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>markdown-converter</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1 id="markdown-to-confluence-storage-format-converter">Markdown to
+Confluence Storage Format Converter</h1>
+<h2 id="overview">Overview</h2>
+<p>This feature will allow users to convert Markdown files
+(<code>.html</code>) to Confluence Storage Format
+(<code>.confluence</code>), making it easier to publish content from
+various sources to Confluence. The conversion will create a new file
+with the <code>.confluence</code> extension, leaving the original
+Markdown file untouched.</p>
+<h2 id="important-notes">Important Notes</h2>
+<ol type="1">
+<li>The conversion process is <strong>read-only</strong> - it will not
+modify the original Markdown file</li>
+<li>A new file will be created with the same name and location as the
+original, but with <code>.confluence</code> extension</li>
+<li>The converted file will need to be published separately using the
+existing publish functionality</li>
+<li>Initial version will support only standard Markdown elements,
+without Confluence-specific markup</li>
+</ol>
+<h2 id="technical-design">Technical Design</h2>
+<h3 id="core-components">1. Core Components</h3>
+<h4 id="markdown-parser">1.1 Markdown Parser</h4>
+<ul>
+<li>Utilize <code>marked</code> library for parsing Markdown</li>
+<li>Support for CommonMark specification</li>
+<li>Focus on standard Markdown elements only</li>
+</ul>
+<h4 id="confluence-storage-format-generator">1.2 Confluence Storage
+Format Generator</h4>
+<ul>
+<li>Convert parsed Markdown AST to basic Confluence Storage Format</li>
+<li>Generate proper XML structure</li>
+<li>Focus on standard HTML elements without Confluence macros</li>
+</ul>
+<h3 id="conversion-rules">2. Conversion Rules</h3>
+<h4 id="basic-elements-initial-scope">2.1 Basic Elements (Initial
+Scope)</h4>
+<ul>
+<li>Headers (<code>#</code> to <code>######</code>) →
+<code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code></li>
+<li>Paragraphs → <code>&lt;p&gt;</code></li>
+<li>Lists (ordered/unordered) →
+<code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code></li>
+<li>Links → <code>&lt;a&gt;</code></li>
+<li>Images → <code>&lt;ac:image&gt;</code></li>
+<li>Code blocks → <code>&lt;ac:structured-macro&gt;</code></li>
+<li>Tables → <code>&lt;table&gt;</code></li>
+</ul>
+<h4 id="special-cases-initial-scope">2.2 Special Cases (Initial
+Scope)</h4>
+<ul>
+<li>Code highlighting → <code>&lt;ac:parameter&gt;</code></li>
+<li>Task lists → <code>&lt;ac:task-list&gt;</code></li>
+<li>Blockquotes → <code>&lt;blockquote&gt;</code></li>
+<li>Horizontal rules → <code>&lt;hr&gt;</code></li>
+</ul>
+<h3 id="implementation-phases">3. Implementation Phases</h3>
+<h4 id="phase-1-basic-conversion">Phase 1: Basic Conversion</h4>
+<ul>
+<li>Implement core Markdown parsing</li>
+<li>Basic element conversion</li>
+<li>Simple file handling</li>
+<li>Create new <code>.confluence</code> file without modifying
+original</li>
+</ul>
+<h4 id="phase-2-advanced-features">Phase 2: Advanced Features</h4>
+<ul>
+<li>Support for basic Confluence macros</li>
+<li>Image handling</li>
+<li>Table formatting</li>
+<li>Code block syntax highlighting</li>
+</ul>
+<h4 id="phase-3-enhancement">Phase 3: Enhancement</h4>
+<ul>
+<li>Metadata handling</li>
+<li>Error recovery</li>
+<li>Progress reporting</li>
+</ul>
+<h3 id="user-interface">4. User Interface</h3>
+<h4 id="command-palette">4.1 Command Palette</h4>
+<ul>
+<li>New command: “Convert Markdown to Confluence”</li>
+<li>Available in file explorer context menu, for .html files</li>
+<li>Creates new <code>.confluence</code> file in the same directory</li>
+</ul>
+<h4 id="settings">4.2 Settings</h4>
+<ul>
+<li>Conversion preferences</li>
+<li>Default macro mappings</li>
+<li>Image handling options</li>
+</ul>
+<h3 id="error-handling">5. Error Handling</h3>
+<ul>
+<li>Invalid Markdown syntax</li>
+<li>Unsupported features</li>
+<li>File system errors</li>
+<li>File already exists errors</li>
+</ul>
+<h3 id="performance-considerations">6. Performance Considerations</h3>
+<ul>
+<li>Large file handling</li>
+<li>Memory usage optimization</li>
+<li>Progress reporting for long conversions</li>
+</ul>
+<h2 id="implementation-plan">Implementation Plan</h2>
+<ol type="1">
+<li><strong>Setup Phase</strong>
+<ul>
+<li>Add necessary dependencies</li>
+<li>Create basic project structure</li>
+</ul></li>
+<li><strong>Core Development</strong>
+<ul>
+<li>Implement Markdown parser integration</li>
+<li>Create basic conversion logic</li>
+<li>Add file handling capabilities</li>
+<li>Implement new file creation logic</li>
+</ul></li>
+<li><strong>Documentation</strong>
+<ul>
+<li>User guide</li>
+<li>API documentation</li>
+<li>Example conversions</li>
+<li>Troubleshooting guide</li>
+</ul></li>
+</ol>
+<h2 id="dependencies">Dependencies</h2>
+<ul>
+<li><code>marked</code>: Markdown parsing</li>
+<li><code>xml-escape</code>: XML character escaping</li>
+<li><code>fs-extra</code>: Enhanced file system operations</li>
+<li><code>vscode</code>: VS Code extension API</li>
+</ul>
+<h2 id="future-enhancements">Future Enhancements</h2>
+<ol type="1">
+<li><strong>Custom Templates</strong>
+<ul>
+<li>Allow users to define custom conversion rules</li>
+<li>Template-based conversion</li>
+</ul></li>
+<li><strong>Batch Processing</strong>
+<ul>
+<li>Convert entire directories</li>
+<li>Handle multiple files simultaneously</li>
+</ul></li>
+<li><strong>Preview</strong>
+<ul>
+<li>Real-time preview of conversion</li>
+<li>Side-by-side comparison</li>
+</ul></li>
+<li><strong>Confluence Macros</strong>
+<ul>
+<li>Support for Confluence-specific macros</li>
+<li>Macro configuration interface</li>
+</ul></li>
+</ol>
+<h2 id="limitations">Limitations</h2>
+<ol type="1">
+<li>Only standard Markdown features will be supported initially</li>
+<li>No automatic publishing - manual publishing required after
+conversion</li>
+<li>Complex nested structures might require manual adjustment</li>
+<li>Custom Markdown extensions are not supported</li>
+<li>Confluence macros are not supported in initial version</li>
+</ol>
+<h2 id="success-criteria">Success Criteria</h2>
+<ol type="1">
+<li>Successful conversion of basic Markdown elements</li>
+<li>Proper handling of images and attachments</li>
+<li>Accurate conversion of tables and code blocks</li>
+<li>Maintainable and extensible codebase</li>
+<li>Good performance with large files</li>
+<li>Clear error messages and recovery options</li>
+<li>Original Markdown file remains unchanged</li>
+<li>New <code>.confluence</code> file is created successfully</li>
+</ol>
+</body>
+</html>
