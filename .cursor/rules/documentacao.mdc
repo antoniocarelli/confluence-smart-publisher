@@ -1,6 +1,0 @@
----
-description: 
-globs: *.md
-alwaysApply: false
----
-Toda a documentação do projeto deve estar em inglês.
