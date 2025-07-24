@@ -253,37 +253,60 @@ href="https://www.paypal.com/donate/?business=ESQ3RSFYC6JMY&amp;no_recurring=0&a
 its development by buying me a coffee and help keep it running!</a></p>
 <h2 id="table-of-contents">📋 Table of Contents</h2>
 <ul>
-<li><a href="#-extension-in-action">Extension in Action</a>
+<li><a href="#-confluence-smart-publisher">🚀 Confluence Smart
+Publisher</a>
 <ul>
-<li><a href="#-real-time-diagnostics">Real-time Diagnostics</a></li>
-<li><a href="#-smart-formatter">Smart Formatter</a></li>
+<li><a href="#-extension-in-action">🎬 Extension in Action</a>
+<ul>
+<li><a href="#-real-time-diagnostics">🩺 Real-time Diagnostics</a></li>
+<li><a href="#️-smart-formatter">🛠️ Smart Formatter</a></li>
 </ul></li>
-<li><a href="#-features">Features</a>
+<li><a href="#️-buy-me-a-coffe">☕️ Buy me a coffe</a></li>
+<li><a href="#-table-of-contents">📋 Table of Contents</a></li>
+<li><a href="#-features">✨ Features</a>
 <ul>
-<li><a href="#-commands">Commands</a></li>
-<li><a href="#-unique-feature">Unique Feature</a></li>
-<li><a href="#-validations-and-diagnostics">Validations and
+<li><a href="#-material-for-mkdocs-support">🎨 Material for MkDocs
+Support</a></li>
+<li><a href="#-commands">🎮 Commands</a></li>
+<li><a href="#-unique-feature-metadata-synchronization">🔄 UNIQUE
+FEATURE: Metadata synchronization!</a></li>
+<li><a href="#-validations-and-diagnostics">🔍 Validations and
 Diagnostics</a>
 <ul>
-<li><a href="#-structure-validation">Structure Validation</a></li>
-<li><a href="#-visual-diagnostics">Visual Diagnostics</a></li>
-<li><a href="#-specific-validations">Specific Validations</a></li>
-<li><a href="#-auto-correction">Auto-correction</a></li>
-<li><a href="#-logs-and-diagnostics">Logs and Diagnostics</a></li>
+<li><a href="#-structure-validation">📝 Structure Validation</a></li>
+<li><a href="#️-visual-diagnostics">👁️ Visual Diagnostics</a></li>
+<li><a href="#-specific-validations">✅ Specific Validations</a></li>
+<li><a href="#-auto-correction">🔧 Auto-correction</a></li>
+<li><a href="#-logs-and-diagnostics">📊 Logs and Diagnostics</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#️-requirements">Requirements</a></li>
-<li><a href="#-installation">Installation</a></li>
-<li><a href="#️-extension-settings">Extension Settings</a></li>
-<li><a href="#-confluence-file-structure">File Structure</a></li>
-<li><a href="#-dependencies">Dependencies</a></li>
-<li><a href="#-known-issues">Known Issues</a></li>
-<li><a href="#-contributing">Contributing</a></li>
-<li><a href="#ℹ️-more-information">More Information</a></li>
-<li><a href="#-license">License</a></li>
-<li><a href="#-current-version">Current Version</a></li>
+<li><a href="#️-requirements">⚙️ Requirements</a></li>
+<li><a href="#-installation">📥 Installation</a></li>
+<li><a href="#-extension-settings">🔧 Extension Settings</a></li>
+<li><a href="#-confluence-file-structure">📄 .confluence File
+Structure</a></li>
+<li><a href="#-dependencies">🧩 Dependencies</a></li>
+<li><a href="#-known-issues">🚧 Known Issues</a></li>
+<li><a href="#-contributing">🧑‍💻 Contributing</a></li>
+<li><a href="#ℹ️-more-information">ℹ️ More Information</a></li>
+<li><a href="#-license">📄 License</a></li>
+</ul></li>
 </ul>
 <h2 id="features">✨ Features</h2>
+<h3 id="material-for-mkdocs-support">🎨 Material for MkDocs Support</h3>
+<p>The extension now includes enhanced support for <strong>Material for
+MkDocs</strong> format: - <strong>Admonition Conversion</strong>:
+Confluence panels are automatically converted to Material for MkDocs
+admonition syntax (<code>!!! type "title"</code>) - <strong>Complete
+Type Mapping</strong>: Support for all Confluence panel types including
+<code>info</code>, <code>warning</code>, <code>success</code>,
+<code>error</code>, <code>tip</code>, <code>note</code>,
+<code>example</code>, <code>quote</code>, <code>abstract</code>,
+<code>failure</code>, <code>bug</code>, <code>question</code>, and
+<code>custom</code> - <strong>Smart Formatting</strong>: First paragraph
+becomes the admonition title, remaining content is properly indented -
+<strong>Fallback Support</strong>: Unknown panel types gracefully
+fallback to <code>note</code> admonition type</p>
 <h3 id="commands">🎮 Commands</h3>
 <ul>
 <li><strong>Direct publishing</strong>: Publish <code>.confluence</code>
@@ -311,8 +334,10 @@ code blocks, and tables. <a
 href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-markdown">📚
 Documentation</a></li>
 <li><strong>Confluence to Markdown</strong>: Convert Confluence Storage
-Format files to Markdown, preserving metadata, macros, and formatting.
-<a
+Format files to Markdown with enhanced support for Material for MkDocs
+Admonitions, preserving metadata, macros, and formatting. Panel elements
+are automatically converted to proper admonition syntax with
+comprehensive type mapping. <a
 href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-confluence-markdown">📚
 Documentation</a></li>
 <li><strong>Automatic formatting</strong>: Format
