@@ -234,6 +234,10 @@
 publish, download, and synchronize Confluence pages directly from your
 editor, using <code>.confluence</code> files in a custom XML format
 named Confluence Storage Format.</p>
+<h2 id="buy-me-a-coffe">☕️ Buy me a coffe</h2>
+<p>Enjoying the Confluence Smart Publisher extension? <a
+href="https://www.paypal.com/donate/?business=ESQ3RSFYC6JMY&amp;no_recurring=0&amp;item_name=Enjoying+the+Confluence+Smart+Publisher+extension?%0ASupport+its+development+by+buying+me+a+coffee+and+help+keep+it+running%21&amp;currency_code=BRL">Support
+its development by buying me a coffee and help keep it running!</a></p>
 <h2 id="extension-in-action">🎬 Extension in Action</h2>
 <h3 id="real-time-diagnostics">🩺 Real-time Diagnostics</h3>
 <div data-align="left">
@@ -247,26 +251,24 @@ correções automáticas diretamente no editor.</p>
 </div>
 <p>Formate seus arquivos <code>.confluence</code> automaticamente, com
 numeração de capítulos e padronização de tags.</p>
-<h2 id="buy-me-a-coffe">☕️ Buy me a coffe</h2>
-<p>Enjoying the Confluence Smart Publisher extension? <a
-href="https://www.paypal.com/donate/?business=ESQ3RSFYC6JMY&amp;no_recurring=0&amp;item_name=Enjoying+the+Confluence+Smart+Publisher+extension?%0ASupport+its+development+by+buying+me+a+coffee+and+help+keep+it+running%21&amp;currency_code=BRL">Support
-its development by buying me a coffee and help keep it running!</a></p>
 <h2 id="table-of-contents">📋 Table of Contents</h2>
 <ul>
 <li><a href="#-confluence-smart-publisher">🚀 Confluence Smart
 Publisher</a>
 <ul>
+<li><a href="#️-buy-me-a-coffe">☕️ Buy me a coffe</a></li>
 <li><a href="#-extension-in-action">🎬 Extension in Action</a>
 <ul>
 <li><a href="#-real-time-diagnostics">🩺 Real-time Diagnostics</a></li>
 <li><a href="#️-smart-formatter">🛠️ Smart Formatter</a></li>
 </ul></li>
-<li><a href="#️-buy-me-a-coffe">☕️ Buy me a coffe</a></li>
 <li><a href="#-table-of-contents">📋 Table of Contents</a></li>
 <li><a href="#-features">✨ Features</a>
 <ul>
-<li><a href="#-material-for-mkdocs-support">🎨 Material for MkDocs
-Support</a></li>
+<li><a href="#-new-material-for-mkdocs-live-preview">🔍 NEW: Material
+for MkDocs Live Preview</a></li>
+<li><a href="#-material-for-mkdocs-conversion-support">🎨 Material for
+MkDocs Conversion Support</a></li>
 <li><a href="#-commands">🎮 Commands</a></li>
 <li><a href="#-unique-feature-metadata-synchronization">🔄 UNIQUE
 FEATURE: Metadata synchronization!</a></li>
@@ -285,20 +287,70 @@ Diagnostics</a>
 <li><a href="#-extension-settings">🔧 Extension Settings</a></li>
 <li><a href="#-confluence-file-structure">📄 .confluence File
 Structure</a></li>
-<li><a href="#-dependencies">🧩 Dependencies</a></li>
+<li><a href="#-dependencies">🧩 Dependencies</a>
+<ul>
+<li><a href="#core-dependencies">Core Dependencies</a></li>
+<li><a href="#preview-system-dependencies">Preview System
+Dependencies</a>
+<ul>
+<li><a href="#styling-and-theming">Styling and Theming</a></li>
+</ul></li>
+</ul></li>
 <li><a href="#-known-issues">🚧 Known Issues</a></li>
 <li><a href="#-contributing">🧑‍💻 Contributing</a></li>
 <li><a href="#ℹ️-more-information">ℹ️ More Information</a></li>
-<li><a href="#-license">📄 License</a></li>
+<li><a href="#-acknowledgments">🙏 Acknowledgments</a></li>
+<li><a href="#-license">📄 License</a>
+<ul>
+<li><a href="#third-party-licenses">Third-Party Licenses</a></li>
+</ul></li>
 </ul></li>
 </ul>
 <h2 id="features">✨ Features</h2>
-<h3 id="material-for-mkdocs-support">🎨 Material for MkDocs Support</h3>
-<p>The extension now includes enhanced support for <strong>Material for
-MkDocs</strong> format: - <strong>Admonition Conversion</strong>:
-Confluence panels are automatically converted to Material for MkDocs
-admonition syntax (<code>!!! type "title"</code>) - <strong>Complete
-Type Mapping</strong>: Support for all Confluence panel types including
+<h3 id="new-material-for-mkdocs-live-preview">🔍 NEW: Material for
+MkDocs Live Preview</h3>
+<p>The extension now includes a <strong>high-fidelity Markdown preview
+system</strong> with authentic Material for MkDocs styling:</p>
+<ul>
+<li><strong>🎨 Pixel-Perfect Rendering</strong>: Uses real CSS from
+mkdocs-material repository (v9.6.15) for authentic visual output</li>
+<li><strong>📝 Advanced Admonitions</strong>: Full support for 8
+admonition types with proper Material Design colors and icons
+<ul>
+<li><code>!!! note "Note Title"</code> - Blue informational blocks</li>
+<li><code>!!! tip "Tip Title"</code> - Green helpful suggestions<br />
+</li>
+<li><code>!!! warning "Warning Title"</code> - Orange cautionary
+blocks</li>
+<li><code>!!! danger "Danger Title"</code> - Red critical alerts</li>
+<li><code>!!! success "Success Title"</code> - Green success
+indicators</li>
+<li><code>!!! info "Info Title"</code> - Cyan informational blocks</li>
+<li><code>!!! question "Question Title"</code> - Purple FAQ blocks</li>
+<li><code>!!! quote "Quote Title"</code> - Gray citation blocks</li>
+</ul></li>
+<li><strong>⚡ Real-Time Updates</strong>: Auto-refresh preview with
+debounced updates (300ms) as you type</li>
+<li><strong>📱 Responsive Design</strong>: Mobile-friendly preview that
+adapts to all screen sizes</li>
+<li><strong>🎯 Smart Context Detection</strong>: Automatically
+recognizes Markdown files and provides appropriate UI states</li>
+<li><strong>🔧 Easy Access</strong>: Available via Command Palette
+(<code>Confluence Smart Publisher: Open Markdown Preview</code>) and
+context menu</li>
+</ul>
+<blockquote>
+<p><strong>Usage</strong>: Open any <code>.html</code> file, right-click
+and select “Open Markdown Preview” or use <code>Ctrl+Shift+P</code> →
+“Confluence Smart Publisher: Open Markdown Preview”</p>
+</blockquote>
+<h3 id="material-for-mkdocs-conversion-support">🎨 Material for MkDocs
+Conversion Support</h3>
+<p>Enhanced support for <strong>Material for MkDocs</strong> format
+conversion: - <strong>Admonition Conversion</strong>: Confluence panels
+are automatically converted to Material for MkDocs admonition syntax
+(<code>!!! type "title"</code>) - <strong>Complete Type
+Mapping</strong>: Support for all Confluence panel types including
 <code>info</code>, <code>warning</code>, <code>success</code>,
 <code>error</code>, <code>tip</code>, <code>note</code>,
 <code>example</code>, <code>quote</code>, <code>abstract</code>,
@@ -309,6 +361,9 @@ becomes the admonition title, remaining content is properly indented -
 fallback to <code>note</code> admonition type</p>
 <h3 id="commands">🎮 Commands</h3>
 <ul>
+<li><strong>🔍 Markdown Preview</strong>: Live preview of Markdown files
+with Material for MkDocs styling and admonition support. Perfect for
+documentation workflows.</li>
 <li><strong>Direct publishing</strong>: Publish <code>.confluence</code>
 files as pages on Confluence with a single click. <a
 href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/publish-document">📚
@@ -370,9 +425,9 @@ href="https://antoniocarelli.github.io/confluence-smart-publisher/docs/set-title
 Documentation</a></li>
 </ul>
 <blockquote>
-<p>All commands are available in the file explorer context menu when
-right-clicking on <code>.confluence</code> files or folders, in the
-“Confluence Smart Publisher” submenu.</p>
+<p>All commands are available in the “Confluence Smart Publisher”
+submenu when you right-click on a <code>.confluence</code> file, an
+<code>.html</code> file, or any folder.</p>
 </blockquote>
 <h3 id="unique-feature-metadata-synchronization">🔄 UNIQUE FEATURE:
 Metadata synchronization!</h3>
@@ -502,6 +557,11 @@ https://company.atlassian.net/wiki)</td>
 <td>Activates automatic conversion of HTML entities to special
 characters when downloading pages (default: false)</td>
 </tr>
+<tr class="even">
+<td><code>confluenceSmartPublisher.mathRenderer</code></td>
+<td>Choose the mathematical renderer for formula blocks based on where
+the markdown will be viewed (default: katex)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="confluence-file-structure">📄 .confluence File Structure</h2>
@@ -529,6 +589,7 @@ class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#c
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">csp:parameters</span>&gt;</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Page content in Confluence Storage format --&gt;</span></span></code></pre></div>
 <h2 id="dependencies">🧩 Dependencies</h2>
+<h3 id="core-dependencies">Core Dependencies</h3>
 <ul>
 <li><a href="https://cheerio.js.org/">cheerio</a>
 <ul>
@@ -565,6 +626,32 @@ functionality.</li>
 <li><a href="https://github.com/missive/emoji-mart">emoji-mart</a>
 <ul>
 <li>Emoji picker used to add emojis to titles.</li>
+</ul></li>
+</ul>
+<h3 id="preview-system-dependencies">Preview System Dependencies</h3>
+<ul>
+<li><a href="https://github.com/markdown-it/markdown-it">markdown-it</a>
+<ul>
+<li>Markdown parser with extensible architecture, used for high-fidelity
+preview rendering.</li>
+</ul></li>
+<li><a
+href="https://github.com/brad-jones/markdown-it-admonition">markdown-it-admonition</a>
+<ul>
+<li>Plugin for markdown-it that adds support for Material for MkDocs
+admonition syntax.</li>
+</ul></li>
+</ul>
+<h4 id="styling-and-theming">Styling and Theming</h4>
+<ul>
+<li><a href="https://github.com/squidfunk/mkdocs-material">Material for
+MkDocs</a> (CSS Assets)
+<ul>
+<li>Official Material Design theme for MkDocs, providing authentic
+styling for the preview system.</li>
+<li>Version: 9.6.15</li>
+<li>Files integrated: <code>main.scss</code>, <code>palette.scss</code>,
+<code>_admonition.scss</code></li>
 </ul></li>
 </ul>
 <h2 id="known-issues">🚧 Known Issues</h2>
@@ -604,9 +691,36 @@ Confluence Storage Format documentation</a>
 applies to the Cloud version.</li>
 </ul></li>
 </ul>
+<h2 id="acknowledgments">🙏 Acknowledgments</h2>
+<p>This extension leverages several excellent open-source projects:</p>
+<ul>
+<li><strong><a
+href="https://github.com/squidfunk/mkdocs-material">Material for
+MkDocs</a></strong> by Martin Donath - For the beautiful Material Design
+theme and CSS assets that power our preview system</li>
+<li><strong><a
+href="https://github.com/markdown-it/markdown-it">markdown-it</a></strong>
+- For the robust and extensible Markdown parser</li>
+<li><strong><a
+href="https://github.com/brad-jones/markdown-it-admonition">markdown-it-admonition</a></strong>
+by Brad Jones - For seamless admonition support</li>
+<li><strong>Atlassian Confluence</strong> - For providing the platform
+and APIs that make this extension possible</li>
+</ul>
+<p>Special thanks to the maintainers and contributors of these projects
+for their excellent work.</p>
 <h2 id="license">📄 License</h2>
 <p>This extension is distributed under the MIT license. See the LICENSE
 file for more details.</p>
+<h3 id="third-party-licenses">Third-Party Licenses</h3>
+<ul>
+<li><strong>Material for MkDocs</strong>: MIT License - Copyright (c)
+2016-2025 Martin Donath</li>
+<li><strong>markdown-it</strong>: MIT License - Copyright (c) 2014
+Vitaly Puzrin, Alex Kocharin</li>
+<li><strong>markdown-it-admonition</strong>: MIT License - Copyright (c)
+2020 Brad Jones</li>
+</ul>
 <hr />
 <p><em>Have fun publishing to Confluence smartly!</em></p>
 </body>
