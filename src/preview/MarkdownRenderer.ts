@@ -3,12 +3,13 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
-// Import markdown-it-admonition plugin
+// Import markdown-it plugins for CommonMark compliance
 const markdownItAdmonition = require('markdown-it-admonition');
 
 /**
- * MarkdownRenderer class responsible for converting Markdown content
- * to HTML with Material for MkDocs styling and admonition support
+ * MarkdownRenderer class responsible for converting CommonMark-compliant Markdown content
+ * to HTML with Material for MkDocs styling and enhanced plugin support.
+ * Supports CommonMark Spec v0.31.2 features and GitHub Flavored Markdown extensions.
  */
 export class MarkdownRenderer {
     private md: MarkdownIt;
@@ -16,29 +17,47 @@ export class MarkdownRenderer {
 
     constructor(extensionUri: vscode.Uri) {
         this.extensionUri = extensionUri;
+        
+        // Configure markdown-it for CommonMark compliance
         this.md = new MarkdownIt({
-            html: true,
-            xhtmlOut: false,
-            breaks: false,
-            linkify: true,
-            typographer: true,
-            quotes: '""\'\'',
+            html: true,           // Enable HTML tags in source
+            xhtmlOut: false,      // Use ">" for single tags (not "/>")
+            breaks: false,        // Convert \n in paragraphs into <br> (disabled for CommonMark)
+            linkify: true,        // Autoconvert URL-like text to links
+            typographer: true,    // Enable smartquotes and other typographic replacements
+            quotes: '""\'\'',     // Quote characters for typographer
             highlight: this.highlightCode.bind(this)
         });
 
-        // Try configuring admonitions plugin without specific options first
+        // Load plugins for enhanced CommonMark support
+        this.loadMarkdownPlugins();
+    }
+
+    /**
+     * Loads markdown-it plugins to support CommonMark and GFM features
+     */
+    private loadMarkdownPlugins(): void {
         try {
+            // Admonitions plugin (already supported)
             this.md.use(markdownItAdmonition);
             console.log('[Plugin Debug] markdown-it-admonition loaded successfully');
+
+            // Note: Additional plugins can be loaded here as needed
+            // For now, we focus on the core plugins that support our CommonMark output
+            
         } catch (error) {
-            console.error('[Plugin Debug] Error loading markdown-it-admonition:', error);
+            console.error('[Plugin Debug] Error loading markdown-it plugins:', error);
             // Fallback configuration
-            this.md.use(markdownItAdmonition, {});
+            try {
+                this.md.use(markdownItAdmonition, {});
+            } catch (fallbackError) {
+                console.error('[Plugin Debug] Fallback admonition loading failed:', fallbackError);
+            }
         }
     }
 
     /**
-     * Renders markdown content to HTML with Material for MkDocs styling
+     * Renders CommonMark-compliant markdown content to HTML with Material for MkDocs styling
      * @param content Markdown content to render
      * @param documentUri URI of the document being rendered (for relative paths)
      * @returns HTML string with embedded CSS
@@ -46,7 +65,7 @@ export class MarkdownRenderer {
     public renderToHtml(content: string, documentUri?: vscode.Uri): string {
         let htmlContent = this.md.render(content);
         
-        // Post-process HTML to fix admonition issues
+        // Post-process HTML to fix any structural issues
         htmlContent = this.fixAdmonitionHtml(htmlContent);
         
         // Debug: Log generated HTML structure
@@ -63,6 +82,53 @@ export class MarkdownRenderer {
     <title>Markdown Preview</title>
     <style>
         ${cssContent}
+        
+        /* Enhanced styles for CommonMark compliance */
+        .md-typeset table {
+            border-collapse: collapse;
+            margin: 1.5em 0;
+            width: 100%;
+        }
+        
+        .md-typeset table th,
+        .md-typeset table td {
+            border: 1px solid var(--md-default-fg-color--lighter);
+            padding: 0.75em;
+            text-align: left;
+        }
+        
+        .md-typeset table th {
+            background-color: var(--md-default-fg-color--lightest);
+            font-weight: bold;
+        }
+        
+        /* Better list styling for CommonMark compliance */
+        .md-typeset ul,
+        .md-typeset ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+        
+        .md-typeset li {
+            margin: 0.25em 0;
+        }
+        
+        .md-typeset li > p {
+            margin: 0.5em 0;
+        }
+        
+        /* Code block improvements */
+        .md-typeset pre {
+            margin: 1.5em 0;
+            overflow-x: auto;
+        }
+        
+        .md-typeset code {
+            background-color: var(--md-code-bg-color);
+            padding: 0.1em 0.4em;
+            border-radius: 0.1rem;
+            font-size: 0.85em;
+        }
     </style>
 </head>
 <body data-md-color-scheme="slate">

@@ -2,7 +2,7 @@
   "name": "confluence-smart-publisher",
   "displayName": "Confluence Smart Publisher",
   "description": "Publish and manage Confluence pages directly from VS Code",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "icon": "images/csp-icon.png",
   "engines": {
     "vscode": "^1.96.0"

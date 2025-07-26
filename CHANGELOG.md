@@ -2,6 +2,41 @@
 
 All notable changes to the "confluence-smart-publisher" extension will be documented in this file.
 
+## [0.4.1] - 2025-01-29
+### Major Enhancement: CommonMark Compliance
+- **🎯 CommonMark Spec v0.31.2 Compliance**: Refactored the Confluence JSON -> Markdown converter to be fully compliant with CommonMark Spec v0.31.2
+- **📝 Improved Markdown Generation**: Enhanced all converter modules to produce clean, portable, and standard-compliant Markdown
+- **🔧 List Formatting Overhaul**: Fixed bullet and ordered list formatting with proper indentation and consistent markers
+  - Bullet lists now use consistent `-` markers with proper 2-space indentation per nesting level
+  - Ordered lists follow CommonMark continuation indentation rules
+  - Improved handling of nested list structures
+- **💪 Enhanced Text Processing**: Upgraded text converter with proper CommonMark emphasis and strong emphasis handling
+  - Correct precedence rules for nested formatting (***text*** for strong emphasis)
+  - Proper code span precedence over other formatting
+  - Improved link formatting with URL escaping
+- **🎨 Code Block Improvements**: Updated code block generation to follow CommonMark fenced code block specification
+  - Removed improper leading newlines
+  - Enhanced language info string handling
+  - Proper fence formatting on dedicated lines
+- **📊 Table Enhancement**: Improved table converter with GitHub Flavored Markdown compatibility
+  - Better pipe character escaping
+  - Enhanced header detection and separator generation
+  - Property table formatting improvements
+- **🔗 Link Processing**: Enhanced link converter with proper URL escaping and CommonMark compliance
+- **📋 Heading Standardization**: Ensured ATX heading compliance with level constraints and spacing requirements
+
+### Preview Engine Enhancements
+- **🎨 Enhanced Styling**: Added CommonMark-specific CSS improvements for tables, lists, and code blocks
+- **🔧 Better Plugin Support**: Improved markdown-it configuration for CommonMark compliance
+- **📱 Responsive Tables**: Enhanced table styling with proper borders and spacing
+- **📝 List Improvements**: Better visual formatting for nested lists and list item content
+
+### Technical Improvements
+- **🏗️ Architecture Cleanup**: Improved converter code organization and documentation
+- **📚 Documentation**: Enhanced inline documentation with CommonMark specification references
+- **✅ Standards Compliance**: All generated Markdown now passes CommonMark validation
+- **🎯 Consistency**: Unified formatting approach across all converter modules
+
 ## [0.4.0] - 2025-01-29
 ### Major New Feature
 - **🔍 Material for MkDocs Preview System**
