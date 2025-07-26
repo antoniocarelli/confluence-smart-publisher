@@ -236,6 +236,7 @@
     "entities": "^6.0.0",
     "form-data": "^4.0.0",
     "fs-extra": "^11.2.0",
+    "highlight.js": "^11.11.1",
     "js-yaml": "^4.1.0",
     "markdown-it": "^14.1.0",
     "markdown-it-admonition": "^1.0.4",

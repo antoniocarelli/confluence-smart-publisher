@@ -30,12 +30,21 @@ All notable changes to the "confluence-smart-publisher" extension will be docume
 - **🔧 Better Plugin Support**: Improved markdown-it configuration for CommonMark compliance
 - **📱 Responsive Tables**: Enhanced table styling with proper borders and spacing
 - **📝 List Improvements**: Better visual formatting for nested lists and list item content
+- **✨ Advanced Syntax Highlighting**: Integrated highlight.js for professional code highlighting
+  - Support for 20+ programming languages (Java, Python, JavaScript, TypeScript, SQL, PHP, C#, etc.)
+  - Smart language detection and normalization
+  - GitHub Dark theme optimized for Material Design
+  - Language-specific enhancements for better readability
+  - Automatic fallback for unsupported languages
 
 ### Technical Improvements
 - **🏗️ Architecture Cleanup**: Improved converter code organization and documentation
 - **📚 Documentation**: Enhanced inline documentation with CommonMark specification references
 - **✅ Standards Compliance**: All generated Markdown now passes CommonMark validation
 - **🎯 Consistency**: Unified formatting approach across all converter modules
+- **📦 Dependencies**: Added highlight.js (v11.9.0) for advanced syntax highlighting
+- **🎨 Enhanced CSS**: Custom GitHub Dark theme with Material Design integration
+- **🔧 Language Support**: Smart language normalization and alias handling
 
 ## [0.4.0] - 2025-01-29
 ### Major New Feature

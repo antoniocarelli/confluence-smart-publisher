@@ -71,6 +71,11 @@ The extension now includes a **high-fidelity Markdown preview system** with auth
   - `!!! info "Info Title"` - Cyan informational blocks
   - `!!! question "Question Title"` - Purple FAQ blocks
   - `!!! quote "Quote Title"` - Gray citation blocks
+- **✨ Professional Syntax Highlighting**: Advanced code highlighting for 20+ programming languages
+  - Java, Python, JavaScript, TypeScript, SQL, PHP, C#, Go, Rust, Kotlin
+  - XML, JSON, YAML, Bash, PowerShell, Docker, and more
+  - Smart language detection and automatic fallback
+  - GitHub Dark theme optimized for Material Design
 - **⚡ Real-Time Updates**: Auto-refresh preview with debounced updates (300ms) as you type
 - **📱 Responsive Design**: Mobile-friendly preview that adapts to all screen sizes
 - **🎯 Smart Context Detection**: Automatically recognizes Markdown files and provides appropriate UI states
