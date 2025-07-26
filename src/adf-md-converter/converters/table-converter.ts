@@ -1,6 +1,7 @@
 /**
  * Converts a table ADF node to markdown.
- * YAML generation is handled centrally by AdfToMarkdownConverter.
+ * Generates CommonMark-compatible tables using GitHub Flavored Markdown table extension.
+ * Supports both property tables and regular tables with proper formatting.
  * @param node The table ADF node
  * @param children The already converted children blocks (should be rows)
  * @returns ConverterResult
@@ -18,17 +19,29 @@ function cleanPropertyKey(text: string): string {
   return text.replace(/^\*\*|\*\*$/g, '').trim();
 }
 
+/**
+ * Escapes pipe characters in table cell content for CommonMark table compatibility
+ * @param text Cell content that may contain pipes
+ * @returns Escaped text safe for table cells
+ */
+function escapeTableCell(text: string): string {
+  // Escape pipe characters that would break table structure
+  return text.replace(/\|/g, '\\|').trim();
+}
+
 export default function convertTable(node: AdfNode, children: MarkdownBlock[]): ConverterResult {
   // Property Table: all rows have 2 cells (1 header, 1 cell)
+  // Convert to definition-list style format which is more readable
   if (isPropertyTable(node)) {
     let markdown = '\n';
     for (const row of children) {
-      // Espera-se que cada row.markdown seja '| key | value |'
+      // Expected format: '| key | value |'
       const cells = row.markdown.split('|').map(s => s.trim()).filter(Boolean);
       if (cells.length === 2) {
         // Clean the key (remove extra ** formatting) and format properly
         const cleanKey = cleanPropertyKey(cells[0]);
-        markdown += `**${cleanKey}:** ${cells[1]}\n\n`;
+        const cleanValue = escapeTableCell(cells[1]);
+        markdown += `**${cleanKey}:** ${cleanValue}\n\n`;
       }
     }
     return { 
@@ -37,22 +50,50 @@ export default function convertTable(node: AdfNode, children: MarkdownBlock[]): 
     };
   }
 
-  // Normal Table: detect header in first row
+  // Regular Table: Generate GitHub Flavored Markdown table
+  // This is supported by most CommonMark parsers with table extensions
+  if (children.length === 0) {
+    return { markdown: '', context: { hasComplexContent: false } };
+  }
+
   let markdown = '';
-  if (children.length > 0) {
-    // Detect header: se todos os filhos do primeiro row são tableHeader
-    const firstRow = children[0];
-    const headerCells = firstRow.markdown
-      .replace(/^\|/,'').replace(/\|$/,'')
-      .split('|').map(s => s.trim());
-    if (headerCells.length > 0 && headerCells.every(cell => cell.length > 0)) {
-      // Header row
-      markdown += '| ' + headerCells.join(' | ') + ' |\n';
-      markdown += '| ' + headerCells.map(() => '---').join(' | ') + ' |\n';
-    }
-    // Add remaining rows
-    for (let i = 1; i < children.length; i++) {
-      markdown += children[i].markdown + '\n';
+  let isFirstRowHeader = false;
+  
+  // Check if first row should be treated as header
+  // In GFM tables, we need to detect if the first row contains header cells
+  const firstRow = children[0];
+  if (firstRow && firstRow.markdown) {
+    // Parse the first row to see if it looks like a header
+    const firstRowCells = firstRow.markdown
+      .replace(/^\|/, '')
+      .replace(/\|$/, '')
+      .split('|')
+      .map(cell => escapeTableCell(cell));
+    
+    isFirstRowHeader = firstRowCells.length > 0 && firstRowCells.every(cell => cell.length > 0);
+  }
+
+  // Process all rows
+  for (let i = 0; i < children.length; i++) {
+    const row = children[i];
+    if (!row.markdown) continue;
+    
+    // Parse and clean cells
+    const cells = row.markdown
+      .replace(/^\|/, '')
+      .replace(/\|$/, '')
+      .split('|')
+      .map(cell => escapeTableCell(cell));
+    
+    if (cells.length === 0) continue;
+    
+    // Add the row
+    markdown += '| ' + cells.join(' | ') + ' |\n';
+    
+    // Add separator row after header (first row if it's a header)
+    if (i === 0 && isFirstRowHeader) {
+      const separatorCells = cells.map(() => '---');
+      markdown += '| ' + separatorCells.join(' | ') + ' |\n';
     }
   }
   
