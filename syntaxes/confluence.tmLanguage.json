@@ -1,6 +1,6 @@
 {
   "information_for_contributors": [
-    "Baseado no HTML padrão do VSCode, adaptado para Confluence."
+    "Based on VSCode standard HTML, adapted for Confluence."
   ],
   "name": "Confluence",
   "scopeName": "source.json.confluence",

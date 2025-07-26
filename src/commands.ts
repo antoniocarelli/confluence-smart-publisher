@@ -6,6 +6,7 @@ import { getEmojiPickerHtml } from './webview';
 import { MarkdownConverter } from './markdownConverter';
 import { AdfToMarkdownConverter } from './adf-md-converter/adf-to-md-converter';
 import { createXMLCSPBlock, createYAMLCSPBlock } from './csp-utils';
+import { PreviewPanel } from './preview/PreviewPanel';
 
 export function registerCommands(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel) {
     // Command to publish .confluence file
@@ -122,14 +123,14 @@ export function registerCommands(context: vscode.ExtensionContext, outputChannel
             return;
         }
 
-        const nomeArquivo = await vscode.window.showInputBox({ prompt: 'Enter the file name (ex: NewPage.confluence)', ignoreFocusOut: true });
-        if (!nomeArquivo) {
+        const fileName = await vscode.window.showInputBox({ prompt: 'Enter the file name (ex: NewPage.confluence)', ignoreFocusOut: true });
+        if (!fileName) {
             vscode.window.showWarningMessage('File name not provided.');
             return;
         }
 
-        const modeloId = await vscode.window.showInputBox({ prompt: 'Enter the Template File ID', ignoreFocusOut: true });
-        if (!modeloId) {
+        const templateId = await vscode.window.showInputBox({ prompt: 'Enter the Template File ID', ignoreFocusOut: true });
+        if (!templateId) {
             vscode.window.showWarningMessage('Template file ID not provided.');
             return;
         }
@@ -140,17 +141,17 @@ export function registerCommands(context: vscode.ExtensionContext, outputChannel
                 title: 'Downloading template file from Confluence...',
                 cancellable: false
             }, async () => {
-                outputChannel.appendLine(`[Create Page] Downloading template: ID=${modeloId}`);
+                outputChannel.appendLine(`[Create Page] Downloading template: ID=${templateId}`);
                 const client = new ConfluenceClient();
                 const tempDir = uri.fsPath;
-                const modeloPath = await client.downloadConfluencePage(modeloId, BodyFormat.ATLAS_DOC_FORMAT, tempDir);
+                const templatePath = await client.downloadConfluencePage(templateId, BodyFormat.ATLAS_DOC_FORMAT, tempDir);
                 const fs = await import('fs');
-                let conteudo = fs.readFileSync(modeloPath, 'utf-8');
-                conteudo = conteudo.replace(/<csp:file_id>[\s\S]*?<\/csp:file_id>\s*/, '');
-                const novoArquivoPath = path.join(uri.fsPath, nomeArquivo.endsWith('.confluence') ? nomeArquivo : nomeArquivo + '.confluence');
-                fs.writeFileSync(novoArquivoPath, conteudo, { encoding: 'utf-8' });
-                outputChannel.appendLine(`[Create Page] File "${nomeArquivo}" created at "${novoArquivoPath}"`);
-                vscode.window.showInformationMessage(`File "${nomeArquivo}" created successfully!`);
+                let content = fs.readFileSync(templatePath, 'utf-8');
+                content = content.replace(/<csp:file_id>[\s\S]*?<\/csp:file_id>\s*/, '');
+                const newFilePath = path.join(uri.fsPath, fileName.endsWith('.confluence') ? fileName : fileName + '.confluence');
+                fs.writeFileSync(newFilePath, content, { encoding: 'utf-8' });
+                outputChannel.appendLine(`[Create Page] File "${fileName}" created at "${newFilePath}"`);
+                vscode.window.showInformationMessage(`File "${fileName}" created successfully!`);
             });
         } catch (e: any) {
             outputChannel.appendLine(`[Create Page] Error: ${e.message || e}`);
@@ -246,7 +247,7 @@ export function registerCommands(context: vscode.ExtensionContext, outputChannel
                 const title = `Diff: Local (formatted) ↔ Published (formatted) (${fileId})`;
                 await vscode.commands.executeCommand('vscode.diff', leftUri, rightUri, title);
 
-                const escolha = await vscode.window.showQuickPick([
+                const choice = await vscode.window.showQuickPick([
                     {
                         label: 'Update local file with online content',
                         detail: 'Overwrites the local file with the content downloaded from Confluence.'
@@ -261,16 +262,16 @@ export function registerCommands(context: vscode.ExtensionContext, outputChannel
                     }
                 ], { placeHolder: 'Choose sync action' });
 
-                if (!escolha || escolha.label === 'Cancel') {
+                if (!choice || choice.label === 'Cancel') {
                     outputChannel.appendLine('[Sync] Sync cancelled by user.');
                     return;
                 }
 
-                if (escolha.label === 'Update local file with online content') {
+                if (choice.label === 'Update local file with online content') {
                     fs.writeFileSync(uri.fsPath, publishedContent, { encoding: 'utf-8' });
                     outputChannel.appendLine('[Sync] Local file updated successfully!');
                     vscode.window.showInformationMessage('Local file updated successfully!');
-                } else if (escolha.label === 'Update Confluence with local content') {
+                } else if (choice.label === 'Update Confluence with local content') {
                     await vscode.window.withProgress({
                         location: vscode.ProgressLocation.Notification,
                         title: 'Publishing local content to Confluence...',
@@ -450,12 +451,12 @@ export function registerCommands(context: vscode.ExtensionContext, outputChannel
                 const path = await import('path');
                 const yaml = await import('js-yaml');
                 const content = fs.readFileSync(uri.fsPath, 'utf-8');
-                outputChannel.appendLine(`[DEBUG] Conteúdo do arquivo: ${content.substring(0, 500)}`);
+                outputChannel.appendLine(`[DEBUG] File content: ${content.substring(0, 500)}`);
                 let adfJson;
                 try {
                     adfJson = JSON.parse(content);
                 } catch (e) {
-                    throw new Error('O arquivo .confluence não está em formato JSON ADF válido.');
+                    throw new Error('The .confluence file is not in valid ADF JSON format.');
                 }
                 outputChannel.appendLine(`[DEBUG] adfJson: ${JSON.stringify(adfJson, null, 2).substring(0, 500)}`);
 
@@ -465,7 +466,7 @@ export function registerCommands(context: vscode.ExtensionContext, outputChannel
                     try {
                         yamlBlock = createYAMLCSPBlock(adfJson.csp);
                     } catch (e) {
-                        outputChannel.appendLine(`[DEBUG] Erro ao converter csp para YAML: ${e}`);
+                        outputChannel.appendLine(`[DEBUG] Error converting csp to YAML: ${e}`);
                     }
                 }
 
@@ -481,7 +482,7 @@ export function registerCommands(context: vscode.ExtensionContext, outputChannel
                     outputChannel.appendLine(`[DEBUG] markdownBlock: ${JSON.stringify(markdownBlock, null, 2)}`);
                     markdown = markdownBlock.markdown;
                 } else {
-                    outputChannel.appendLine('[DEBUG] Bloco content não encontrado no JSON.');
+                    outputChannel.appendLine('[DEBUG] Content block not found in JSON.');
                 }
 
                 const outputPath = uri.fsPath.replace(/\.confluence$/, '.md');
@@ -504,6 +505,19 @@ ${markdown.trim()}
         }
     });
 
+    // Command to open markdown preview
+    const previewCmd = vscode.commands.registerCommand('confluence-smart-publisher.preview', () => {
+        try {
+            outputChannel.appendLine('[Preview] Opening Markdown preview...');
+            PreviewPanel.createOrShow(context.extensionUri, outputChannel);
+            outputChannel.appendLine('[Preview] Markdown preview opened successfully');
+        } catch (e: any) {
+            outputChannel.appendLine(`[Preview] Error: ${e.message || e}`);
+            outputChannel.show(true);
+            vscode.window.showErrorMessage(`Error opening preview: ${e.message || e}`);
+        }
+    });
+
     // Register all commands
     context.subscriptions.push(
         publishCmd,
@@ -515,6 +529,7 @@ ${markdown.trim()}
         setEmojiTitleCmd,
         decodeHtmlCmd,
         convertMarkdownCmd,
-        convertConfluenceToMarkdownCmd
+        convertConfluenceToMarkdownCmd,
+        previewCmd
     );
 } 

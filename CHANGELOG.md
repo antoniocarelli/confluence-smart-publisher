@@ -2,7 +2,45 @@
 
 All notable changes to the "confluence-smart-publisher" extension will be documented in this file.
 
+## [0.4.0] - 2025-01-29
+### Major New Feature
+- **🔍 Material for MkDocs Preview System**
+  - ✨ **Live Markdown Preview**: Added high-fidelity Markdown preview with Material for MkDocs styling
+  - 🎨 **Authentic Styling**: Integrated real CSS from mkdocs-material repository (v9.6.15) for pixel-perfect rendering
+  - 📝 **Admonitions Support**: Full support for 8 admonition types (`note`, `tip`, `warning`, `danger`, `success`, `info`, `question`, `quote`)
+  - ⚡ **Real-time Updates**: Auto-refresh preview with debounced updates (300ms) as you type
+  - 🎯 **Smart Context**: Automatically detects Markdown files and provides appropriate UI states
+  - 🔧 **Command Integration**: New `confluence-smart-publisher.preview` command accessible via Command Palette and context menu
+  - 🎪 **WebviewPanel Management**: Sophisticated panel lifecycle management with singleton pattern
+  - 📱 **Responsive Design**: Mobile-friendly preview that works on all screen sizes
+  - 🛡️ **Fallback Support**: Comprehensive fallback CSS when Material files unavailable
+  - 🔄 **SCSS Processing**: Built-in SCSS variable processing for Material Design colors
 
+### Technical Enhancements
+- **📦 New Dependencies**: Added `markdown-it` and `markdown-it-admonition` for advanced Markdown processing
+- **🏗️ Modular Architecture**: New `src/preview/` directory with `MarkdownRenderer` and `PreviewPanel` classes
+- **🎨 Asset Management**: CSS assets system in `assets/css/` with Material for MkDocs files
+- **📋 Package Integration**: Updated package.json with new preview command and context menu entries
+- **🔄 CSS Integration**: Direct integration of mkdocs-material SCSS files (v9.6.15) with automatic processing
+- **🎨 Material Design Colors**: Full color palette support with SCSS variable processing
+- **🛠️ TypeScript Enhancements**: Enhanced type safety with proper fs module integration
+
+### Documentation & Validation
+- **📖 Comprehensive Guide**: Added `MATERIAL_CSS_GUIDE.md` with detailed CSS integration instructions
+- **🧪 Validation System**: Created extensive test suite with `test-case.md` and validation HTML pages
+- **🔍 Visual Testing**: Generated validation pages for comparing rendering fidelity
+- **📋 Assets Documentation**: Complete guide for Material for MkDocs CSS extraction and integration
+
+### Files Added/Modified
+- **New Files**: 
+  - `src/preview/MarkdownRenderer.ts` - Core markdown rendering with Material styling
+  - `src/preview/PreviewPanel.ts` - WebviewPanel lifecycle management
+  - `assets/css/material.css` - Main mkdocs-material SCSS file (91 lines)
+  - `assets/css/palette.scss` - Color palette definitions (41 lines)  
+  - `assets/css/admonitions.scss` - Admonition styling (196 lines)
+  - `MATERIAL_CSS_GUIDE.md` - CSS integration guide
+  - `test-case.md` - Comprehensive test document
+  - `validation.html` & `validation-updated.html` - Visual validation pages
 
 ## [0.3.3] - 2025-01-23
 ### Enhanced

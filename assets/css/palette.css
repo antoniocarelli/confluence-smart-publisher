@@ -1,0 +1,38 @@
+/* Material for MkDocs Color Palette */
+:root {
+    /* Primary colors */
+    --md-primary-fg-color: #1976d2;
+    --md-primary-fg-color--light: #64b5f6;
+    --md-primary-fg-color--dark: #0d47a1;
+    
+    /* Accent colors */
+    --md-accent-fg-color: #ff5722;
+    --md-accent-fg-color--transparent: rgba(255, 87, 34, 0.1);
+}
+
+/* Light theme palette */
+[data-md-color-scheme="default"] {
+    --md-default-bg-color: #ffffff;
+    --md-default-fg-color: rgba(0, 0, 0, 0.87);
+    --md-default-fg-color--light: rgba(0, 0, 0, 0.54);
+    --md-default-fg-color--lighter: rgba(0, 0, 0, 0.32);
+    --md-default-fg-color--lightest: rgba(0, 0, 0, 0.07);
+}
+
+/* Dark theme palette (slate) */
+[data-md-color-scheme="slate"] {
+    --md-default-bg-color: #1e1e1e;
+    --md-default-fg-color: rgba(255, 255, 255, 0.87);
+    --md-default-fg-color--light: rgba(255, 255, 255, 0.54);
+    --md-default-fg-color--lighter: rgba(255, 255, 255, 0.32);
+    --md-default-fg-color--lightest: rgba(255, 255, 255, 0.07);
+    
+    /* Dark theme specific colors */
+    --md-code-bg-color: #2d2d2d;
+    --md-code-fg-color: #e1e1e1;
+    --md-shadow-z1: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.4);
+    
+    /* Admonition colors for dark theme */
+    --md-admonition-bg-color: #2d2d2d;
+    --md-admonition-fg-color: rgba(255, 255, 255, 0.87);
+}

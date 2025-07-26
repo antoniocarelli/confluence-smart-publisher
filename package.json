@@ -2,7 +2,7 @@
   "name": "confluence-smart-publisher",
   "displayName": "Confluence Smart Publisher",
   "description": "Publish and manage Confluence pages directly from VS Code",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "icon": "images/csp-icon.png",
   "engines": {
     "vscode": "^1.96.0"
@@ -53,6 +53,10 @@
       {
         "command": "confluence-smart-publisher.convertConfluenceToMarkdown",
         "title": "Convert Confluence to Markdown"
+      },
+      {
+        "command": "confluence-smart-publisher.preview",
+        "title": "Open Markdown Preview"
       }
     ],
     "submenus": [
@@ -109,6 +113,10 @@
         {
           "command": "confluence-smart-publisher.convertConfluenceToMarkdown",
           "when": "resourceExtname == .confluence"
+        },
+        {
+          "command": "confluence-smart-publisher.preview",
+          "when": "resourceExtname == .md"
         }
       ]
     },
@@ -143,13 +151,17 @@
         "confluenceSmartPublisher.mathRenderer": {
           "type": "string",
           "default": "katex",
-          "enum": ["katex", "mathjax", "latex"],
-          "enumDescriptions": [
-            "KaTeX - Rápido e leve. Usado em: VS Code, algumas extensões GitHub, sites com foco em performance. Aplica sanitização automática (ex: escapa underscores em \\text{}). Ideal para a maioria dos casos.",
-            "MathJax - Suporte LaTeX mais amplo. Usado em: GitHub nativo, Jupyter notebooks, sites acadêmicos. Sintaxe mais tolerante, mas renderização mais lenta. Escolha para fórmulas complexas.",
-            "LaTeX Puro - Sintaxe original sem modificações. Usado em: documentos científicos, quando você precisa da sintaxe exata do LaTeX. Pode não funcionar em todos os visualizadores web."
+          "enum": [
+            "katex",
+            "mathjax",
+            "latex"
           ],
-          "description": "Escolha o renderizador matemático para blocos de fórmulas baseado em onde o markdown será visualizado"
+          "enumDescriptions": [
+            "KaTeX - Fast and lightweight. Used in: VS Code, some GitHub extensions, performance-focused sites. Applies automatic sanitization (e.g., escapes underscores in \\text{}). Ideal for most cases.",
+            "MathJax - Broader LaTeX support. Used in: GitHub native, Jupyter notebooks, academic sites. More tolerant syntax, but slower rendering. Choose for complex formulas.",
+            "Pure LaTeX - Original syntax without modifications. Used in: scientific documents, when you need exact LaTeX syntax. May not work in all web viewers."
+          ],
+          "description": "Choose the math renderer for formula blocks based on where the markdown will be viewed"
         }
       }
     },
@@ -199,6 +211,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/glob": "^8.1.0",
     "@types/js-yaml": "^4.0.9",
+    "@types/markdown-it": "^14.1.2",
     "@types/marked": "^5.0.2",
     "@types/mocha": "^10.0.6",
     "@types/node": "20.x",
@@ -224,6 +237,8 @@
     "form-data": "^4.0.0",
     "fs-extra": "^11.2.0",
     "js-yaml": "^4.1.0",
+    "markdown-it": "^14.1.0",
+    "markdown-it-admonition": "^1.0.4",
     "marked": "^12.0.0",
     "node-fetch": "^2.7.0",
     "turndown": "^7.2.0",
