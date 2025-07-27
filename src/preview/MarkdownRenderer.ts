@@ -2,13 +2,15 @@ import MarkdownIt from 'markdown-it';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import hljs from 'highlight.js';
 
-// Import markdown-it-admonition plugin
+// Import markdown-it plugins for CommonMark compliance
 const markdownItAdmonition = require('markdown-it-admonition');
 
 /**
- * MarkdownRenderer class responsible for converting Markdown content
- * to HTML with Material for MkDocs styling and admonition support
+ * MarkdownRenderer class responsible for converting CommonMark-compliant Markdown content
+ * to HTML with Material for MkDocs styling, enhanced plugin support, and syntax highlighting.
+ * Supports CommonMark Spec v0.31.2 features and GitHub Flavored Markdown extensions.
  */
 export class MarkdownRenderer {
     private md: MarkdownIt;
@@ -16,29 +18,117 @@ export class MarkdownRenderer {
 
     constructor(extensionUri: vscode.Uri) {
         this.extensionUri = extensionUri;
+        
+        // Configure markdown-it for CommonMark compliance
         this.md = new MarkdownIt({
-            html: true,
-            xhtmlOut: false,
-            breaks: false,
-            linkify: true,
-            typographer: true,
-            quotes: '""\'\'',
+            html: true,           // Enable HTML tags in source
+            xhtmlOut: false,      // Use ">" for single tags (not "/>")
+            breaks: false,        // Convert \n in paragraphs into <br> (disabled for CommonMark)
+            linkify: true,        // Autoconvert URL-like text to links
+            typographer: true,    // Enable smartquotes and other typographic replacements
+            quotes: '""\'\'',     // Quote characters for typographer
             highlight: this.highlightCode.bind(this)
         });
 
-        // Try configuring admonitions plugin without specific options first
+        // Load plugins for enhanced CommonMark support
+        this.loadMarkdownPlugins();
+    }
+
+    /**
+     * Loads markdown-it plugins to support CommonMark and GFM features
+     */
+    private loadMarkdownPlugins(): void {
         try {
+            // Admonitions plugin (already supported)
             this.md.use(markdownItAdmonition);
             console.log('[Plugin Debug] markdown-it-admonition loaded successfully');
+
+            // Note: Additional plugins can be loaded here as needed
+            // For now, we focus on the core plugins that support our CommonMark output
+            
         } catch (error) {
-            console.error('[Plugin Debug] Error loading markdown-it-admonition:', error);
+            console.error('[Plugin Debug] Error loading markdown-it plugins:', error);
             // Fallback configuration
-            this.md.use(markdownItAdmonition, {});
+            try {
+                this.md.use(markdownItAdmonition, {});
+            } catch (fallbackError) {
+                console.error('[Plugin Debug] Fallback admonition loading failed:', fallbackError);
+            }
         }
     }
 
     /**
-     * Renders markdown content to HTML with Material for MkDocs styling
+     * Enhanced syntax highlighting for code blocks using highlight.js
+     * Supports major programming languages with proper CSS classes and highlighting
+     * @param str Code content
+     * @param lang Language identifier
+     * @returns Highlighted HTML
+     */
+    private highlightCode(str: string, lang: string): string {
+        if (!lang || !lang.trim()) {
+            // No language specified - return plain code block
+            return `<pre class="hljs"><code>${this.escapeHtml(str)}</code></pre>`;
+        }
+
+        const normalizedLang = this.normalizeLangName(lang.trim().toLowerCase());
+        
+        try {
+            // Check if language is supported by highlight.js
+            if (hljs.getLanguage(normalizedLang)) {
+                const highlighted = hljs.highlight(str, { language: normalizedLang });
+                return `<pre class="hljs"><code class="hljs language-${normalizedLang}">${highlighted.value}</code></pre>`;
+            } else {
+                // Language not supported - try auto-detection
+                const autoHighlighted = hljs.highlightAuto(str);
+                const detectedLang = autoHighlighted.language || 'text';
+                console.log(`[Highlight Debug] Auto-detected language: ${detectedLang} for requested: ${lang}`);
+                return `<pre class="hljs"><code class="hljs language-${detectedLang}">${autoHighlighted.value}</code></pre>`;
+            }
+        } catch (err) {
+            console.warn(`[Highlight Debug] Error highlighting code for language '${lang}':`, err);
+            // Fallback to plain text with language class
+            return `<pre class="hljs"><code class="hljs language-${this.escapeHtml(normalizedLang)}">${this.escapeHtml(str)}</code></pre>`;
+        }
+    }
+
+    /**
+     * Normalizes language names to match highlight.js expectations
+     * @param lang Original language name
+     * @returns Normalized language name
+     */
+    private normalizeLangName(lang: string): string {
+        const langMap: { [key: string]: string } = {
+            // Common aliases to standard names
+            'js': 'javascript',
+            'ts': 'typescript',
+            'py': 'python',
+            'cs': 'csharp',
+            'c#': 'csharp',
+            'md': 'markdown',
+            'sh': 'bash',
+            'shell': 'bash',
+            'yml': 'yaml',
+            'jsx': 'javascript',
+            'tsx': 'typescript',
+            'golang': 'go',
+            'kt': 'kotlin',
+            'rb': 'ruby',
+            'ps1': 'powershell',
+            'psm1': 'powershell',
+            'dockerfile': 'docker',
+            'makefile': 'make',
+            'cmake': 'cmake',
+            'toml': 'ini', // Similar enough for basic highlighting
+            'properties': 'ini',
+            'conf': 'ini',
+            'config': 'ini'
+        };
+
+        return langMap[lang] || lang;
+    }
+
+    /**
+     * Renders CommonMark-compliant markdown content to HTML with Material for MkDocs styling
      * @param content Markdown content to render
      * @param documentUri URI of the document being rendered (for relative paths)
      * @returns HTML string with embedded CSS
@@ -46,7 +136,7 @@ export class MarkdownRenderer {
     public renderToHtml(content: string, documentUri?: vscode.Uri): string {
         let htmlContent = this.md.render(content);
         
-        // Post-process HTML to fix admonition issues
+        // Post-process HTML to fix any structural issues
         htmlContent = this.fixAdmonitionHtml(htmlContent);
         
         // Debug: Log generated HTML structure
@@ -54,6 +144,7 @@ export class MarkdownRenderer {
         console.log(htmlContent.substring(0, 500) + '...');
         
         const cssContent = this.getMaterialCss();
+        const highlightCss = this.getHighlightCss();
         
         return `<!DOCTYPE html>
 <html lang="en" data-md-color-scheme="slate">
@@ -63,6 +154,72 @@ export class MarkdownRenderer {
     <title>Markdown Preview</title>
     <style>
         ${cssContent}
+        
+        ${highlightCss}
+        
+        /* Enhanced styles for CommonMark compliance */
+        .md-typeset table {
+            border-collapse: collapse;
+            margin: 1.5em 0;
+            width: 100%;
+        }
+        
+        .md-typeset table th,
+        .md-typeset table td {
+            border: 1px solid var(--md-default-fg-color--lighter);
+            padding: 0.75em;
+            text-align: left;
+        }
+        
+        .md-typeset table th {
+            background-color: var(--md-default-fg-color--lightest);
+            font-weight: bold;
+        }
+        
+        /* Better list styling for CommonMark compliance */
+        .md-typeset ul,
+        .md-typeset ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+        
+        .md-typeset li {
+            margin: 0.25em 0;
+        }
+        
+        .md-typeset li > p {
+            margin: 0.5em 0;
+        }
+        
+        /* Enhanced code block styling with syntax highlighting */
+        .md-typeset pre {
+            margin: 1.5em 0;
+            overflow-x: auto;
+            border-radius: 0.25rem;
+            background-color: var(--md-code-bg-color, #2d3748) !important;
+        }
+        
+        .md-typeset pre.hljs {
+            padding: 1em;
+            line-height: 1.5;
+            font-family: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        
+        .md-typeset code {
+            background-color: var(--md-code-bg-color, #2d3748);
+            color: var(--md-code-fg-color, #e2e8f0);
+            padding: 0.1em 0.4em;
+            border-radius: 0.1rem;
+            font-size: 0.85em;
+            font-family: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+        }
+        
+        /* Ensure highlighted code blocks have proper contrast */
+        .md-typeset pre code.hljs {
+            background: transparent;
+            padding: 0;
+        }
     </style>
 </head>
 <body data-md-color-scheme="slate">
@@ -134,26 +291,6 @@ export class MarkdownRenderer {
         console.log('[HTML Debug] Closing divs found:', closingDivs?.length || 0);
         
         return htmlContent;
-    }
-
-    /**
-     * Syntax highlighting for code blocks
-     * @param str Code content
-     * @param lang Language identifier
-     * @returns Highlighted HTML
-     */
-    private highlightCode(str: string, lang: string): string {
-        if (lang && lang.trim()) {
-            try {
-                // Basic syntax highlighting classes for common languages
-                const languageClass = `language-${lang.trim()}`;
-                return `<pre class="highlight"><code class="${languageClass}">${this.escapeHtml(str)}</code></pre>`;
-            } catch (err) {
-                // Fallback to plain text
-                return `<pre class="highlight"><code>${this.escapeHtml(str)}</code></pre>`;
-            }
-        }
-        return `<pre class="highlight"><code>${this.escapeHtml(str)}</code></pre>`;
     }
 
     /**
@@ -1313,6 +1450,152 @@ body {
         padding: 0.5rem 0.75rem;
     }
 }
+        `;
+    }
+
+    /**
+     * Gets highlight.js CSS styles optimized for dark theme
+     * @returns CSS string for syntax highlighting
+     */
+    private getHighlightCss(): string {
+        return `
+        /* Highlight.js GitHub Dark Theme - Optimized for Material Design */
+        .hljs {
+            color: #e6edf3;
+            background: #0d1117;
+        }
+        
+        .hljs-doctag,
+        .hljs-keyword,
+        .hljs-meta .hljs-keyword,
+        .hljs-template-tag,
+        .hljs-template-variable,
+        .hljs-type,
+        .hljs-variable.language_ {
+            color: #ff7b72;
+        }
+        
+        .hljs-title,
+        .hljs-title.class_,
+        .hljs-title.class_.inherited__,
+        .hljs-title.function_ {
+            color: #d2a8ff;
+        }
+        
+        .hljs-attr,
+        .hljs-attribute,
+        .hljs-literal,
+        .hljs-meta,
+        .hljs-number,
+        .hljs-operator,
+        .hljs-variable,
+        .hljs-selector-attr,
+        .hljs-selector-class,
+        .hljs-selector-id {
+            color: #79c0ff;
+        }
+        
+        .hljs-regexp,
+        .hljs-string,
+        .hljs-meta .hljs-string {
+            color: #a5d6ff;
+        }
+        
+        .hljs-built_in,
+        .hljs-symbol {
+            color: #ffa657;
+        }
+        
+        .hljs-comment,
+        .hljs-code,
+        .hljs-formula {
+            color: #8b949e;
+        }
+        
+        .hljs-name,
+        .hljs-quote,
+        .hljs-selector-tag,
+        .hljs-selector-pseudo {
+            color: #7ee787;
+        }
+        
+        .hljs-subst {
+            color: #e6edf3;
+        }
+        
+        .hljs-section {
+            color: #1f6feb;
+            font-weight: bold;
+        }
+        
+        .hljs-bullet {
+            color: #f2cc60;
+        }
+        
+        .hljs-emphasis {
+            color: #e6edf3;
+            font-style: italic;
+        }
+        
+        .hljs-strong {
+            color: #e6edf3;
+            font-weight: bold;
+        }
+        
+        .hljs-addition {
+            color: #aff5b4;
+            background-color: #033a16;
+        }
+        
+        .hljs-deletion {
+            color: #ffdcd7;
+            background-color: #67060c;
+        }
+        
+        /* Language-specific enhancements */
+        .hljs.language-sql .hljs-keyword {
+            color: #ff7b72;
+            font-weight: bold;
+        }
+        
+        .hljs.language-sql .hljs-built_in {
+            color: #ffa657;
+        }
+        
+        .hljs.language-json .hljs-attr {
+            color: #79c0ff;
+        }
+        
+        .hljs.language-json .hljs-string {
+            color: #a5d6ff;
+        }
+        
+        .hljs.language-xml .hljs-tag {
+            color: #7ee787;
+        }
+        
+        .hljs.language-xml .hljs-attr {
+            color: #79c0ff;
+        }
+        
+        .hljs.language-css .hljs-selector-tag {
+            color: #ffa657;
+        }
+        
+        .hljs.language-css .hljs-attribute {
+            color: #79c0ff;
+        }
+        
+        /* Make sure line numbers and special elements are visible */
+        .hljs-meta,
+        .hljs-comment {
+            font-style: italic;
+        }
+        
+        .hljs-tag,
+        .hljs-name {
+            font-weight: normal;
+        }
         `;
     }
 }

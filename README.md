@@ -71,6 +71,11 @@ The extension now includes a **high-fidelity Markdown preview system** with auth
   - `!!! info "Info Title"` - Cyan informational blocks
   - `!!! question "Question Title"` - Purple FAQ blocks
   - `!!! quote "Quote Title"` - Gray citation blocks
+- **✨ Professional Syntax Highlighting**: Advanced code highlighting for 20+ programming languages
+  - Java, Python, JavaScript, TypeScript, SQL, PHP, C#, Go, Rust, Kotlin
+  - XML, JSON, YAML, Bash, PowerShell, Docker, and more
+  - Smart language detection and automatic fallback
+  - GitHub Dark theme optimized for Material Design
 - **⚡ Real-Time Updates**: Auto-refresh preview with debounced updates (300ms) as you type
 - **📱 Responsive Design**: Mobile-friendly preview that adapts to all screen sizes
 - **🎯 Smart Context Detection**: Automatically recognizes Markdown files and provides appropriate UI states
@@ -80,10 +85,12 @@ The extension now includes a **high-fidelity Markdown preview system** with auth
 
 ### 🎨 Material for MkDocs Conversion Support
 
-Enhanced support for **Material for MkDocs** format conversion:
+Enhanced support for **Material for MkDocs** format conversion with **CommonMark Spec v0.31.2 compliance**:
+- **⭐ CommonMark Compliance**: All generated Markdown follows CommonMark Spec v0.31.2 for maximum compatibility and portability
 - **Admonition Conversion**: Confluence panels are automatically converted to Material for MkDocs admonition syntax (`!!! type "title"`)
 - **Complete Type Mapping**: Support for all Confluence panel types including `info`, `warning`, `success`, `error`, `tip`, `note`, `example`, `quote`, `abstract`, `failure`, `bug`, `question`, and `custom`
 - **Smart Formatting**: First paragraph becomes the admonition title, remaining content is properly indented
+- **Standards-Compliant Output**: Lists, code blocks, tables, and all formatting elements follow CommonMark specification
 - **Fallback Support**: Unknown panel types gracefully fallback to `note` admonition type
 
 ### 🎮 Commands
@@ -93,7 +100,7 @@ Enhanced support for **Material for MkDocs** format conversion:
 - **Synchronization**: Compare and synchronize local content with what's published on Confluence, choosing which version to keep. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/sync-with-published)
 - **Template-based creation**: Create new files based on Confluence template pages. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/create-document)
 - **Markdown to Confluence**: Convert Markdown files to Confluence Storage Format, supporting common syntax like headers, lists, code blocks, and tables. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-markdown)
-- **Confluence to Markdown**: Convert Confluence Storage Format files to Markdown with enhanced support for Material for MkDocs Admonitions, preserving metadata, macros, and formatting. Panel elements are automatically converted to proper admonition syntax with comprehensive type mapping. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-confluence-markdown)
+- **Confluence to Markdown**: Convert Confluence Storage Format files to CommonMark Spec v0.31.2 compliant Markdown with enhanced support for Material for MkDocs Admonitions, preserving metadata, macros, and formatting. Panel elements are automatically converted to proper admonition syntax with comprehensive type mapping. All output follows CommonMark standards for maximum compatibility. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/convert-confluence-markdown)
 - **Automatic formatting**: Format `.confluence` files with specific rules, including automatic chapter numbering. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/format-document)
 - **Structure validation**: Real-time diagnostics of required tags, structure, and attributes, displaying issues in VSCode. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/structure-validation)
 - **Tag auto-completion**: Smart suggestions for Confluence custom tags and attributes. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/tag-auto-completion)
