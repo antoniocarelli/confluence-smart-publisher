@@ -35,6 +35,7 @@ export interface ConverterResult {
     hasComplexContent?: boolean;
     originalType?: string;
     needsYaml?: boolean;
+    startNumber?: number;
   };
 }
 
