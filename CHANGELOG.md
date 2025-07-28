@@ -2,7 +2,15 @@
 
 All notable changes to the "confluence-smart-publisher" extension will be documented in this file.
 
-## [0.4.1] - 2025-01-29
+## [0.4.2] - 2025-07-28
+### BUGFIX: Adjust alignment of markers in ordered lists and correct task item formatting
+- Modify the rendering of the first line in ordered lists to include a padded marker for consistent alignment.
+- Update the indentation of subsequent lines to ensure compliance with CommonMark standards.
+- Correct the formatting of the generated markdown for task items, removing an extra space before the line break.
+
+These changes aim to improve the presentation and readability of the generated markdown.
+
+## [0.4.1] - 2025-07-27
 ### Major Enhancement: CommonMark Compliance
 - **🎯 CommonMark Spec v0.31.2 Compliance**: Refactored the Confluence JSON -> Markdown converter to be fully compliant with CommonMark Spec v0.31.2
 - **📝 Improved Markdown Generation**: Enhanced all converter modules to produce clean, portable, and standard-compliant Markdown
@@ -46,7 +54,7 @@ All notable changes to the "confluence-smart-publisher" extension will be docume
 - **🎨 Enhanced CSS**: Custom GitHub Dark theme with Material Design integration
 - **🔧 Language Support**: Smart language normalization and alias handling
 
-## [0.4.0] - 2025-01-29
+## [0.4.0] - 2025-07-25
 ### Major New Feature
 - **🔍 Material for MkDocs Preview System**
   - ✨ **Live Markdown Preview**: Added high-fidelity Markdown preview with Material for MkDocs styling
@@ -86,7 +94,7 @@ All notable changes to the "confluence-smart-publisher" extension will be docume
   - `test-case.md` - Comprehensive test document
   - `validation.html` & `validation-updated.html` - Visual validation pages
 
-## [0.3.3] - 2025-01-23
+## [0.3.3] - 2025-07-23
 ### Enhanced
 - **🎨 Panel Converter Enhancement**
   - ✅ **Material for MkDocs Admonition Support**: Panel converter now uses Material for MkDocs Admonition format instead of blockquotes
