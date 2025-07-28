@@ -45,14 +45,15 @@ function renderOrderedList(children: MarkdownBlock[], level: number = 0, startNu
         }
         
         if (i === 0) {
-          // First line gets the number marker
-          result += `${indent}${currentMarker} ${trimmedLine}`;
+          // First line gets the number marker, padded to max width for alignment
+          const paddedMarker = currentMarker.padEnd(maxMarkerWidth);
+          result += `${indent}${paddedMarker} ${trimmedLine}`;
           counter++;
         } else {
           // Subsequent lines: indent to align with the content after the marker
           // CommonMark requires continuation to be indented to the first non-space character
-          // after the list marker. For "1. ", that's 3 spaces from start of marker
-          const continuationIndent = indent + ' '.repeat(currentMarker.length + 1);
+          // after the list marker. Use maxMarkerWidth + 1 space for consistent alignment
+          const continuationIndent = indent + ' '.repeat(maxMarkerWidth + 1);
           
           // If line starts with a list marker, it's a nested list - preserve structure
           if (/^(\s*[-*+]|\s*\d+\.)/.test(line)) {
