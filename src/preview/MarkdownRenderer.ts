@@ -4,8 +4,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import hljs from 'highlight.js';
 
-// Import markdown-it plugins for CommonMark compliance
-const markdownItAdmonition = require('markdown-it-admonition');
+// Import custom admonition plugin
+import { admonitionPlugin } from '../plugins/admonition-plugin';
 
 /**
  * MarkdownRenderer class responsible for converting CommonMark-compliant Markdown content
@@ -39,18 +39,19 @@ export class MarkdownRenderer {
      */
     private loadMarkdownPlugins(): void {
         try {
-            // Admonitions plugin (already supported)
-            this.md.use(markdownItAdmonition);
-            console.log('[Plugin Debug] markdown-it-admonition loaded successfully');
+            // Custom admonitions plugin (replaces markdown-it-admonition)
+            this.md.use(admonitionPlugin);
+            console.log('[Plugin Debug] Custom admonition plugin loaded successfully');
 
             // Note: Additional plugins can be loaded here as needed
             // For now, we focus on the core plugins that support our CommonMark output
             
         } catch (error) {
             console.error('[Plugin Debug] Error loading markdown-it plugins:', error);
-            // Fallback configuration
+            // Fallback configuration - try to load the plugin without options
             try {
-                this.md.use(markdownItAdmonition, {});
+                this.md.use(admonitionPlugin);
+                console.log('[Plugin Debug] Custom admonition plugin loaded via fallback');
             } catch (fallbackError) {
                 console.error('[Plugin Debug] Fallback admonition loading failed:', fallbackError);
             }

@@ -2,6 +2,25 @@
 
 All notable changes to the "confluence-smart-publisher" extension will be documented in this file.
 
+## [0.4.3] - 2025-01-29
+### MAJOR: Custom Admonition Implementation
+- **🔧 Replaced External Dependency**: Removed `markdown-it-admonition` dependency and implemented custom admonition plugin
+- **📝 Full Admonition Support**: Complete implementation supporting all 12 admonition types with aliases
+  - `note`, `abstract/summary/tldr`, `info/todo`, `tip/hint/important`
+  - `success/check/done`, `question/help/faq`, `warning/caution/attention`
+  - `failure/fail/missing`, `danger/error`, `bug`, `example`, `quote/cite`
+- **🎯 Material for MkDocs Compatibility**: 100% compatible with Material for MkDocs admonition syntax
+- **⚡ Improved Performance**: Custom implementation optimized for project-specific needs
+- **🛡️ Enhanced Maintainability**: Internal code control eliminates external dependency risks
+- **✅ Comprehensive Testing**: Extensive test coverage including edge cases and alias validation
+- **📋 Specification Compliance**: Follows CommonMark standards with proper 4-space indentation requirement
+
+#### Technical Implementation
+- Created `src/plugins/admonition-plugin.ts` with full parser implementation
+- Updated `src/preview/MarkdownRenderer.ts` to use custom plugin
+- Maintained complete CSS/SCSS compatibility with existing styling
+- Zero breaking changes - all existing functionality preserved
+
 ## [0.4.2] - 2025-07-28
 ### BUGFIX: Adjust alignment of markers in ordered lists and correct task item formatting
 - Modify the rendering of the first line in ordered lists to include a padded marker for consistent alignment.

@@ -239,7 +239,6 @@
     "highlight.js": "^11.11.1",
     "js-yaml": "^4.1.0",
     "markdown-it": "^14.1.0",
-    "markdown-it-admonition": "^1.0.4",
     "marked": "^12.0.0",
     "node-fetch": "^2.7.0",
     "turndown": "^7.2.0",
