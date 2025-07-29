@@ -29,3 +29,8 @@ docs-for-testing/old_extension.ts
 images/diagnostics.gif
 images/formater.gif
 docs/**
+.github/**
+webpack.config.js
+eslint.config.mjs
+tsconfig.tsbuildinfo
+*.md
