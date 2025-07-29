@@ -239,34 +239,24 @@ export class MarkdownRenderer {
      * @returns Fixed HTML
      */
     private fixAdmonitionHtml(html: string): string {
-        // Ensure all admonition divs are properly closed
+        // Since our custom admonition plugin now works correctly, 
+        // we only need basic validation without complex regex manipulation
         let processedHtml = html;
         
-        // Count opening and closing admonition divs
+        // Count opening and closing admonition divs for debugging
         const admonitionOpening = (processedHtml.match(/<div[^>]*class="[^"]*admonition[^"]*"/g) || []).length;
         const totalClosingDivs = (processedHtml.match(/<\/div>/g) || []).length;
         
         console.log('[HTML Fix] Admonition divs:', admonitionOpening, 'Total closing divs:', totalClosingDivs);
         
-        // If there's a structural issue, try to fix it
+        // Only log if there's a major structural issue - don't try to fix automatically
         if (admonitionOpening > 0) {
-            // Make sure each admonition block is properly contained
-            processedHtml = processedHtml.replace(
-                /<div([^>]*class="[^"]*admonition[^"]*"[^>]*)>([\s\S]*?)(?=<h[1-6]|<div class="admonition|$)/g,
-                (match, attrs, content) => {
-                    // Ensure the admonition block is properly closed before the next heading or admonition
-                    const openDivs = (content.match(/<div/g) || []).length;
-                    const closeDivs = (content.match(/<\/div>/g) || []).length;
-                    
-                    // Add missing closing divs if needed
-                    let fixedContent = content;
-                    for (let i = closeDivs; i < openDivs; i++) {
-                        fixedContent += '</div>';
-                    }
-                    
-                    return `<div${attrs}>${fixedContent}</div>`;
-                }
-            );
+            const totalOpeningDivs = (processedHtml.match(/<div[^>]*>/g) || []).length;
+            console.log('[HTML Fix] All opening divs:', totalOpeningDivs, 'All closing divs:', totalClosingDivs);
+            
+            if (totalOpeningDivs !== totalClosingDivs) {
+                console.warn('[HTML Fix] WARNING: Mismatched div count detected, but leaving HTML as-is since plugin generates correct structure');
+            }
         }
         
         return processedHtml;

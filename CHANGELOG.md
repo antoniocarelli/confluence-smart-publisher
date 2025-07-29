@@ -2,7 +2,7 @@
 
 All notable changes to the "confluence-smart-publisher" extension will be documented in this file.
 
-## [0.4.3] - 2025-01-29
+## [0.4.3] - 2025-07-29
 ### MAJOR: Custom Admonition Implementation
 - **🔧 Replaced External Dependency**: Removed `markdown-it-admonition` dependency and implemented custom admonition plugin
 - **📝 Full Admonition Support**: Complete implementation supporting all 12 admonition types with aliases

@@ -71,6 +71,22 @@ const DEFAULT_TITLES: { [key: string]: string } = {
 };
 
 /**
+ * Verifica se uma linha é o início de um novo admonition
+ */
+function isAdmonitionStart(src: string, pos: number, max: number): boolean {
+  // Precisa ter pelo menos "!!! " (4 caracteres)
+  if (pos + 4 >= max) {return false;}
+  
+  const marker = src.slice(pos, pos + 3);
+  if (marker !== '!!!') {return false;}
+  
+  // Deve ter um espaço após !!!
+  if (src[pos + 3] !== ' ') {return false;}
+  
+  return true;
+}
+
+/**
  * Parser personalizado para admonitions seguindo especificação Material for MkDocs
  * Suporta sintaxe: !!! tipo ["título"]
  * Com indentação obrigatória de 4 espaços para o conteúdo
@@ -83,14 +99,9 @@ function parseAdmonition(state: any, start: number, end: number, silent: boolean
   const startPos = state.bMarks[nextLine] + state.tShift[nextLine];
   const max = state.eMarks[nextLine];
   
-  // Precisa ter pelo menos "!!! " (4 caracteres)
-  if (startPos + 4 >= max) return false;
-  
-  const marker = state.src.slice(startPos, startPos + 3);
-  if (marker !== '!!!') return false;
-  
-  // Deve ter um espaço após !!!
-  if (state.src[startPos + 3] !== ' ') return false;
+  if (!isAdmonitionStart(state.src, startPos, max)) {
+    return false;
+  }
   
   // Extrair tipo e título da linha de abertura
   const headerLine = state.src.slice(startPos + 4, max).trim();
@@ -98,37 +109,57 @@ function parseAdmonition(state: any, start: number, end: number, silent: boolean
   // Regex para capturar: tipo obrigatório, título opcional entre aspas
   const match = headerLine.match(/^(\S+)(?:\s+"([^"]*)")?/);
   
-  if (!match) return false;
+  if (!match) {return false;}
   
   const inputType = match[1].toLowerCase();
   const customTitle = match[2];
   const admonitionType = ADMONITION_TYPES[inputType];
   
   // Tipo deve ser válido
-  if (!admonitionType) return false;
+  if (!admonitionType) {return false;}
   
-  if (silent) return true;
+  if (silent) {return true;}
   
   // Encontrar o fim do bloco admonition
   nextLine = start + 1;
+  const contentLines: string[] = [];
+  
   while (nextLine < end) {
     const pos = state.bMarks[nextLine] + state.tShift[nextLine];
     const lineMax = state.eMarks[nextLine];
+    const lineContent = state.src.slice(pos, lineMax);
+    const fullLine = state.src.slice(state.bMarks[nextLine], lineMax);
     
-    // Linha vazia - continuar
+    // Contar espaços no início da linha completa
+    let spaceCount = 0;
+    for (let i = 0; i < fullLine.length && fullLine[i] === ' '; i++) {
+      spaceCount++;
+    }
+    
+    // Linha vazia - pode ser parte do conteúdo
     if (state.isEmpty(nextLine)) {
+      contentLines.push('');
       nextLine++;
       continue;
     }
     
-    // Verificar se a linha está indentada com 4 espaços
-    const lineContent = state.src.slice(pos, lineMax);
-    if (!lineContent.startsWith('    ')) {
-      // Linha não indentada - fim do bloco
+    // Verificar se é o início de um novo admonition
+    if (isAdmonitionStart(state.src, pos, lineMax)) {
+      // Encontrou um novo admonition - fim do bloco atual
       break;
     }
     
-    nextLine++;
+    // Verificar se a linha está indentada com 4 ou mais espaços
+    if (spaceCount >= 4) {
+      // Remover indentação e adicionar à lista de conteúdo
+      const contentText = fullLine.slice(4);
+      contentLines.push(contentText);
+      nextLine++;
+      continue;
+    }
+    
+    // Linha não indentada e não é um novo admonition - fim do bloco
+    break;
   }
   
   // Criar tokens para a estrutura do admonition
@@ -153,55 +184,28 @@ function parseAdmonition(state: any, start: number, end: number, silent: boolean
   tokenTitleClose.markup = '!!!';
   tokenTitleClose.block = true;
   
-  // Processar conteúdo interno se existir
-  if (nextLine > start + 1) {
-    const contentLines: string[] = [];
-    for (let i = start + 1; i < nextLine; i++) {
-      const linePos = state.bMarks[i] + state.tShift[i];
-      const lineMax = state.eMarks[i];
-      let lineContent = state.src.slice(linePos, lineMax);
-      
-      // Remover indentação de 4 espaços obrigatória
-      if (lineContent.startsWith('    ')) {
-        lineContent = lineContent.slice(4);
-      } else if (lineContent.trim() === '') {
-        // Linha vazia - manter como está
-        lineContent = '';
-      }
-      
-      contentLines.push(lineContent);
+  // Processar conteúdo se existir
+  if (contentLines.length > 0) {
+    // Remover linhas vazias do início e fim
+    while (contentLines.length > 0 && contentLines[0].trim() === '') {
+      contentLines.shift();
+    }
+    while (contentLines.length > 0 && contentLines[contentLines.length - 1].trim() === '') {
+      contentLines.pop();
     }
     
-    // Processar o conteúdo como markdown recursivamente
-    const contentText = contentLines.join('\n').trim();
-    
-    if (contentText) {
-      // Criar um novo estado para processar o conteúdo interno
-      const oldParent = state.parentType;
-      const oldLineMax = state.lineMax;
-      const oldTShift = state.tShift[start];
-      const oldSCount = state.sCount[start];
-      const oldBMarks = state.bMarks[start];
-      const oldEMarks = state.eMarks[start];
+    if (contentLines.length > 0) {
+      // Criar conteúdo como markdown parseado
+      const contentText = contentLines.join('\n');
       
-      state.parentType = 'admonition';
+      // Criar uma nova instância de parser para o conteúdo
+      const subState = new state.md.block.State(contentText, state.md, state.env, []);
+      state.md.block.tokenize(subState, subState.line, subState.lineMax);
       
-      // Tokenizar o conteúdo
-      const contentState = new state.md.block.State(contentText, state.md, state.env, []);
-      state.md.block.tokenize(contentState, contentState.line, contentState.lineMax);
-      
-      // Copiar os tokens gerados para o estado principal
-      for (const token of contentState.tokens) {
+      // Adicionar os tokens do conteúdo ao estado principal
+      for (const token of subState.tokens) {
         state.tokens.push(token);
       }
-      
-      // Restaurar estado anterior
-      state.parentType = oldParent;
-      state.lineMax = oldLineMax;
-      state.tShift[start] = oldTShift;
-      state.sCount[start] = oldSCount;
-      state.bMarks[start] = oldBMarks;
-      state.eMarks[start] = oldEMarks;
     }
   }
   
