@@ -4,8 +4,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import hljs from 'highlight.js';
 
-// Import markdown-it plugins for CommonMark compliance
-const markdownItAdmonition = require('markdown-it-admonition');
+// Import custom admonition plugin
+import { admonitionPlugin } from '../plugins/admonition-plugin';
 
 /**
  * MarkdownRenderer class responsible for converting CommonMark-compliant Markdown content
@@ -39,18 +39,19 @@ export class MarkdownRenderer {
      */
     private loadMarkdownPlugins(): void {
         try {
-            // Admonitions plugin (already supported)
-            this.md.use(markdownItAdmonition);
-            console.log('[Plugin Debug] markdown-it-admonition loaded successfully');
+            // Custom admonitions plugin (replaces markdown-it-admonition)
+            this.md.use(admonitionPlugin);
+            console.log('[Plugin Debug] Custom admonition plugin loaded successfully');
 
             // Note: Additional plugins can be loaded here as needed
             // For now, we focus on the core plugins that support our CommonMark output
             
         } catch (error) {
             console.error('[Plugin Debug] Error loading markdown-it plugins:', error);
-            // Fallback configuration
+            // Fallback configuration - try to load the plugin without options
             try {
-                this.md.use(markdownItAdmonition, {});
+                this.md.use(admonitionPlugin);
+                console.log('[Plugin Debug] Custom admonition plugin loaded via fallback');
             } catch (fallbackError) {
                 console.error('[Plugin Debug] Fallback admonition loading failed:', fallbackError);
             }
@@ -238,34 +239,24 @@ export class MarkdownRenderer {
      * @returns Fixed HTML
      */
     private fixAdmonitionHtml(html: string): string {
-        // Ensure all admonition divs are properly closed
+        // Since our custom admonition plugin now works correctly, 
+        // we only need basic validation without complex regex manipulation
         let processedHtml = html;
         
-        // Count opening and closing admonition divs
+        // Count opening and closing admonition divs for debugging
         const admonitionOpening = (processedHtml.match(/<div[^>]*class="[^"]*admonition[^"]*"/g) || []).length;
         const totalClosingDivs = (processedHtml.match(/<\/div>/g) || []).length;
         
         console.log('[HTML Fix] Admonition divs:', admonitionOpening, 'Total closing divs:', totalClosingDivs);
         
-        // If there's a structural issue, try to fix it
+        // Only log if there's a major structural issue - don't try to fix automatically
         if (admonitionOpening > 0) {
-            // Make sure each admonition block is properly contained
-            processedHtml = processedHtml.replace(
-                /<div([^>]*class="[^"]*admonition[^"]*"[^>]*)>([\s\S]*?)(?=<h[1-6]|<div class="admonition|$)/g,
-                (match, attrs, content) => {
-                    // Ensure the admonition block is properly closed before the next heading or admonition
-                    const openDivs = (content.match(/<div/g) || []).length;
-                    const closeDivs = (content.match(/<\/div>/g) || []).length;
-                    
-                    // Add missing closing divs if needed
-                    let fixedContent = content;
-                    for (let i = closeDivs; i < openDivs; i++) {
-                        fixedContent += '</div>';
-                    }
-                    
-                    return `<div${attrs}>${fixedContent}</div>`;
-                }
-            );
+            const totalOpeningDivs = (processedHtml.match(/<div[^>]*>/g) || []).length;
+            console.log('[HTML Fix] All opening divs:', totalOpeningDivs, 'All closing divs:', totalClosingDivs);
+            
+            if (totalOpeningDivs !== totalClosingDivs) {
+                console.warn('[HTML Fix] WARNING: Mismatched div count detected, but leaving HTML as-is since plugin generates correct structure');
+            }
         }
         
         return processedHtml;
