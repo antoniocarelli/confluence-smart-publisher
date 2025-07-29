@@ -500,6 +500,7 @@ Verificar se todas as funcionalidades existentes continuam funcionando:
 - ✅ **Modificado**: `src/preview/MarkdownRenderer.ts` - Integração do plugin
 - ✅ **Modificado**: `package.json` - Remoção da dependência
 - ✅ **Modificado**: `CHANGELOG.md` - Documentação das mudanças
+- ✅ **Publicado**: Commit `fd0baf8` pushed para branch remoto
 
 ### 🚀 Benefícios da Implementação
 
