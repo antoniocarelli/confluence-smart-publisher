@@ -36,6 +36,30 @@ export interface ConverterResult {
     originalType?: string;
     needsYaml?: boolean;
     startNumber?: number;
+    footnoteRef?: string;
+    annotationRef?: string;
+    annotationBlock?: string;
+    annotationDef?: string;
+  };
+}
+
+/**
+ * Interface for footnote reference
+ */
+export interface FootnoteReference {
+  id: string;
+  number: number;
+  content?: string;
+}
+
+/**
+ * Interface for footnote mark in text
+ */
+export interface FootnoteMark {
+  type: 'footnote';
+  attrs: {
+    id: string;
+    footnoteType?: 'reference' | 'definition';
   };
 }
 

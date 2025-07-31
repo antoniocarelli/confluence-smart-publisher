@@ -3,6 +3,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import hljs from 'highlight.js';
+// @ts-ignore
+import footnotePlugin from 'markdown-it-footnote';
 
 // Import custom admonition plugin
 import { admonitionPlugin } from '../plugins/admonition-plugin';
@@ -15,6 +17,7 @@ import { admonitionPlugin } from '../plugins/admonition-plugin';
 export class MarkdownRenderer {
     private md: MarkdownIt;
     private extensionUri: vscode.Uri;
+    private globalAnnotationDefinitions: Map<string, string> = new Map();
 
     constructor(extensionUri: vscode.Uri) {
         this.extensionUri = extensionUri;
@@ -32,6 +35,9 @@ export class MarkdownRenderer {
 
         // Load plugins for enhanced CommonMark support
         this.loadMarkdownPlugins();
+        
+        // Configure footnotes for Material for MkDocs styling
+        this.configureFootnotes();
     }
 
     /**
@@ -43,6 +49,10 @@ export class MarkdownRenderer {
             this.md.use(admonitionPlugin);
             console.log('[Plugin Debug] Custom admonition plugin loaded successfully');
 
+            // Footnotes plugin for Material for MkDocs support
+            this.md.use(footnotePlugin);
+            console.log('[Plugin Debug] markdown-it-footnote plugin loaded successfully');
+
             // Note: Additional plugins can be loaded here as needed
             // For now, we focus on the core plugins that support our CommonMark output
             
@@ -51,11 +61,41 @@ export class MarkdownRenderer {
             // Fallback configuration - try to load the plugin without options
             try {
                 this.md.use(admonitionPlugin);
-                console.log('[Plugin Debug] Custom admonition plugin loaded via fallback');
+                this.md.use(footnotePlugin);
+                console.log('[Plugin Debug] Plugins loaded via fallback');
             } catch (fallbackError) {
-                console.error('[Plugin Debug] Fallback admonition loading failed:', fallbackError);
+                console.error('[Plugin Debug] Fallback plugin loading failed:', fallbackError);
             }
         }
+    }
+
+    /**
+     * Configure footnotes for Material for MkDocs styling
+     */
+    private configureFootnotes(): void {
+        // Override footnote renderer for Material for MkDocs styling
+        this.md.renderer.rules.footnote_ref = (tokens, idx, options, env, renderer) => {
+            const id = tokens[idx].meta.id;
+            const refid = tokens[idx].meta.refid;
+            
+            return `<sup id="fnref:${id}">
+                <a href="#fn:${id}" class="footnote-ref" data-footnote-id="${id}">${refid}</a>
+            </sup>`;
+        };
+
+        this.md.renderer.rules.footnote_block_open = () => {
+            return '<div class="footnote">\n<ol>\n';
+        };
+
+        this.md.renderer.rules.footnote_block_close = () => {
+            return '</ol>\n</div>\n';
+        };
+
+        this.md.renderer.rules.footnote_anchor = (tokens, idx, options, env, renderer) => {
+            const id = tokens[idx].meta.id;
+            
+            return `<a href="#fnref:${id}" class="footnote-backref">↩</a>`;
+        };
     }
 
     /**
@@ -135,10 +175,16 @@ export class MarkdownRenderer {
      * @returns HTML string with embedded CSS
      */
     public renderToHtml(content: string, documentUri?: vscode.Uri): string {
-        let htmlContent = this.md.render(content);
+        // Pre-process markdown for annotations
+        const processedContent = this.preprocessMarkdown(content);
+        
+        let htmlContent = this.md.render(processedContent);
         
         // Post-process HTML to fix any structural issues
         htmlContent = this.fixAdmonitionHtml(htmlContent);
+        
+        // Process annotations in HTML
+        htmlContent = this.replaceAnnotationReferences(htmlContent);
         
         // Debug: Log generated HTML structure
         console.log('[HTML Debug] Generated HTML structure:');
@@ -157,6 +203,251 @@ export class MarkdownRenderer {
         ${cssContent}
         
         ${highlightCss}
+        
+        /* Material for MkDocs Official CSS for Footnotes and Annotations */
+        :root {
+            --md-annotation-bg-icon: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2Z'/></svg>");
+            --md-annotation-icon: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2Z'/></svg>");
+            --md-tooltip-width: 20rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .md-tooltip {
+            position: absolute;
+            z-index: 1000;
+            background-color: var(--md-default-bg-color);
+            border: 1px solid var(--md-default-fg-color--lighter);
+            border-radius: 0.25rem;
+            box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.3);
+            font-size: 0.8rem;
+            max-width: var(--md-tooltip-width);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-0.5rem);
+            transition: opacity 0.25s cubic-bezier(0.1, 0.7, 0.1, 1), transform 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
+        }
+
+        .md-tooltip--active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .md-tooltip--inline {
+            display: inline-block;
+        }
+
+        .md-tooltip__inner {
+            padding: 0.75rem;
+            color: var(--md-default-fg-color);
+            line-height: 1.4;
+        }
+
+        .md-annotation {
+            display: inline;
+            line-height: 1;
+            outline: none;
+            position: relative;
+            vertical-align: text-top;
+        }
+
+        .md-annotation__index {
+            color: var(--md-default-fg-color--light);
+            cursor: pointer;
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 400;
+            height: 2.2ch;
+            line-height: 2.2ch;
+            margin: 0 0.4ch;
+            outline: none;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+            transition: color 0.25s cubic-bezier(0.1, 0.7, 0.1, 1), transform 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
+            user-select: none;
+            vertical-align: text-top;
+            width: 2.2ch;
+            z-index: 0;
+        }
+
+        .md-annotation__index::before {
+            background-color: var(--md-default-fg-color--lighter);
+            border-radius: 50%;
+            content: "";
+            height: 2.2ch;
+            left: 0;
+            mask-image: var(--md-annotation-bg-icon);
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            position: absolute;
+            top: 0;
+            transition: background-color 0.25s cubic-bezier(0.1, 0.7, 0.1, 1), transform 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
+            width: 2.2ch;
+            z-index: -1;
+        }
+
+        .md-annotation__index[data-md-annotation-id]::after {
+            background-color: var(--md-primary-fg-color);
+            border-radius: 50%;
+            color: var(--md-primary-bg-color);
+            content: "";
+            height: 2.2ch;
+            left: 0;
+            mask-image: var(--md-annotation-icon);
+            mask-position: center;
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            position: absolute;
+            top: 0;
+            transition: background-color 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
+            width: 2.2ch;
+            z-index: 0;
+        }
+
+        .md-annotation__index:hover::before,
+        .md-annotation__index:focus::before {
+            background-color: var(--md-accent-fg-color);
+            transform: scale(1.1);
+        }
+
+        .md-annotation__index:hover[data-md-annotation-id]::after,
+        .md-annotation__index:focus[data-md-annotation-id]::after {
+            background-color: var(--md-accent-fg-color);
+            animation: pulse 2000ms infinite;
+        }
+
+        .md-annotation[data-md-visible] .md-annotation__index {
+            color: var(--md-accent-fg-color);
+            transform: rotate(45deg);
+        }
+
+        /* Footnote styling */
+        .footnote-ref {
+            color: var(--md-primary-fg-color);
+            text-decoration: none;
+            font-size: 0.8em;
+            transition: color 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
+        }
+
+        .footnote-ref:hover {
+            color: var(--md-accent-fg-color);
+        }
+
+        .footnote {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--md-default-fg-color--lighter);
+        }
+
+        .footnote ol {
+            list-style: decimal;
+            padding-left: 1.5rem;
+        }
+
+        .footnote-backref {
+            color: var(--md-primary-fg-color);
+            text-decoration: none;
+            margin-left: 0.5rem;
+        }
+
+        .footnote-tooltip {
+            background-color: var(--md-default-bg-color);
+            border: 1px solid var(--md-default-fg-color--lighter);
+            border-radius: 0.25rem;
+            box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.3);
+            color: var(--md-default-fg-color);
+            font-size: 0.8rem;
+            line-height: 1.4;
+            max-width: 20rem;
+            padding: 0.75rem;
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .footnote-tooltip p,
+        .md-tooltip__inner p {
+            margin: 0 0 0.5rem 0;
+        }
+
+        .footnote-tooltip p:last-child,
+        .md-tooltip__inner p:last-child {
+            margin-bottom: 0;
+        }
+
+        .footnote-tooltip ul,
+        .footnote-tooltip ol,
+        .md-tooltip__inner ul,
+        .md-tooltip__inner ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .footnote-tooltip li,
+        .md-tooltip__inner li {
+            margin: 0.25rem 0;
+        }
+
+        .footnote-tooltip code,
+        .md-tooltip__inner code {
+            background-color: var(--md-code-bg-color);
+            color: var(--md-code-fg-color);
+            font-size: 0.75rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.1rem;
+        }
+
+        .footnote-tooltip a,
+        .md-tooltip__inner a {
+            color: var(--md-primary-fg-color);
+            text-decoration: none;
+        }
+
+        .footnote-tooltip a:hover,
+        .md-tooltip__inner a:hover {
+            color: var(--md-accent-fg-color);
+            text-decoration: underline;
+        }
+
+        .footnote-tooltip strong,
+        .md-tooltip__inner strong {
+            font-weight: 600;
+        }
+
+        .footnote-tooltip em,
+        .md-tooltip__inner em {
+            font-style: italic;
+        }
+
+        .footnote-tooltip blockquote,
+        .md-tooltip__inner blockquote {
+            border-left: 2px solid var(--md-default-fg-color--lighter);
+            margin: 0.5rem 0;
+            padding-left: 0.75rem;
+            font-style: italic;
+        }
+
+        .footnote-tooltip pre,
+        .md-tooltip__inner pre {
+            background-color: var(--md-code-bg-color);
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            overflow-x: auto;
+            font-size: 0.7rem;
+        }
+
+        .footnote-tooltip hr,
+        .md-tooltip__inner hr {
+            border: none;
+            border-top: 1px solid var(--md-default-fg-color--lighter);
+            margin: 0.75rem 0;
+        }
         
         /* Enhanced styles for CommonMark compliance */
         .md-typeset table {
@@ -224,11 +515,243 @@ export class MarkdownRenderer {
     </style>
 </head>
 <body data-md-color-scheme="slate">
-    <div class="md-content">
-        <article class="md-content__inner md-typeset">
-            ${htmlContent}
-        </article>
+    <div class="md-container">
+        <main class="md-main">
+            <div class="md-grid">
+                <div class="md-content">
+                    <article class="md-content__inner md-typeset">
+                        ${htmlContent}
+                    </article>
+                </div>
+            </div>
+        </main>
     </div>
+
+    <script>
+        // Global annotation definitions storage
+        window.annotationDefinitions = new Map(${JSON.stringify(Array.from(this.globalAnnotationDefinitions.entries()))});
+
+        let currentTooltip = null;
+
+        // Tooltip creation function
+        function createTooltip() {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'footnote-tooltip';
+            tooltip.style.display = 'none';
+            document.body.appendChild(tooltip);
+            return tooltip;
+        }
+
+        // Get footnote content
+        function getFootnoteContent(footnoteId) {
+            const footnoteElement = document.querySelector('#fn\\\\:' + footnoteId + ' p');
+            if (footnoteElement) {
+                // Clone content and remove the back-reference link
+                const content = footnoteElement.cloneNode(true);
+                const backref = content.querySelector('.footnote-backref');
+                if (backref) backref.remove();
+                return content.innerHTML;
+            }
+            return null;
+        }
+
+        // Get annotation content
+        function getAnnotationContent(annotationId) {
+            const content = window.annotationDefinitions.get(annotationId);
+            if (content) {
+                return content;
+            }
+            return null;
+        }
+
+        // Position tooltip
+        function positionTooltip(tooltip, targetElement) {
+            const rect = targetElement.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            
+            let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+            let top = rect.top - tooltipRect.height - 10;
+            
+            // Adjust if tooltip goes outside viewport
+            const padding = 10;
+            if (left < padding) left = padding;
+            if (left + tooltipRect.width > window.innerWidth - padding) {
+                left = window.innerWidth - tooltipRect.width - padding;
+            }
+            if (top < padding) {
+                top = rect.bottom + 10;
+            }
+            
+            tooltip.style.left = left + window.scrollX + 'px';
+            tooltip.style.top = top + window.scrollY + 'px';
+        }
+
+        // Show tooltip
+        function showTooltip(content, targetElement) {
+            hideTooltip();
+            
+            const tooltip = createTooltip();
+            tooltip.innerHTML = content;
+            tooltip.style.display = 'block';
+            
+            // Position tooltip
+            requestAnimationFrame(() => {
+                positionTooltip(tooltip, targetElement);
+                tooltip.style.opacity = '1';
+            });
+            
+            currentTooltip = tooltip;
+        }
+
+        // Hide tooltip
+        function hideTooltip() {
+            if (currentTooltip) {
+                currentTooltip.remove();
+                currentTooltip = null;
+            }
+        }
+
+        // Material for MkDocs tooltip functions
+        function createMaterialTooltip() {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'md-tooltip md-tooltip--inline';
+            
+            const inner = document.createElement('div');
+            inner.className = 'md-tooltip__inner';
+            tooltip.appendChild(inner);
+            
+            document.body.appendChild(tooltip);
+            return { tooltip, inner };
+        }
+
+        function showMaterialTooltip(content, targetElement, annotationId) {
+            hideMaterialTooltip();
+            
+            const { tooltip, inner } = createMaterialTooltip();
+            inner.innerHTML = content;
+            
+            // Position using CSS variables
+            const rect = targetElement.getBoundingClientRect();
+            const x = rect.left + (rect.width / 2);
+            const y = rect.top;
+            
+            document.documentElement.style.setProperty('--md-tooltip-x', x + 'px');
+            document.documentElement.style.setProperty('--md-tooltip-y', y + 'px');
+            
+            // Position tooltip
+            tooltip.style.left = x + window.scrollX + 'px';
+            tooltip.style.top = (y + window.scrollY - 10) + 'px';
+            tooltip.style.transform = 'translateX(-50%) translateY(-100%)';
+            
+            // Make links clickable
+            const links = inner.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // Allow default link behavior
+                });
+            });
+            
+            // Activate tooltip
+            requestAnimationFrame(() => {
+                tooltip.classList.add('md-tooltip--active');
+            });
+            
+            currentTooltip = tooltip;
+        }
+
+        function hideMaterialTooltip() {
+            if (currentTooltip) {
+                currentTooltip.classList.remove('md-tooltip--active');
+                setTimeout(() => {
+                    if (currentTooltip) {
+                        currentTooltip.remove();
+                        currentTooltip = null;
+                    }
+                }, 250);
+            }
+        }
+
+        // Event listeners for footnotes (hover)
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.classList.contains('footnote-ref')) {
+                const footnoteId = e.target.getAttribute('data-footnote-id');
+                const content = getFootnoteContent(footnoteId);
+                if (content) {
+                    showTooltip(content, e.target);
+                }
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.classList.contains('footnote-ref')) {
+                hideTooltip();
+            }
+        });
+
+        // Event listeners for annotations (click)
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('md-annotation__index') || 
+                e.target.closest('.md-annotation__index')) {
+                
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const indexElement = e.target.closest('.md-annotation__index') || e.target;
+                const annotationId = indexElement.querySelector('[data-md-annotation-id]')?.getAttribute('data-md-annotation-id');
+                
+                if (annotationId) {
+                    const content = getAnnotationContent(annotationId);
+                    if (content) {
+                        showMaterialTooltip(content, indexElement, annotationId);
+                        
+                        // Toggle visible state
+                        const annotation = indexElement.closest('.md-annotation');
+                        if (annotation) {
+                            annotation.setAttribute('data-md-visible', '');
+                        }
+                    }
+                }
+            } else {
+                // Click outside - hide annotation tooltips
+                hideMaterialTooltip();
+                
+                // Remove visible state from all annotations
+                document.querySelectorAll('.md-annotation[data-md-visible]').forEach(annotation => {
+                    annotation.removeAttribute('data-md-visible');
+                });
+            }
+        });
+
+        // Keep tooltip visible when hovering over it
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest('.footnote-tooltip') || e.target.closest('.md-tooltip')) {
+                // Keep current tooltip
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.closest('.footnote-tooltip') || e.target.closest('.md-tooltip')) {
+                if (!e.relatedTarget || (!e.relatedTarget.closest('.footnote-tooltip') && 
+                    !e.relatedTarget.closest('.md-tooltip') && 
+                    !e.relatedTarget.classList.contains('footnote-ref'))) {
+                    hideTooltip();
+                    hideMaterialTooltip();
+                }
+            }
+        });
+
+        // Hide tooltips on scroll and resize
+        window.addEventListener('scroll', () => {
+            hideTooltip();
+            hideMaterialTooltip();
+        });
+
+        window.addEventListener('resize', () => {
+            hideTooltip();
+            hideMaterialTooltip();
+        });
+    </script>
 </body>
 </html>`;
     }
@@ -1588,5 +2111,195 @@ body {
             font-weight: normal;
         }
         `;
+    }
+
+    /**
+     * Pre-process markdown content for annotations
+     */
+    private preprocessMarkdown(content: string): string {
+        this.processAnnotations(content);
+        return content;
+    }
+
+    /**
+     * Process annotations in markdown content
+     */
+    private processAnnotations(content: string): void {
+        const lines = content.split('\n');
+        const annotationDefinitions = new Map<string, string>();
+        let globalAnnotationCounter = 0;
+        let isInAnnotatedBlock = false;
+        const currentBlockGlobalIds = new Map<string, string>();
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+
+            // Check for annotate block marker
+            if (line.includes('{ .annotate }')) {
+                isInAnnotatedBlock = true;
+                continue;
+            }
+
+            if (isInAnnotatedBlock) {
+                // Process references (1), (2), etc.
+                const referencePattern = /\((\d+)\)/g;
+                let processedLine = lines[i];
+                
+                // Collect all local IDs in this line first
+                const localIdsInLine: string[] = [];
+                let match;
+                while ((match = referencePattern.exec(lines[i])) !== null) {
+                    localIdsInLine.push(match[1]);
+                }
+                
+                // Replace local IDs with global IDs (in reverse order to avoid overlaps)
+                for (let j = localIdsInLine.length - 1; j >= 0; j--) {
+                    const localId = localIdsInLine[j];
+                    let globalId = currentBlockGlobalIds.get(localId);
+                    
+                    if (!globalId) {
+                        globalAnnotationCounter++;
+                        globalId = globalAnnotationCounter.toString();
+                        currentBlockGlobalIds.set(localId, globalId);
+                    }
+                    
+                    // Replace the specific occurrence
+                    processedLine = processedLine.replace(`(${localId})`, `(${globalId})`);
+                }
+                
+                lines[i] = processedLine;
+
+                // Check for definition lines
+                const definitionMatch = line.match(/^(\d+)\.\s+(.*)$/);
+                if (definitionMatch) {
+                    const localId = definitionMatch[1];
+                    let content = definitionMatch[2].trim();
+                    
+                    // Check for multi-line definitions (indented continuation)
+                    let j = i + 1;
+                    while (j < lines.length && lines[j].match(/^\s+/) && lines[j].trim() !== '') {
+                        content += '\n' + lines[j].trim();
+                        j++;
+                    }
+                    
+                    const globalId = currentBlockGlobalIds.get(localId);
+                    if (globalId) {
+                        const processedContent = this.processAnnotationContentForTooltip(content);
+                        annotationDefinitions.set(globalId, processedContent);
+                        
+                        // Hide definition lines from output
+                        lines[i] = '';
+                        for (let k = i + 1; k < j; k++) {
+                            lines[k] = '';
+                        }
+                    }
+                }
+
+                // End block if we hit empty line and next line isn't a definition
+                if (line === '' && i + 1 < lines.length) {
+                    const nextLine = lines[i + 1].trim();
+                    if (!nextLine.match(/^\d+\.\s+/) && nextLine !== '') {
+                        isInAnnotatedBlock = false;
+                        currentBlockGlobalIds.clear();
+                    }
+                }
+            }
+        }
+
+        this.storeAnnotationDefinitions(annotationDefinitions);
+    }
+
+    /**
+     * Process annotation content for tooltip display
+     */
+    private processAnnotationContentForTooltip(content: string): string {
+        // Split into lines for processing
+        const lines = content.split('\n');
+        const processedLines: string[] = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i].trim();
+
+            if (line === '') {
+                // Empty line becomes paragraph break
+                if (processedLines.length > 0) {
+                    processedLines.push('</p><p>');
+                }
+                continue;
+            }
+
+            // Process basic markdown formatting
+            line = this.processBasicMarkdownForHTML(line);
+
+            // Handle list items
+            if (line.match(/^-\s+/)) {
+                line = '<li>' + line.replace(/^-\s+/, '') + '</li>';
+                // Wrap in ul if first list item
+                if (i === 0 || !lines[i-1]?.trim().match(/^-\s+/)) {
+                    line = '<ul>' + line;
+                }
+                // Close ul if last list item
+                if (i === lines.length - 1 || !lines[i+1]?.trim().match(/^-\s+/)) {
+                    line = line + '</ul>';
+                }
+            }
+
+            processedLines.push(line);
+        }
+
+        // Wrap in paragraph if not already structured
+        let result = processedLines.join('');
+        if (!result.match(/^<(p|ul|ol|h[1-6]|div)/)) {
+            result = '<p>' + result + '</p>';
+        }
+
+        return result;
+    }
+
+    /**
+     * Process basic markdown formatting for HTML
+     */
+    private processBasicMarkdownForHTML(text: string): string {
+        // Process in order: links, code, bold, italic
+
+        // Links: [text](url)
+        text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+        // Inline code: `code`
+        text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+        // Bold: **text**
+        text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+
+        // Italic: *text*
+        text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+        return text;
+    }
+
+    /**
+     * Store annotation definitions globally
+     */
+    private storeAnnotationDefinitions(definitions: Map<string, string>): void {
+        definitions.forEach((content, id) => {
+            this.globalAnnotationDefinitions.set(id, content);
+        });
+    }
+
+    /**
+     * Replace annotation references with Material for MkDocs HTML structure
+     */
+    private replaceAnnotationReferences(html: string): string {
+        // Replace (N) with proper annotation structure inside paragraphs
+        return html.replace(/<p>(.*?)<\/p>/gs, (pMatch: string, pContent: string) => {
+            const processedContent = pContent.replace(/\((\d+)\)/g, (refMatch: string, id: string) => {
+                return `<span class="md-annotation" tabindex="0" data-md-visible="">
+                    <span class="md-annotation__index" tabindex="-1">
+                        <span data-md-annotation-id="${id}"></span>
+                    </span>
+                </span>`;
+            });
+            return `<p>${processedContent}</p>`;
+        });
     }
 }

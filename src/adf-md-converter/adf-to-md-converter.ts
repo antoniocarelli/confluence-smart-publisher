@@ -35,6 +35,8 @@ import convertHardBreak from './converters/hard-break-converter';
 import convertExtension from './converters/extension-converter';
 import convertBodiedExtension from './converters/bodied-extension-converter';
 import convertMathBlock from './converters/math-block-converter';
+import { convertFootnote, resetFootnoteState, getFootnoteContent } from './converters/footnote-converter';
+import { convertAnnotation, resetAnnotationState, getAnnotationContent } from './converters/annotation-converter';
 
 export class AdfToMarkdownConverter {
   private rootDocument?: AdfNode;
@@ -152,11 +154,13 @@ export class AdfToMarkdownConverter {
    * @param level The nesting level (for lists)
    */
   async convertNode(node: AdfNode, level: number = 0, confluenceBaseUrl: string = ''): Promise<MarkdownBlock> {
-    // If this is the root document, collect all nodes for context
+    // If this is the root document, collect all nodes for context and reset footnote/annotation state
     if (node.type === 'doc' && !this.rootDocument) {
       this.rootDocument = node;
       this.allNodes = [];
       this.collectAllNodes(node);
+      resetFootnoteState();
+      resetAnnotationState();
     }
     const children = await this.convertChildren(node, level, confluenceBaseUrl);
     const converter = this.getConverter(node.type);
@@ -173,7 +177,20 @@ export class AdfToMarkdownConverter {
     // Se for doc, não aplica renderBlock aqui (será feito na montagem final)
     if (node.type === 'doc') {
       // Para doc, renderiza todos os filhos já formatados
-      const markdown = children.map(child => this.renderBlock(child)).join('\n\n');
+      let markdown = children.map(child => this.renderBlock(child)).join('\n\n');
+      
+      // Append footnote content at the end of the document
+      const footnoteContent = getFootnoteContent();
+      if (footnoteContent) {
+        markdown += footnoteContent;
+      }
+      
+      // Append annotation content (processed in MarkdownRenderer)
+      const annotationContent = getAnnotationContent();
+      if (annotationContent) {
+        markdown += annotationContent;
+      }
+      
       return { yamlBlock: '', markdown, adfInfo: { adfType: 'doc' } };
     }
 
@@ -237,6 +254,8 @@ export class AdfToMarkdownConverter {
     if (type === 'extension') {return convertExtension;}
     if (type === 'bodiedExtension') {return convertBodiedExtension;}
     if (type === 'math' || type === 'mathBlock' || type === 'easy-math-block') {return convertMathBlock;}
+    if (type === 'footnote' || type === 'footnoteReference' || type === 'footnoteDefinition') {return convertFootnote;}
+    if (type === 'annotation' || type === 'annotationReference' || type === 'annotationDefinition') {return convertAnnotation;}
     return (node, children) => ({
       yamlBlock: generateYamlBlock({ adfType: 'not-implemented', originalNode: node }),
       markdown: ''

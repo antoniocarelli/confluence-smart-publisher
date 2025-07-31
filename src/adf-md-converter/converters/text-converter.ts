@@ -18,6 +18,7 @@ export default function convertText(node: AdfNode, children: MarkdownBlock[]): C
     let hasStrong = false;
     let hasEm = false;
     let linkHref = '';
+    let footnoteRef = '';
     
     // Check what marks we have first
     for (const mark of node.marks) {
@@ -29,6 +30,8 @@ export default function convertText(node: AdfNode, children: MarkdownBlock[]): C
         hasEm = true;
       } else if (mark.type === 'link') {
         linkHref = mark.attrs && typeof mark.attrs['href'] === 'string' ? mark.attrs['href'] : '';
+      } else if (mark.type === 'footnote') {
+        footnoteRef = mark.attrs && typeof mark.attrs['id'] === 'string' ? mark.attrs['id'] : '';
       }
     }
     
@@ -56,10 +59,15 @@ export default function convertText(node: AdfNode, children: MarkdownBlock[]): C
       }
     }
     
+    // Handle footnote reference (processed after all other formatting)
+    if (footnoteRef) {
+      text = `${text}[^${footnoteRef}]`;
+    }
+    
     // Handle other marks that might be present (future extensibility)
     for (const mark of node.marks) {
       // Skip marks we've already processed
-      if (['code', 'strong', 'em', 'link'].includes(mark.type)) {
+      if (['code', 'strong', 'em', 'link', 'footnote'].includes(mark.type)) {
         continue;
       }
       
