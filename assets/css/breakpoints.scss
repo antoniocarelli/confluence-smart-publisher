@@ -1,0 +1,45 @@
+////
+/// Breakpoint utilities for responsive design
+////
+
+@import "convert";
+
+// Device-specific breakpoints
+$break-devices: (
+  mobile: (
+    portrait:  px2em(220px)  px2em(479.75px),
+    landscape: px2em(480px)  px2em(719.75px)
+  ),
+  tablet: (
+    portrait:  px2em(720px)  px2em(959.75px),
+    landscape: px2em(960px)  px2em(1219.75px)
+  ),
+  screen: (
+    small:     px2em(1220px) px2em(1599.75px),
+    medium:    px2em(1600px) px2em(1999.75px),
+    large:     px2em(2000px)
+  )
+);
+
+// Breakpoint mixins (simplified versions)
+@mixin break-from-device($device) {
+  // Simplified implementation for now
+  @if $device == "screen medium" {
+    @media (min-width: 1600px) {
+      @content;
+    }
+  } @else if $device == "screen large" {
+    @media (min-width: 2000px) {
+      @content;
+    }
+  }
+}
+
+@mixin break-to-device($device) {
+  // Simplified implementation for now
+  @if $device == "tablet portrait" {
+    @media (max-width: 959.75px) {
+      @content;
+    }
+  }
+}

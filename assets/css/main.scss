@@ -1,0 +1,21 @@
+////
+/// Main SCSS file that imports all Material for MkDocs styles
+/// Used by the MarkdownRenderer for styling
+////
+
+// Base utilities and variables
+@import "material-color-variables";
+@import "convert";
+@import "breakpoints";
+
+// Core styles
+@import "colors";
+@import "base";
+
+// Component styles
+@import "tooltip";
+@import "footnotes";
+@import "admonitions";
+
+// Existing palette styles
+@import "palette";

@@ -203,315 +203,6 @@ export class MarkdownRenderer {
         ${cssContent}
         
         ${highlightCss}
-        
-        /* Material for MkDocs Official CSS for Footnotes and Annotations */
-        :root {
-            --md-annotation-bg-icon: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2Z'/></svg>");
-            --md-annotation-icon: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2Z'/></svg>");
-            --md-tooltip-width: 20rem;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .md-tooltip {
-            position: absolute;
-            z-index: 1000;
-            background-color: var(--md-default-bg-color);
-            border: 1px solid var(--md-default-fg-color--lighter);
-            border-radius: 0.25rem;
-            box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.3);
-            font-size: 0.8rem;
-            max-width: var(--md-tooltip-width);
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(-0.5rem);
-            transition: opacity 0.25s cubic-bezier(0.1, 0.7, 0.1, 1), transform 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
-        }
-
-        .md-tooltip--active {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-        }
-
-        .md-tooltip--inline {
-            display: inline-block;
-        }
-
-        .md-tooltip__inner {
-            padding: 0.75rem;
-            color: var(--md-default-fg-color);
-            line-height: 1.4;
-        }
-
-        .md-annotation {
-            display: inline;
-            line-height: 1;
-            outline: none;
-            position: relative;
-            vertical-align: text-top;
-        }
-
-        .md-annotation__index {
-            color: var(--md-default-fg-color--light);
-            cursor: pointer;
-            display: inline-block;
-            font-size: 0.8rem;
-            font-weight: 400;
-            height: 2.2ch;
-            line-height: 2.2ch;
-            margin: 0 0.4ch;
-            outline: none;
-            overflow: hidden;
-            position: relative;
-            text-align: center;
-            transition: color 0.25s cubic-bezier(0.1, 0.7, 0.1, 1), transform 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
-            user-select: none;
-            vertical-align: text-top;
-            width: 2.2ch;
-            z-index: 0;
-        }
-
-        .md-annotation__index::before {
-            background-color: var(--md-default-fg-color--lighter);
-            border-radius: 50%;
-            content: "";
-            height: 2.2ch;
-            left: 0;
-            mask-image: var(--md-annotation-bg-icon);
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            position: absolute;
-            top: 0;
-            transition: background-color 0.25s cubic-bezier(0.1, 0.7, 0.1, 1), transform 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
-            width: 2.2ch;
-            z-index: -1;
-        }
-
-        .md-annotation__index[data-md-annotation-id]::after {
-            background-color: var(--md-primary-fg-color);
-            border-radius: 50%;
-            color: var(--md-primary-bg-color);
-            content: "";
-            height: 2.2ch;
-            left: 0;
-            mask-image: var(--md-annotation-icon);
-            mask-position: center;
-            mask-repeat: no-repeat;
-            mask-size: contain;
-            position: absolute;
-            top: 0;
-            transition: background-color 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
-            width: 2.2ch;
-            z-index: 0;
-        }
-
-        .md-annotation__index:hover::before,
-        .md-annotation__index:focus::before {
-            background-color: var(--md-accent-fg-color);
-            transform: scale(1.1);
-        }
-
-        .md-annotation__index:hover[data-md-annotation-id]::after,
-        .md-annotation__index:focus[data-md-annotation-id]::after {
-            background-color: var(--md-accent-fg-color);
-            animation: pulse 2000ms infinite;
-        }
-
-        .md-annotation[data-md-visible] .md-annotation__index {
-            color: var(--md-accent-fg-color);
-            transform: rotate(45deg);
-        }
-
-        /* Footnote styling */
-        .footnote-ref {
-            color: var(--md-primary-fg-color);
-            text-decoration: none;
-            font-size: 0.8em;
-            transition: color 0.25s cubic-bezier(0.1, 0.7, 0.1, 1);
-        }
-
-        .footnote-ref:hover {
-            color: var(--md-accent-fg-color);
-        }
-
-        .footnote {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--md-default-fg-color--lighter);
-        }
-
-        .footnote ol {
-            list-style: decimal;
-            padding-left: 1.5rem;
-        }
-
-        .footnote-backref {
-            color: var(--md-primary-fg-color);
-            text-decoration: none;
-            margin-left: 0.5rem;
-        }
-
-        .footnote-tooltip {
-            background-color: var(--md-default-bg-color);
-            border: 1px solid var(--md-default-fg-color--lighter);
-            border-radius: 0.25rem;
-            box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.3);
-            color: var(--md-default-fg-color);
-            font-size: 0.8rem;
-            line-height: 1.4;
-            max-width: 20rem;
-            padding: 0.75rem;
-            position: absolute;
-            z-index: 1000;
-        }
-
-        .footnote-tooltip p,
-        .md-tooltip__inner p {
-            margin: 0 0 0.5rem 0;
-        }
-
-        .footnote-tooltip p:last-child,
-        .md-tooltip__inner p:last-child {
-            margin-bottom: 0;
-        }
-
-        .footnote-tooltip ul,
-        .footnote-tooltip ol,
-        .md-tooltip__inner ul,
-        .md-tooltip__inner ol {
-            margin: 0.5rem 0;
-            padding-left: 1.5rem;
-        }
-
-        .footnote-tooltip li,
-        .md-tooltip__inner li {
-            margin: 0.25rem 0;
-        }
-
-        .footnote-tooltip code,
-        .md-tooltip__inner code {
-            background-color: var(--md-code-bg-color);
-            color: var(--md-code-fg-color);
-            font-size: 0.75rem;
-            padding: 0.1rem 0.3rem;
-            border-radius: 0.1rem;
-        }
-
-        .footnote-tooltip a,
-        .md-tooltip__inner a {
-            color: var(--md-primary-fg-color);
-            text-decoration: none;
-        }
-
-        .footnote-tooltip a:hover,
-        .md-tooltip__inner a:hover {
-            color: var(--md-accent-fg-color);
-            text-decoration: underline;
-        }
-
-        .footnote-tooltip strong,
-        .md-tooltip__inner strong {
-            font-weight: 600;
-        }
-
-        .footnote-tooltip em,
-        .md-tooltip__inner em {
-            font-style: italic;
-        }
-
-        .footnote-tooltip blockquote,
-        .md-tooltip__inner blockquote {
-            border-left: 2px solid var(--md-default-fg-color--lighter);
-            margin: 0.5rem 0;
-            padding-left: 0.75rem;
-            font-style: italic;
-        }
-
-        .footnote-tooltip pre,
-        .md-tooltip__inner pre {
-            background-color: var(--md-code-bg-color);
-            padding: 0.5rem;
-            border-radius: 0.25rem;
-            overflow-x: auto;
-            font-size: 0.7rem;
-        }
-
-        .footnote-tooltip hr,
-        .md-tooltip__inner hr {
-            border: none;
-            border-top: 1px solid var(--md-default-fg-color--lighter);
-            margin: 0.75rem 0;
-        }
-        
-        /* Enhanced styles for CommonMark compliance */
-        .md-typeset table {
-            border-collapse: collapse;
-            margin: 1.5em 0;
-            width: 100%;
-        }
-        
-        .md-typeset table th,
-        .md-typeset table td {
-            border: 1px solid var(--md-default-fg-color--lighter);
-            padding: 0.75em;
-            text-align: left;
-        }
-        
-        .md-typeset table th {
-            background-color: var(--md-default-fg-color--lightest);
-            font-weight: bold;
-        }
-        
-        /* Better list styling for CommonMark compliance */
-        .md-typeset ul,
-        .md-typeset ol {
-            margin: 1em 0;
-            padding-left: 2em;
-        }
-        
-        .md-typeset li {
-            margin: 0.25em 0;
-        }
-        
-        .md-typeset li > p {
-            margin: 0.5em 0;
-        }
-        
-        /* Enhanced code block styling with syntax highlighting */
-        .md-typeset pre {
-            margin: 1.5em 0;
-            overflow-x: auto;
-            border-radius: 0.25rem;
-            background-color: var(--md-code-bg-color, #2d3748) !important;
-        }
-        
-        .md-typeset pre.hljs {
-            padding: 1em;
-            line-height: 1.5;
-            font-family: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
-            font-size: 0.85em;
-        }
-        
-        .md-typeset code {
-            background-color: var(--md-code-bg-color, #2d3748);
-            color: var(--md-code-fg-color, #e2e8f0);
-            padding: 0.1em 0.4em;
-            border-radius: 0.1rem;
-            font-size: 0.85em;
-            font-family: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
-        }
-        
-        /* Ensure highlighted code blocks have proper contrast */
-        .md-typeset pre code.hljs {
-            background: transparent;
-            padding: 0;
-        }
     </style>
 </head>
 <body data-md-color-scheme="slate">
@@ -829,10 +520,15 @@ export class MarkdownRenderer {
      * @returns CSS string
      */
     private getMaterialCss(): string {
-        // Only load SCSS files that we can properly process
+        // Load the new SCSS files from assets/css
         const scssFiles = [
+            'colors.scss',
+            'base.scss', 
+            'tooltip.scss',
+            'footnotes.scss',
+            'admonitions.scss',
             'palette.scss',
-            'admonitions.scss'
+            'csp.css'
         ];
         
         let combinedCss = '';
@@ -855,105 +551,26 @@ export class MarkdownRenderer {
             }
         }
         
-        // Always include our enhanced fallback CSS as base
-        const fallbackCss = this.getEnhancedFallbackCss();
-        console.log(`[CSS Debug] Total CSS size: ${(fallbackCss + combinedCss).length} characters`);
+        // If no CSS files were loaded, return a minimal fallback
+        if (combinedCss.trim() === '') {
+            console.warn('[CSS Debug] No CSS files were loaded, using minimal fallback');
+            return `
+            /* Minimal fallback CSS */
+            body { 
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                line-height: 1.6;
+                color: #333;
+                background: #fff;
+                padding: 1rem;
+            }
+            .md-typeset { font-size: 1rem; }
+            `;
+        }
         
-        // Make sure admonition-specific styles come after base styles
-        return fallbackCss + '\n' + combinedCss + '\n' + this.getAdmonitionSpecificStyles();
-    }
-
-    /**
-     * Returns enhanced admonition-specific styles that override base styles
-     * @returns CSS string with specific admonition styles
-     */
-    private getAdmonitionSpecificStyles(): string {
-        return `
-/* Enhanced Admonition Type-Specific Styles */
-.md-typeset .admonition.note {
-    border-color: #448aff !important;
-}
-.md-typeset .admonition.note > .admonition-title {
-    background-color: rgba(68, 138, 255, 0.1) !important;
-}
-
-.md-typeset .admonition.tip {
-    border-color: #00bfa5 !important;
-}
-.md-typeset .admonition.tip > .admonition-title {
-    background-color: rgba(0, 191, 165, 0.1) !important;
-}
-
-.md-typeset .admonition.warning {
-    border-color: #ff9100 !important;
-}
-.md-typeset .admonition.warning > .admonition-title {
-    background-color: rgba(255, 145, 0, 0.1) !important;
-}
-
-.md-typeset .admonition.danger {
-    border-color: #ff1744 !important;
-}
-.md-typeset .admonition.danger > .admonition-title {
-    background-color: rgba(255, 23, 68, 0.1) !important;
-}
-
-.md-typeset .admonition.success {
-    border-color: #00c853 !important;
-}
-.md-typeset .admonition.success > .admonition-title {
-    background-color: rgba(0, 200, 83, 0.1) !important;
-}
-
-.md-typeset .admonition.info {
-    border-color: #00b8d4 !important;
-}
-.md-typeset .admonition.info > .admonition-title {
-    background-color: rgba(0, 184, 212, 0.1) !important;
-}
-
-.md-typeset .admonition.question {
-    border-color: #64dd17 !important;
-}
-.md-typeset .admonition.question > .admonition-title {
-    background-color: rgba(100, 221, 23, 0.1) !important;
-}
-
-.md-typeset .admonition.quote {
-    border-color: #9e9e9e !important;
-}
-.md-typeset .admonition.quote > .admonition-title {
-    background-color: rgba(158, 158, 158, 0.1) !important;
-}
-
-.md-typeset .admonition.abstract {
-    border-color: #00bcd4 !important;
-}
-.md-typeset .admonition.abstract > .admonition-title {
-    background-color: rgba(0, 188, 212, 0.1) !important;
-}
-
-.md-typeset .admonition.bug {
-    border-color: #f50057 !important;
-}
-.md-typeset .admonition.bug > .admonition-title {
-    background-color: rgba(245, 0, 87, 0.1) !important;
-}
-
-.md-typeset .admonition.example {
-    border-color: #7c4dff !important;
-}
-.md-typeset .admonition.example > .admonition-title {
-    background-color: rgba(124, 77, 255, 0.1) !important;
-}
-
-.md-typeset .admonition.failure {
-    border-color: #ff5252 !important;
-}
-.md-typeset .admonition.failure > .admonition-title {
-    background-color: rgba(255, 82, 82, 0.1) !important;
-}
-        `;
+        console.log(`[CSS Debug] Total CSS size: ${combinedCss.length} characters`);
+        
+        // Return combined CSS without hardcoded styles
+        return combinedCss;
     }
 
     /**
@@ -1116,856 +733,7 @@ export class MarkdownRenderer {
         return css;
     }
 
-    /**
-     * Returns fallback CSS when Material for MkDocs files are not available
-     * @returns CSS string
-     */
-    private getFallbackCss(): string {
-        return `
-/* Material for MkDocs Base Styles */
-:root {
-    --md-primary-fg-color: #1976d2;
-    --md-primary-fg-color--light: #64b5f6;
-    --md-primary-fg-color--dark: #0d47a1;
-    --md-accent-fg-color: #ff5722;
-    --md-default-bg-color: #ffffff;
-    --md-default-fg-color: #000000;
-    --md-default-fg-color--light: #8a8a8a;
-    --md-default-fg-color--lighter: #b3b3b3;
-    --md-default-fg-color--lightest: #cccccc;
-    --md-code-bg-color: #f5f5f5;
-    --md-code-fg-color: #37474f;
-    --md-admonition-note-color: #448aff;
-    --md-admonition-tip-color: #00c853;
-    --md-admonition-warning-color: #ff9100;
-    --md-admonition-danger-color: #ff5252;
-    --md-admonition-success-color: #00e676;
-    --md-admonition-info-color: #00b8d4;
-    --md-admonition-question-color: #9c27b0;
-    --md-admonition-quote-color: #9e9e9e;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.6;
-    color: var(--md-default-fg-color);
-    background-color: var(--md-default-bg-color);
-    margin: 0;
-    padding: 20px;
-}
-
-.md-content {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.md-content__inner {
-    padding: 0 16px;
-}
-
-.md-typeset {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--md-default-fg-color);
-}
-
-/* Headings */
-.md-typeset h1,
-.md-typeset h2,
-.md-typeset h3,
-.md-typeset h4,
-.md-typeset h5,
-.md-typeset h6 {
-    margin: 1.25em 0 0.5em;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    color: var(--md-default-fg-color);
-}
-
-.md-typeset h1 {
-    font-size: 2.5em;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-}
-
-.md-typeset h2 {
-    font-size: 2em;
-    font-weight: 300;
-    letter-spacing: -0.01em;
-}
-
-.md-typeset h3 {
-    font-size: 1.5em;
-    font-weight: 400;
-}
-
-.md-typeset h4 {
-    font-size: 1.25em;
-    font-weight: 500;
-}
-
-.md-typeset h5 {
-    font-size: 1.125em;
-    font-weight: 500;
-}
-
-.md-typeset h6 {
-    font-size: 1em;
-    font-weight: 500;
-}
-
-/* Paragraphs */
-.md-typeset p {
-    margin: 0 0 1em;
-}
-
-/* Lists */
-.md-typeset ul,
-.md-typeset ol {
-    margin: 0 0 1em;
-    padding-left: 1.5em;
-}
-
-.md-typeset li {
-    margin: 0.25em 0;
-}
-
-/* Code */
-.md-typeset code {
-    background-color: var(--md-code-bg-color);
-    color: var(--md-code-fg-color);
-    padding: 0.125em 0.25em;
-    border-radius: 0.125em;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 0.85em;
-}
-
-.md-typeset pre {
-    background-color: var(--md-code-bg-color);
-    color: var(--md-code-fg-color);
-    border-radius: 0.25em;
-    padding: 1em;
-    margin: 1em 0;
-    overflow-x: auto;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-    font-size: 0.85em;
-    line-height: 1.4;
-}
-
-.md-typeset pre code {
-    background-color: transparent;
-    padding: 0;
-    border-radius: 0;
-}
-
-/* Tables */
-.md-typeset table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    margin: 1em 0;
-    border: 1px solid var(--md-default-fg-color--lightest);
-}
-
-.md-typeset th,
-.md-typeset td {
-    padding: 0.5em 1em;
-    border-bottom: 1px solid var(--md-default-fg-color--lightest);
-    text-align: left;
-}
-
-.md-typeset th {
-    background-color: var(--md-code-bg-color);
-    font-weight: 500;
-}
-
-/* Links */
-.md-typeset a {
-    color: var(--md-primary-fg-color);
-    text-decoration: none;
-}
-
-.md-typeset a:hover {
-    text-decoration: underline;
-}
-
-/* Blockquotes */
-.md-typeset blockquote {
-    border-left: 4px solid var(--md-default-fg-color--lightest);
-    padding-left: 1em;
-    margin: 1em 0;
-    color: var(--md-default-fg-color--light);
-}
-
-/* Admonitions */
-.admonition {
-    margin: 1.5625em 0;
-    padding: 0 0.75em;
-    overflow: hidden;
-    page-break-inside: avoid;
-    border-left: 0.25em solid;
-    border-radius: 0.125em;
-    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.05);
-}
-
-.admonition > :last-child {
-    margin-bottom: 0.75em;
-}
-
-.admonition-title {
-    position: relative;
-    margin: 0 -0.75em 0.75em;
-    padding: 0.5em 0.75em 0.5em 2.5em;
-    font-weight: 700;
-    background-color: rgba(68, 138, 255, 0.1);
-}
-
-.admonition-title::before {
-    position: absolute;
-    top: 0.5em;
-    left: 0.75em;
-    width: 1.25em;
-    height: 1.25em;
-    content: attr(data-icon);
-}
-
-/* Note admonition */
-.admonition.note {
-    border-color: var(--md-admonition-note-color);
-}
-
-.admonition.note > .admonition-title {
-    background-color: rgba(68, 138, 255, 0.1);
-}
-
-/* Tip admonition */
-.admonition.tip {
-    border-color: var(--md-admonition-tip-color);
-}
-
-.admonition.tip > .admonition-title {
-    background-color: rgba(0, 200, 83, 0.1);
-}
-
-/* Warning admonition */
-.admonition.warning {
-    border-color: var(--md-admonition-warning-color);
-}
-
-.admonition.warning > .admonition-title {
-    background-color: rgba(255, 145, 0, 0.1);
-}
-
-/* Danger admonition */
-.admonition.danger {
-    border-color: var(--md-admonition-danger-color);
-}
-
-.admonition.danger > .admonition-title {
-    background-color: rgba(255, 82, 82, 0.1);
-}
-
-/* Success admonition */
-.admonition.success {
-    border-color: var(--md-admonition-success-color);
-}
-
-.admonition.success > .admonition-title {
-    background-color: rgba(0, 230, 118, 0.1);
-}
-
-/* Info admonition */
-.admonition.info {
-    border-color: var(--md-admonition-info-color);
-}
-
-.admonition.info > .admonition-title {
-    background-color: rgba(0, 184, 212, 0.1);
-}
-
-/* Question admonition */
-.admonition.question {
-    border-color: var(--md-admonition-question-color);
-}
-
-.admonition.question > .admonition-title {
-    background-color: rgba(156, 39, 176, 0.1);
-}
-
-/* Quote admonition */
-.admonition.quote {
-    border-color: var(--md-admonition-quote-color);
-}
-
-.admonition.quote > .admonition-title {
-    background-color: rgba(158, 158, 158, 0.1);
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .md-content__inner {
-        padding: 0 8px;
-    }
-    
-    .md-typeset {
-        font-size: 14px;
-    }
-    
-    .md-typeset h1 {
-        font-size: 2em;
-    }
-    
-    .md-typeset h2 {
-        font-size: 1.75em;
-    }
-}
-        `;
-    }
-
-    /**
-     * Returns enhanced fallback CSS based on Material for MkDocs
-     * @returns CSS string
-     */
-    private getEnhancedFallbackCss(): string {
-        return `
-/* Material for MkDocs Enhanced Base Styles - Dark Theme (Slate) */
-:root {
-    --md-primary-fg-color: #82b1ff;
-    --md-primary-fg-color--light: #adc5ff;
-    --md-primary-fg-color--dark: #5a9cff;
-    --md-accent-fg-color: #ff5722;
-    
-    /* Dark theme base colors */
-    --md-default-bg-color: #1e1e1e;
-    --md-default-fg-color: rgba(255, 255, 255, 0.87);
-    --md-default-fg-color--light: rgba(255, 255, 255, 0.54);
-    --md-default-fg-color--lighter: rgba(255, 255, 255, 0.32);
-    --md-default-fg-color--lightest: rgba(255, 255, 255, 0.12);
-    
-    /* Dark theme code colors */
-    --md-code-bg-color: #2d2d2d;
-    --md-code-fg-color: #e1e1e1;
-    
-    /* Dark theme shadows */
-    --md-shadow-z1: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.4);
-    
-    /* Admonition colors for dark theme */
-    --md-admonition-fg-color: rgba(255, 255, 255, 0.87);
-    --md-admonition-bg-color: #2d2d2d;
-    --md-admonition-note-color: #82b1ff;
-    --md-admonition-tip-color: #4dd0e1;
-    --md-admonition-success-color: #66bb6a;
-    --md-admonition-warning-color: #ffb74d;
-    --md-admonition-danger-color: #ef5350;
-    --md-admonition-info-color: #26c6da;
-    --md-admonition-question-color: #ab47bc;
-    --md-admonition-quote-color: #bdbdbd;
-    --md-admonition-abstract-color: #4fc3f7;
-    --md-admonition-failure-color: #ef5350;
-    --md-admonition-bug-color: #ec407a;
-    --md-admonition-example-color: #9575cd;
-}
-
-/* Force dark theme */
-[data-md-color-scheme="slate"] {
-    --md-default-bg-color: #1e1e1e;
-    --md-default-fg-color: rgba(255, 255, 255, 0.87);
-    --md-default-fg-color--light: rgba(255, 255, 255, 0.54);
-    --md-default-fg-color--lighter: rgba(255, 255, 255, 0.32);
-    --md-default-fg-color--lightest: rgba(255, 255, 255, 0.12);
-    --md-code-bg-color: #2d2d2d;
-    --md-code-fg-color: #e1e1e1;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.6;
-    color: var(--md-default-fg-color);
-    background-color: var(--md-default-bg-color);
-    margin: 0;
-    padding: 1.25rem;
-    font-size: 0.8rem;
-}
-
-.md-content {
-    max-width: 1220px;
-    margin: 0 auto;
-}
-
-.md-content__inner {
-    padding: 0 1rem;
-}
-
-.md-typeset {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--md-default-fg-color);
-    -webkit-print-color-adjust: exact;
-    color-adjust: exact;
-}
-
-/* Enhanced Typography */
-.md-typeset h1,
-.md-typeset h2,
-.md-typeset h3,
-.md-typeset h4,
-.md-typeset h5,
-.md-typeset h6 {
-    margin: 1.25em 0 0.5em;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    color: var(--md-default-fg-color);
-    line-height: 1.25;
-}
-
-.md-typeset h1 {
-    font-size: 2rem;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-}
-
-.md-typeset h2 {
-    font-size: 1.5rem;
-    font-weight: 300;
-    letter-spacing: -0.01em;
-}
-
-.md-typeset h3 {
-    font-size: 1.25rem;
-    font-weight: 400;
-}
-
-.md-typeset h4 {
-    font-size: 1rem;
-    font-weight: 700;
-}
-
-.md-typeset h5 {
-    font-size: 0.875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.md-typeset h6 {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-/* Enhanced Code Styling */
-.md-typeset code {
-    background-color: var(--md-code-bg-color);
-    color: var(--md-code-fg-color);
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.125rem;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, "Courier New", monospace;
-    font-size: 0.85em;
-    word-break: break-word;
-    box-decoration-break: clone;
-}
-
-.md-typeset pre {
-    background-color: var(--md-code-bg-color);
-    color: var(--md-code-fg-color);
-    border-radius: 0.25rem;
-    padding: 1rem;
-    margin: 1.5em 0;
-    overflow-x: auto;
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, "Courier New", monospace;
-    font-size: 0.85em;
-    line-height: 1.4;
-    box-shadow: var(--md-shadow-z1);
-}
-
-.md-typeset pre code {
-    background-color: transparent;
-    padding: 0;
-    border-radius: 0;
-    box-decoration-break: none;
-}
-
-/* Enhanced Table Styling */
-.md-typeset table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    width: 100%;
-    margin: 1.5em 0;
-    border: 1px solid var(--md-default-fg-color--lightest);
-    border-radius: 0.25rem;
-    overflow: hidden;
-    box-shadow: var(--md-shadow-z1);
-}
-
-.md-typeset th,
-.md-typeset td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--md-default-fg-color--lightest);
-    text-align: left;
-    vertical-align: top;
-}
-
-.md-typeset th {
-    background-color: var(--md-code-bg-color);
-    font-weight: 700;
-    color: var(--md-default-fg-color);
-}
-
-.md-typeset tr:last-child td {
-    border-bottom: none;
-}
-
-/* Enhanced Links */
-.md-typeset a {
-    color: var(--md-primary-fg-color);
-    text-decoration: none;
-    word-break: break-word;
-}
-
-.md-typeset a:hover {
-    text-decoration: underline;
-    color: var(--md-primary-fg-color--light);
-}
-
-/* Enhanced Blockquotes */
-.md-typeset blockquote {
-    border-left: 0.25rem solid var(--md-default-fg-color--lighter);
-    padding-left: 1rem;
-    margin: 1.5em 0;
-    color: var(--md-default-fg-color--light);
-    font-style: italic;
-}
-
-/* Enhanced Lists */
-.md-typeset ul,
-.md-typeset ol {
-    margin: 0 0 1em;
-    padding-left: 2rem;
-}
-
-.md-typeset li {
-    margin: 0.5em 0;
-}
-
-.md-typeset li > p {
-    margin: 0.5em 0;
-}
-
-/* Enhanced Admonitions */
-.md-typeset .admonition {
-    display: block;
-    clear: both;
-    padding: 0 0.75rem;
-    margin: 1.25rem 0;
-    font-size: 0.8rem;
-    color: var(--md-admonition-fg-color);
-    background-color: var(--md-admonition-bg-color);
-    border: 0.09375rem solid #448aff;
-    border-radius: 0.25rem;
-    box-shadow: var(--md-shadow-z1);
-    transition: box-shadow 125ms;
-    page-break-inside: avoid;
-    position: relative;
-    z-index: 1;
-}
-
-.md-typeset .admonition:focus-within {
-    box-shadow: 0 0 0 0.25rem rgba(68, 138, 255, 0.1);
-}
-
-.md-typeset .admonition > * {
-    box-sizing: border-box;
-    position: relative;
-    z-index: auto;
-}
-
-.md-typeset .admonition > :last-child {
-    margin-bottom: 0.75rem;
-}
-
-.md-typeset .admonition-title {
-    position: relative;
-    padding: 0.5rem 0.75rem 0.5rem 2.5rem;
-    margin: 0 -0.75rem 0.75rem;
-    font-weight: 700;
-    background-color: rgba(68, 138, 255, 0.1);
-    border: none;
-    border-radius: 0.125rem 0.125rem 0 0;
-    display: block;
-    clear: both;
-}
-
-.md-typeset .admonition-title::before {
-    position: absolute;
-    left: 0.75rem;
-    top: 0.625rem;
-    width: 1.25rem;
-    height: 1.25rem;
-    content: "";
-    background-color: #448aff;
-    mask-repeat: no-repeat;
-    mask-position: center;
-    mask-size: contain;
-}
-
-.md-typeset .admonition-title code {
-    box-shadow: 0 0 0 0.0625rem var(--md-default-fg-color--lightest);
-}
-
-/* Force proper containment for admonitions */
-.md-typeset .admonition::after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-/* Ensure elements after admonitions are properly positioned */
-.md-typeset .admonition + * {
-    clear: both;
-    margin-top: 1rem;
-}
-
-/* Specific admonition types with proper colors */
-.md-typeset .admonition.note {
-    border-color: #448aff;
-}
-.md-typeset .admonition.note > .admonition-title {
-    background-color: rgba(68, 138, 255, 0.1);
-}
-.md-typeset .admonition.note > .admonition-title::before {
-    background-color: #448aff;
-    content: "ℹ️";
-    background: none;
-    color: #448aff;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.tip {
-    border-color: #00bfa5;
-}
-.md-typeset .admonition.tip > .admonition-title {
-    background-color: rgba(0, 191, 165, 0.1);
-}
-.md-typeset .admonition.tip > .admonition-title::before {
-    background-color: #00bfa5;
-    content: "💡";
-    background: none;
-    color: #00bfa5;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.warning {
-    border-color: #ff9100;
-}
-.md-typeset .admonition.warning > .admonition-title {
-    background-color: rgba(255, 145, 0, 0.1);
-}
-.md-typeset .admonition.warning > .admonition-title::before {
-    background-color: #ff9100;
-    content: "⚠️";
-    background: none;
-    color: #ff9100;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.danger {
-    border-color: #ff1744;
-}
-.md-typeset .admonition.danger > .admonition-title {
-    background-color: rgba(255, 23, 68, 0.1);
-}
-.md-typeset .admonition.danger > .admonition-title::before {
-    background-color: #ff1744;
-    content: "🚨";
-    background: none;
-    color: #ff1744;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.success {
-    border-color: #00c853;
-}
-.md-typeset .admonition.success > .admonition-title {
-    background-color: rgba(0, 200, 83, 0.1);
-}
-.md-typeset .admonition.success > .admonition-title::before {
-    background-color: #00c853;
-    content: "✅";
-    background: none;
-    color: #00c853;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.info {
-    border-color: #00b8d4;
-}
-.md-typeset .admonition.info > .admonition-title {
-    background-color: rgba(0, 184, 212, 0.1);
-}
-.md-typeset .admonition.info > .admonition-title::before {
-    background-color: #00b8d4;
-    content: "ℹ️";
-    background: none;
-    color: #00b8d4;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.question {
-    border-color: #64dd17;
-}
-.md-typeset .admonition.question > .admonition-title {
-    background-color: rgba(100, 221, 23, 0.1);
-}
-.md-typeset .admonition.question > .admonition-title::before {
-    background-color: #64dd17;
-    content: "❓";
-    background: none;
-    color: #64dd17;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.quote {
-    border-color: #9e9e9e;
-}
-.md-typeset .admonition.quote > .admonition-title {
-    background-color: rgba(158, 158, 158, 0.1);
-}
-.md-typeset .admonition.quote > .admonition-title::before {
-    background-color: #9e9e9e;
-    content: "💬";
-    background: none;
-    color: #9e9e9e;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.abstract {
-    border-color: #00bcd4;
-}
-.md-typeset .admonition.abstract > .admonition-title {
-    background-color: rgba(0, 188, 212, 0.1);
-}
-.md-typeset .admonition.abstract > .admonition-title::before {
-    background-color: #00bcd4;
-    content: "📋";
-    background: none;
-    color: #00bcd4;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.bug {
-    border-color: #f50057;
-}
-.md-typeset .admonition.bug > .admonition-title {
-    background-color: rgba(245, 0, 87, 0.1);
-}
-.md-typeset .admonition.bug > .admonition-title::before {
-    background-color: #f50057;
-    content: "🐛";
-    background: none;
-    color: #f50057;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.example {
-    border-color: #7c4dff;
-}
-.md-typeset .admonition.example > .admonition-title {
-    background-color: rgba(124, 77, 255, 0.1);
-}
-.md-typeset .admonition.example > .admonition-title::before {
-    background-color: #7c4dff;
-    content: "🧪";
-    background: none;
-    color: #7c4dff;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.md-typeset .admonition.failure {
-    border-color: #ff5252;
-}
-.md-typeset .admonition.failure > .admonition-title {
-    background-color: rgba(255, 82, 82, 0.1);
-}
-.md-typeset .admonition.failure > .admonition-title::before {
-    background-color: #ff5252;
-    content: "❌";
-    background: none;
-    color: #ff5252;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    body {
-        padding: 1rem;
-    }
-    
-    .md-content__inner {
-        padding: 0 0.5rem;
-    }
-    
-    .md-typeset {
-        font-size: 0.9rem;
-    }
-    
-    .md-typeset h1 {
-        font-size: 1.75rem;
-    }
-    
-    .md-typeset h2 {
-        font-size: 1.5rem;
-    }
-    
-    .md-typeset th,
-    .md-typeset td {
-        padding: 0.5rem 0.75rem;
-    }
-}
-        `;
-    }
+    // Fallback CSS methods removed - now using SCSS files from assets/css/
 
     /**
      * Gets highlight.js CSS styles optimized for dark theme
@@ -2133,158 +901,105 @@ body {
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
-
-            // Check for annotate block marker
-            if (line.includes('{ .annotate }')) {
-                isInAnnotatedBlock = true;
-                continue;
-            }
-
-            if (isInAnnotatedBlock) {
-                // Process references (1), (2), etc.
-                const referencePattern = /\((\d+)\)/g;
-                let processedLine = lines[i];
-                
-                // Collect all local IDs in this line first
-                const localIdsInLine: string[] = [];
-                let match;
-                while ((match = referencePattern.exec(lines[i])) !== null) {
-                    localIdsInLine.push(match[1]);
-                }
-                
-                // Replace local IDs with global IDs (in reverse order to avoid overlaps)
-                for (let j = localIdsInLine.length - 1; j >= 0; j--) {
-                    const localId = localIdsInLine[j];
-                    let globalId = currentBlockGlobalIds.get(localId);
-                    
-                    if (!globalId) {
-                        globalAnnotationCounter++;
-                        globalId = globalAnnotationCounter.toString();
-                        currentBlockGlobalIds.set(localId, globalId);
-                    }
-                    
-                    // Replace the specific occurrence
-                    processedLine = processedLine.replace(`(${localId})`, `(${globalId})`);
-                }
-                
-                lines[i] = processedLine;
-
-                // Check for definition lines
-                const definitionMatch = line.match(/^(\d+)\.\s+(.*)$/);
-                if (definitionMatch) {
-                    const localId = definitionMatch[1];
-                    let content = definitionMatch[2].trim();
-                    
-                    // Check for multi-line definitions (indented continuation)
-                    let j = i + 1;
-                    while (j < lines.length && lines[j].match(/^\s+/) && lines[j].trim() !== '') {
-                        content += '\n' + lines[j].trim();
-                        j++;
-                    }
-                    
-                    const globalId = currentBlockGlobalIds.get(localId);
-                    if (globalId) {
-                        const processedContent = this.processAnnotationContentForTooltip(content);
-                        annotationDefinitions.set(globalId, processedContent);
+            
+            // Process annotation definitions and matches
+            if (line.includes('--{') && line.includes('}--')) {
+                // Process annotation content
+                const annotationMatch = line.match(/--\{(.+?)\}--/g);
+                if (annotationMatch) {
+                    annotationMatch.forEach((match) => {
+                        const content = match.slice(3, -3); // Remove --{ }--
+                        const localId = content.split(':')[0];
+                        const definition = content.split(':').slice(1).join(':').trim();
                         
-                        // Hide definition lines from output
-                        lines[i] = '';
-                        for (let k = i + 1; k < j; k++) {
-                            lines[k] = '';
+                        if (definition) {
+                            const globalId = `annotation-${++globalAnnotationCounter}`;
+                            annotationDefinitions.set(localId, definition);
+                            this.globalAnnotationDefinitions.set(globalId, definition);
                         }
-                    }
-                }
-
-                // End block if we hit empty line and next line isn't a definition
-                if (line === '' && i + 1 < lines.length) {
-                    const nextLine = lines[i + 1].trim();
-                    if (!nextLine.match(/^\d+\.\s+/) && nextLine !== '') {
-                        isInAnnotatedBlock = false;
-                        currentBlockGlobalIds.clear();
-                    }
+                    });
                 }
             }
         }
-
-        this.storeAnnotationDefinitions(annotationDefinitions);
     }
 
     /**
-     * Process annotation content for tooltip display
+     * Returns enhanced fallback CSS based on Material for MkDocs
+     * @returns CSS string
      */
-    private processAnnotationContentForTooltip(content: string): string {
-        // Split into lines for processing
-        const lines = content.split('\n');
-        const processedLines: string[] = [];
+    private getEnhancedFallbackCss(): string {
+        return `
+/* Material for MkDocs Enhanced Base Styles - Dark Theme (Slate) */
+:root {
+    --md-primary-fg-color: #82b1ff;
+    --md-primary-fg-color--light: #adc5ff;
+    --md-primary-fg-color--dark: #5a9cff;
+    --md-accent-fg-color: #ff5722;
+    
+    /* Dark theme base colors */
+    --md-default-bg-color: #1e1e1e;
+    --md-default-fg-color: rgba(255, 255, 255, 0.87);
+    --md-default-fg-color--light: rgba(255, 255, 255, 0.54);
+    --md-default-fg-color--lighter: rgba(255, 255, 255, 0.32);
+    --md-default-fg-color--lightest: rgba(255, 255, 255, 0.12);
+    
+    /* Dark theme code colors */
+    --md-code-bg-color: #2d2d2d;
+    --md-code-fg-color: #e1e1e1;
+    
+    /* Dark theme shadows */
+    --md-shadow-z1: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.4);
+    
+    /* Admonition colors for dark theme */
+    --md-admonition-fg-color: rgba(255, 255, 255, 0.87);
+    --md-admonition-bg-color: #2d2d2d;
+    --md-admonition-note-color: #82b1ff;
+    --md-admonition-tip-color: #4dd0e1;
+    --md-admonition-success-color: #66bb6a;
+    --md-admonition-warning-color: #ffb74d;
+    --md-admonition-danger-color: #ef5350;
+    --md-admonition-info-color: #26c6da;
+    --md-admonition-question-color: #ab47bc;
+    --md-admonition-quote-color: #bdbdbd;
+}
 
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i].trim();
+/* Basic Typography and Layout */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--md-default-fg-color);
+    background-color: var(--md-default-bg-color);
+    margin: 0;
+    padding: 1rem;
+}
 
-            if (line === '') {
-                // Empty line becomes paragraph break
-                if (processedLines.length > 0) {
-                    processedLines.push('</p><p>');
-                }
-                continue;
-            }
+.md-typeset {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--md-default-fg-color);
+}
 
-            // Process basic markdown formatting
-            line = this.processBasicMarkdownForHTML(line);
+/* Enhanced Admonitions */
+.admonition {
+    margin: 1.5em 0;
+    padding: 0 0.75em;
+    border-left: 0.25em solid #448aff;
+    border-radius: 0.125em;
+    background-color: var(--md-admonition-bg-color);
+}
 
-            // Handle list items
-            if (line.match(/^-\s+/)) {
-                line = '<li>' + line.replace(/^-\s+/, '') + '</li>';
-                // Wrap in ul if first list item
-                if (i === 0 || !lines[i-1]?.trim().match(/^-\s+/)) {
-                    line = '<ul>' + line;
-                }
-                // Close ul if last list item
-                if (i === lines.length - 1 || !lines[i+1]?.trim().match(/^-\s+/)) {
-                    line = line + '</ul>';
-                }
-            }
+.admonition-title {
+    position: relative;
+    margin: 0 -0.75em 0.75em;
+    padding: 0.5em 0.75em;
+    font-weight: 700;
+    background-color: rgba(68, 138, 255, 0.1);
+}
 
-            processedLines.push(line);
-        }
-
-        // Wrap in paragraph if not already structured
-        let result = processedLines.join('');
-        if (!result.match(/^<(p|ul|ol|h[1-6]|div)/)) {
-            result = '<p>' + result + '</p>';
-        }
-
-        return result;
+        `;
     }
 
-    /**
-     * Process basic markdown formatting for HTML
-     */
-    private processBasicMarkdownForHTML(text: string): string {
-        // Process in order: links, code, bold, italic
 
-        // Links: [text](url)
-        text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-
-        // Inline code: `code`
-        text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-        // Bold: **text**
-        text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-
-        // Italic: *text*
-        text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-
-        return text;
-    }
-
-    /**
-     * Store annotation definitions globally
-     */
-    private storeAnnotationDefinitions(definitions: Map<string, string>): void {
-        definitions.forEach((content, id) => {
-            this.globalAnnotationDefinitions.set(id, content);
-        });
-    }
 
     /**
      * Replace annotation references with Material for MkDocs HTML structure

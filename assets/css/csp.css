@@ -1,0 +1,158 @@
+/* Confluence Smart Publisher specific styles */
+
+/* Enhanced styles for CommonMark compliance */
+.md-typeset table {
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    width: 100%;
+}
+
+.md-typeset table th,
+.md-typeset table td {
+    border: 1px solid var(--md-default-fg-color--lighter);
+    padding: 0.75em;
+    text-align: left;
+}
+
+.md-typeset table th {
+    background-color: var(--md-default-fg-color--lightest);
+    font-weight: bold;
+}
+
+/* Better list styling for CommonMark compliance */
+.md-typeset ul,
+.md-typeset ol {
+    margin: 1em 0;
+    padding-left: 2em;
+}
+
+.md-typeset li {
+    margin: 0.25em 0;
+}
+
+.md-typeset li > p {
+    margin: 0.5em 0;
+}
+
+/* Enhanced code block styling with syntax highlighting */
+.md-typeset pre {
+    margin: 1.5em 0;
+    overflow-x: auto;
+    border-radius: 0.25rem;
+    background-color: var(--md-code-bg-color, #2d3748) !important;
+}
+
+.md-typeset pre.hljs {
+    padding: 1em;
+    line-height: 1.5;
+    font-family: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    font-size: 0.85em;
+}
+
+.md-typeset code {
+    background-color: var(--md-code-bg-color, #2d3748);
+    color: var(--md-code-fg-color, #e2e8f0);
+    padding: 0.1em 0.4em;
+    border-radius: 0.1rem;
+    font-size: 0.85em;
+    font-family: 'SFMono-Regular', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+}
+
+/* Ensure highlighted code blocks have proper contrast */
+.md-typeset pre code.hljs {
+    background: transparent;
+    padding: 0;
+}
+
+/* Custom tooltip for footnotes */
+.footnote-tooltip {
+    background-color: var(--md-default-bg-color);
+    border: 1px solid var(--md-default-fg-color--lighter);
+    border-radius: 0.25rem;
+    box-shadow: 0 0.2rem 0.5rem rgba(0,0,0,0.3);
+    color: var(--md-default-fg-color);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    max-width: 20rem;
+    padding: 0.75rem;
+    position: absolute;
+    z-index: 1000;
+}
+
+.footnote-tooltip p,
+.md-tooltip__inner p {
+    margin: 0 0 0.5rem 0;
+}
+
+.footnote-tooltip p:last-child,
+.md-tooltip__inner p:last-child {
+    margin-bottom: 0;
+}
+
+.footnote-tooltip ul,
+.footnote-tooltip ol,
+.md-tooltip__inner ul,
+.md-tooltip__inner ol {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.footnote-tooltip li,
+.md-tooltip__inner li {
+    margin: 0.25rem 0;
+}
+
+.footnote-tooltip code,
+.md-tooltip__inner code {
+    background-color: var(--md-code-bg-color);
+    color: var(--md-code-fg-color);
+    font-size: 0.75rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.1rem;
+}
+
+.footnote-tooltip a,
+.md-tooltip__inner a {
+    color: var(--md-primary-fg-color);
+    text-decoration: none;
+}
+
+.footnote-tooltip a:hover,
+.md-tooltip__inner a:hover {
+    color: var(--md-accent-fg-color);
+    text-decoration: underline;
+}
+
+.footnote-tooltip strong,
+.md-tooltip__inner strong {
+    font-weight: 600;
+}
+
+.footnote-tooltip em,
+.md-tooltip__inner em {
+    font-style: italic;
+}
+
+.footnote-tooltip blockquote,
+.md-tooltip__inner blockquote {
+    border-left: 2px solid var(--md-default-fg-color--lighter);
+    margin: 0.5rem 0;
+    padding-left: 0.75rem;
+    font-style: italic;
+}
+
+.footnote-tooltip pre,
+.md-tooltip__inner pre {
+    background-color: var(--md-code-bg-color);
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    overflow-x: auto;
+    font-size: 0.7rem;
+}
+
+.footnote-tooltip hr,
+.md-tooltip__inner hr {
+    border: none;
+    border-top: 1px solid var(--md-default-fg-color--lighter);
+    margin: 0.75rem 0;
+}
