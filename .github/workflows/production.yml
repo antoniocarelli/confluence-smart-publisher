@@ -1,41 +1,41 @@
-name: Production
+# name: Production
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-permissions:
-  contents: write
+# permissions:
+#   contents: write
 
-jobs:
-  build-and-publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+# jobs:
+#   build-and-publish:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18'
           
-      - name: Install dependencies
-        run: npm install
+#       - name: Install dependencies
+#         run: npm install
         
-      - name: Install vsce and ovsx
-        run: |
-          npm install -g @vscode/vsce
-          npm install -g ovsx
+#       - name: Install vsce and ovsx
+#         run: |
+#           npm install -g @vscode/vsce
+#           npm install -g ovsx
         
-      - name: Publish to VS Code Marketplace
-        run: npx @vscode/vsce publish
-        continue-on-error: true
-        env:
-          VSCE_PAT: ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
+#       - name: Publish to VS Code Marketplace
+#         run: npx @vscode/vsce publish
+#         continue-on-error: true
+#         env:
+#           VSCE_PAT: ${{ secrets.VSCODE_MARKETPLACE_TOKEN }}
           
-      - name: Publish to Open VSX Registry
-        run: npx ovsx publish
-        env:
-          OVSX_PAT: ${{ secrets.OPEN_VSX_TOKEN }}
+#       - name: Publish to Open VSX Registry
+#         run: npx ovsx publish
+#         env:
+#           OVSX_PAT: ${{ secrets.OPEN_VSX_TOKEN }}

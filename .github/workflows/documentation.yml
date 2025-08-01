@@ -1,58 +1,58 @@
-# Nome do Workflow
-name: Build and Deploy Documentation to GitHub Pages
+# # Nome do Workflow
+# name: Build and Deploy Documentation to GitHub Pages
 
-# Acionadores: o workflow é executado em pushes para os ramos 'main' ou 'preview'
-on:
-  push:
-    branches:
-      - main
-      - preview
+# # Acionadores: o workflow é executado em pushes para os ramos 'main' ou 'preview'
+# on:
+#   push:
+#     branches:
+#       - main
+#       - preview
 
-# Permissões necessárias para que a Ação possa escrever no ramo gh-pages
-permissions:
-  contents: write
+# # Permissões necessárias para que a Ação possa escrever no ramo gh-pages
+# permissions:
+#   contents: write
 
-jobs:
-  deploy-docs:
-    runs-on: ubuntu-latest
-    steps:
-      # 1. Faz o checkout do código do ramo que acionou o workflow
-      - name: Checkout code
-        uses: actions/checkout@v4
+# jobs:
+#   deploy-docs:
+#     runs-on: ubuntu-latest
+#     steps:
+#       # 1. Faz o checkout do código do ramo que acionou o workflow
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      # 2. Instala o pandoc
-      - name: Install pandoc
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pandoc
+#       # 2. Instala o pandoc
+#       - name: Install pandoc
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y pandoc
 
-      # 3. Constrói os ficheiros HTML a partir do Markdown
-      - name: Build HTML from Markdown
-        run: |
-          # Cria o diretório de saída
-          mkdir build
+#       # 3. Constrói os ficheiros HTML a partir do Markdown
+#       - name: Build HTML from Markdown
+#         run: |
+#           # Cria o diretório de saída
+#           mkdir build
 
-          # Converte README.md para index.html (página principal)
-          # A flag --standalone cria um ficheiro HTML completo
-          pandoc README.md --standalone -o build/index.html
+#           # Converte README.md para index.html (página principal)
+#           # A flag --standalone cria um ficheiro HTML completo
+#           pandoc README.md --standalone -o build/index.html
 
-          # Cria a subpasta para os outros documentos
-          mkdir build/docs
+#           # Cria a subpasta para os outros documentos
+#           mkdir build/docs
 
-          # Converte cada ficheiro .md dentro da pasta /docs para .html
-          for file in docs/*.md; do
-            filename=$(basename "$file" .md)
-            pandoc "$file" --standalone -o "build/docs/$filename.html"
-          done
+#           # Converte cada ficheiro .md dentro da pasta /docs para .html
+#           for file in docs/*.md; do
+#             filename=$(basename "$file" .md)
+#             pandoc "$file" --standalone -o "build/docs/$filename.html"
+#           done
           
-          # ✅ PASSO CRÍTICO: Corrige os links internos nos ficheiros HTML gerados
-          # Procura todos os ficheiros .html e substitui as referências a ".md" por ".html"
-          find build -type f -name "*.html" -exec sed -i 's/\.md/\.html/g' {} +
+#           # ✅ PASSO CRÍTICO: Corrige os links internos nos ficheiros HTML gerados
+#           # Procura todos os ficheiros .html e substitui as referências a ".md" por ".html"
+#           find build -type f -name "*.html" -exec sed -i 's/\.md/\.html/g' {} +
 
-      # 4. Publica as páginas
-      - name: Deploy
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/preview'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+#       # 4. Publica as páginas
+#       - name: Deploy
+#         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/preview'
+#         uses: peaceiris/actions-gh-pages@v4
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./build
