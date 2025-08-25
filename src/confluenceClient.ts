@@ -24,6 +24,65 @@ export enum BodyFormat {
     ANONYMOUS_EXPORT_VIEW = 'anonymous_export_view',
 }
 
+export interface Page {
+    id: string;
+    status: string;
+    title: string;
+    spaceId: string;
+    parentId: string;
+    parentType: string;
+    position: number;
+    authorId: string;
+    ownerId: string;
+    lastOwnerId: string;
+    subtype: string;
+    createdAt: string;
+    version: {
+        createdAt: string;
+        message: string;
+        number: number;
+        minorEdit: boolean;
+        authorId: string;
+    };
+    body: {
+        storage?: {
+            value: string;
+            representation: string;
+        };
+        atlas_doc_format?: {
+            value: any;
+            representation: string;
+        };
+    };
+    _links: {
+        webui: string;
+        editui: string;
+        tinyui: string;
+    };
+}
+
+export interface MultiEntityResult<T> {
+    results: T[];
+    _links: {
+        next?: string;
+        base: string;
+    };
+}
+
+export interface Space {
+    id: string;
+    key: string;
+    name: string;
+    type: string;
+    status: string;
+    authorId: string;
+    createdAt: string;
+    homepageId: string;
+    _links: {
+        webui: string;
+    };
+}
+
 export class ConfluenceClient {
     private baseUrl: string;
     private username: string;
@@ -54,6 +113,53 @@ export class ConfluenceClient {
         return data.results?.[0] || null;
     }
 
+    async getSpaceByKey(spaceKey: string): Promise<Space | null> {
+        const { default: fetch } = await import('node-fetch');
+
+        const url = `${this.baseUrl}/api/v2/spaces?keys=${encodeURIComponent(spaceKey)}`;
+        const resp = await fetch(url, { headers: { ...this.getAuthHeader(), 'Content-Type': 'application/json' } });
+        if (!resp.ok) {
+            throw new Error(`Failed to fetch space by key: ${await resp.text()}`);
+        }
+        const data = await resp.json() as MultiEntityResult<Space>;
+        return data.results?.[0] || null;
+    }
+
+
+    async getPagesInSpace(spaceId: string, bodyFormat: BodyFormat = BodyFormat.ATLAS_DOC_FORMAT, limit: number = 200): Promise<Page[]> {
+        const { default: fetch } = await import('node-fetch');
+        let allPages: Page[] = [];
+        let cursor: string | undefined;
+        let hasMore = true;
+
+        while (hasMore) {
+            let url = `${this.baseUrl}/api/v2/spaces/${spaceId}/pages?body-format=${bodyFormat}&limit=${limit}`;
+            if (cursor) {
+                url += `&cursor=${cursor}`;
+            }
+            const resp = await fetch(url, { headers: { ...this.getAuthHeader(), 'Content-Type': 'application/json' } });
+            if (resp.status === 404) {
+                return [];
+            }
+            if (!resp.ok) {
+                throw new Error(`Failed to fetch pages: ${await resp.text()}`);
+            }
+            const data = await resp.json() as MultiEntityResult<Page>;
+            allPages = allPages.concat(data.results);
+
+            const linkHeader = resp.headers.get('Link');
+            const nextLinkMatch = linkHeader ? linkHeader.match(/<([^>]+)>; rel="next"/) : null;
+            if (nextLinkMatch && nextLinkMatch[1]) {
+                const nextUrl = new URL(nextLinkMatch[1], this.baseUrl);
+                cursor = nextUrl.searchParams.get('cursor') || undefined;
+                hasMore = !!cursor;
+            } else {
+                hasMore = false;
+            }
+        }
+        return allPages;
+    }
+
     async getPageById(pageId: string, bodyFormat: BodyFormat = BodyFormat.ATLAS_DOC_FORMAT): Promise<any | null> {
         const { default: fetch } = await import('node-fetch');
         const url = `${this.baseUrl}/api/v2/pages/${pageId}?body-format=${bodyFormat}`;
@@ -61,6 +167,73 @@ export class ConfluenceClient {
         if (resp.status === 404) {return null;}
         if (!resp.ok) {throw new Error(await resp.text());}
         return await resp.json() as any;
+    }
+
+    /**
+     * Get child pages of a given parent page
+     * @param parentId The ID of the parent page
+     * @param bodyFormat The body format to retrieve
+     * @returns Array of child pages
+     */
+    async getChildPages(parentId: string, bodyFormat: BodyFormat = BodyFormat.ATLAS_DOC_FORMAT): Promise<Page[]> {
+        const { default: fetch } = await import('node-fetch');
+        const url = `${this.baseUrl}/api/v2/pages/${parentId}/children?body-format=${bodyFormat}`;
+        const resp = await fetch(url, { headers: { ...this.getAuthHeader(), 'Content-Type': 'application/json' } });
+        if (resp.status === 404) {
+            return [];
+        }
+        if (!resp.ok) {
+            throw new Error(`Failed to fetch child pages: ${await resp.text()}`);
+        }
+        const data = await resp.json() as MultiEntityResult<Page>;
+        return data.results || [];
+    }
+
+    /**
+     * Get the complete hierarchy path for a page (all parent pages)
+     * @param pageId The ID of the page
+     * @returns Array of parent pages from root to immediate parent
+     */
+    async getPageHierarchy(pageId: string): Promise<Page[]> {
+        const hierarchy: Page[] = [];
+        let currentPageId = pageId;
+
+        while (currentPageId) {
+            const page = await this.getPageById(currentPageId);
+            if (!page) {
+                break;
+            }
+            
+            hierarchy.unshift(page); // Add to beginning to maintain root->child order
+            
+            // Get parent ID for next iteration
+            currentPageId = page.parentId || '';
+        }
+
+        return hierarchy;
+    }
+
+    /**
+     * Search for pages by title across all spaces or within a specific space
+     * @param title The title to search for
+     * @param spaceKey Optional space key to limit search
+     * @returns Array of matching pages
+     */
+    async searchPagesByTitle(title: string, spaceKey?: string): Promise<Page[]> {
+        const { default: fetch } = await import('node-fetch');
+        
+        let url = `${this.baseUrl}/api/v2/pages?title=${encodeURIComponent(title)}`;
+        if (spaceKey) {
+            url += `&spaceKey=${encodeURIComponent(spaceKey)}`;
+        }
+        
+        const resp = await fetch(url, { headers: { ...this.getAuthHeader(), 'Content-Type': 'application/json' } });
+        if (!resp.ok) {
+            throw new Error(`Failed to search pages: ${await resp.text()}`);
+        }
+        
+        const data = await resp.json() as MultiEntityResult<Page>;
+        return data.results || [];
     }
 
     async downloadConfluencePage(pageId: string, bodyFormat: BodyFormat = BodyFormat.ATLAS_DOC_FORMAT, outputDir: string = 'Downloaded'): Promise<string> {

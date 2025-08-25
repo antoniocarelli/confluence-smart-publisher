@@ -7,6 +7,7 @@ import { MarkdownConverter } from './markdownConverter';
 import { AdfToMarkdownConverter } from './adf-md-converter/adf-to-md-converter';
 import { createXMLCSPBlock, createYAMLCSPBlock } from './csp-utils';
 import { PreviewPanel } from './preview/PreviewPanel';
+import { FileOrganizer } from './file-organizer';
 
 export function registerCommands(context: vscode.ExtensionContext, outputChannel: vscode.OutputChannel) {
     // Command to publish .confluence file
@@ -518,6 +519,144 @@ ${markdown.trim()}
         }
     });
 
+    // Command to download all pages from a space
+    const downloadAllSpacePagesCmd = vscode.commands.registerCommand('confluence-smart-publisher.downloadAllSpacePages', async (uri: vscode.Uri) => {
+        if (!uri || !uri.fsPath) {
+            vscode.window.showErrorMessage('Select a folder to save the pages.');
+            return;
+        }
+        const stat = await vscode.workspace.fs.stat(uri);
+        if (stat.type !== vscode.FileType.Directory) {
+            vscode.window.showErrorMessage('Select a folder to save the pages.');
+            return;
+        }
+
+        const spaceKey = await vscode.window.showInputBox({ prompt: 'Enter the Confluence Space Key', ignoreFocusOut: true });
+        if (!spaceKey) {
+            vscode.window.showWarningMessage('Space Key not provided.');
+            return;
+        }
+
+        try {
+            await vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: 'Fetching space details...',
+                cancellable: false
+            }, async (progress) => {
+                outputChannel.appendLine(`[Download All Pages] Fetching details for Space Key: ${spaceKey}`);
+                const client = new ConfluenceClient();
+                const space = await client.getSpaceByKey(spaceKey);
+
+                if (!space) {
+                    vscode.window.showErrorMessage(`Space with key "${spaceKey}" not found or you don't have permissions.`);
+                    outputChannel.appendLine(`[Download All Pages] Space with key "${spaceKey}" not found.`);
+                    return;
+                }
+
+                const spaceId = space.id;
+                const spaceName = space.name;
+
+                progress.report({ message: `Downloading pages from space "${spaceName}"...`, increment: 0 });
+                outputChannel.appendLine(`[Download All Pages] Starting download for Space: "${spaceName}" (ID: ${spaceId})`);
+                
+                const pages = await client.getPagesInSpace(spaceId, BodyFormat.ATLAS_DOC_FORMAT);
+
+                if (pages.length === 0) {
+                    vscode.window.showInformationMessage(`No pages found in space "${spaceName}".`);
+                    outputChannel.appendLine(`[Download All Pages] No pages found in space "${spaceName}".`);
+                    return;
+                }
+
+                let completedDownloads = 0;
+                for (const page of pages) {
+                    const pageTitle = page.title || `Page_${page.id}`;
+                    progress.report({ message: `Downloading "${pageTitle}"...`, increment: (100 / pages.length) });
+                    try {
+                        const filePath = await client.downloadConfluencePage(page.id, BodyFormat.ATLAS_DOC_FORMAT, uri.fsPath);
+                        outputChannel.appendLine(`[Download All Pages] Downloaded and converted "${pageTitle}" to: "${filePath}"`);
+                        completedDownloads++;
+                    } catch (pageError: any) {
+                        outputChannel.appendLine(`[Download All Pages] Error downloading page "${pageTitle}" (ID: ${page.id}): ${pageError.message || pageError}`);
+                        vscode.window.showWarningMessage(`Could not download page "${pageTitle}". See output channel for details.`);
+                    }
+                }
+                outputChannel.appendLine(`[Download All Pages] Completed downloading ${completedDownloads} of ${pages.length} pages from space "${spaceName}".`);
+                vscode.window.showInformationMessage(`Completed downloading ${completedDownloads} of ${pages.length} pages from space "${spaceName}".`);
+            });
+        } catch (e: any) {
+            outputChannel.appendLine(`[Download All Pages] Error: ${e.message || e}`);
+            outputChannel.show(true);
+            vscode.window.showErrorMessage(`Error downloading all pages: ${e.message || e}`);
+        }
+    });
+
+    // Command to organize files based on Confluence page hierarchy
+    const organizeFilesCmd = vscode.commands.registerCommand('confluence-smart-publisher.organizeFiles', async (uri: vscode.Uri) => {
+        if (!uri || !uri.fsPath) {
+            vscode.window.showErrorMessage('Select a folder to organize files.');
+            return;
+        }
+        
+        const stat = await vscode.workspace.fs.stat(uri);
+        if (stat.type !== vscode.FileType.Directory) {
+            vscode.window.showErrorMessage('Select a folder to organize files.');
+            return;
+        }
+
+        // Ask user if they want to limit search to a specific space
+        const limitToSpace = await vscode.window.showQuickPick(['Yes', 'No'], {
+            placeHolder: 'Limit search to a specific Confluence space?',
+            ignoreFocusOut: true
+        });
+
+        let spaceKey: string | undefined;
+        if (limitToSpace === 'Yes') {
+            spaceKey = await vscode.window.showInputBox({ 
+                prompt: 'Enter the Confluence Space Key (optional)', 
+                ignoreFocusOut: true 
+            });
+            if (spaceKey === '') {
+                spaceKey = undefined; // Treat empty string as no space key
+            }
+        }
+
+        try {
+            await vscode.window.withProgress({
+                location: vscode.ProgressLocation.Notification,
+                title: 'Organizing files based on Confluence hierarchy...',
+                cancellable: false
+            }, async (progress) => {
+                outputChannel.appendLine(`[Organize Files] Starting organization of folder: ${uri.fsPath}`);
+                if (spaceKey) {
+                    outputChannel.appendLine(`[Organize Files] Limiting search to space: ${spaceKey}`);
+                }
+
+                const organizer = new FileOrganizer(outputChannel);
+                const result = await organizer.organizeFiles(uri.fsPath, spaceKey);
+
+                // Show results
+                if (result.success) {
+                    const message = result.summary;
+                    vscode.window.showInformationMessage(message);
+                    outputChannel.appendLine(`[Organize Files] Organization completed: ${message}`);
+                    
+                    // Show detailed results if there were errors
+                    if (result.errors.length > 0) {
+                        outputChannel.show(true);
+                        vscode.window.showWarningMessage(`${result.errors.length} errors occurred during organization. Check the output channel for details.`);
+                    }
+                } else {
+                    vscode.window.showErrorMessage(`Organization failed: ${result.errors.join(', ')}`);
+                    outputChannel.show(true);
+                }
+            });
+        } catch (e: any) {
+            outputChannel.appendLine(`[Organize Files] Error: ${e.message || e}`);
+            outputChannel.show(true);
+            vscode.window.showErrorMessage(`Error organizing files: ${e.message || e}`);
+        }
+    });
+
     // Register all commands
     context.subscriptions.push(
         publishCmd,
@@ -530,6 +669,8 @@ ${markdown.trim()}
         decodeHtmlCmd,
         convertMarkdownCmd,
         convertConfluenceToMarkdownCmd,
-        previewCmd
+        previewCmd,
+        downloadAllSpacePagesCmd,
+        organizeFilesCmd
     );
 } 

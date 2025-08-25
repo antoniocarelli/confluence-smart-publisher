@@ -2,6 +2,32 @@
 
 All notable changes to the "confluence-smart-publisher" extension will be documented in this file.
 
+## [0.4.4] - 2025-01-27
+### Major New Feature: File Organization by Confluence Hierarchy
+- **📁 Smart File Organization**: New command to automatically organize downloaded Confluence files into folders that mirror the original page hierarchy
+- **🔍 Intelligent Page Matching**: Uses Confluence API to match local files with their corresponding pages by title
+- **🌳 Hierarchy Preservation**: Creates folder structure based on parent-child relationships from Confluence
+- **🔄 Batch Processing**: Processes files in batches to avoid overwhelming the Confluence API
+- **🎯 Flexible Matching**: Implements smart matching algorithms to handle variations between file names and page titles
+- **⚡ Progress Tracking**: Real-time progress updates and detailed logging in the output channel
+- **🛡️ Error Handling**: Comprehensive error handling for API failures, file system issues, and conflicts
+- **🎛️ Space Filtering**: Optional space key filtering to limit search scope and improve performance
+- **📋 Context Menu Integration**: New "Organize Files by Confluence Hierarchy" command available in explorer context menu
+
+#### Technical Implementation
+- **New API Methods**: Added `getChildPages()`, `getPageHierarchy()`, and `searchPagesByTitle()` to ConfluenceClient
+- **FileOrganizer Class**: New `src/file-organizer.ts` with complete organization logic
+- **Command Integration**: Added `confluence-smart-publisher.organizeFiles` command with user-friendly prompts
+- **Package Configuration**: Updated package.json with new command and menu entries
+- **Type Safety**: Full TypeScript implementation with proper interfaces and error handling
+
+#### User Experience
+- **Simple Workflow**: Right-click any folder → "Organize Files by Confluence Hierarchy"
+- **Optional Space Filtering**: Choose to limit search to specific Confluence space for better performance
+- **Clear Feedback**: Progress notifications and detailed results summary
+- **Conflict Resolution**: Handles file name conflicts gracefully with clear error reporting
+- **Preservation**: Files that can't be matched remain in their original location
+
 ## [0.4.3] - 2025-07-29
 ### MAJOR: Custom Admonition Implementation
 - **🔧 Replaced External Dependency**: Removed `markdown-it-admonition` dependency and implemented custom admonition plugin

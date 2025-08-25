@@ -2,7 +2,7 @@
   "name": "confluence-smart-publisher",
   "displayName": "Confluence Smart Publisher",
   "description": "Publish and manage Confluence pages directly from VS Code",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "icon": "images/csp-icon.png",
   "engines": {
     "vscode": "^1.99.0"
@@ -57,6 +57,14 @@
       {
         "command": "confluence-smart-publisher.preview",
         "title": "Open Markdown Preview"
+      },
+      {
+        "command": "confluence-smart-publisher.downloadAllSpacePages",
+        "title": "Download All Space Pages"
+      },
+      {
+        "command": "confluence-smart-publisher.organizeFiles",
+        "title": "Organize Files by Confluence Hierarchy"
       }
     ],
     "submenus": [
@@ -117,6 +125,14 @@
         {
           "command": "confluence-smart-publisher.preview",
           "when": "resourceExtname == .md"
+        },
+        {
+          "command": "confluence-smart-publisher.downloadAllSpacePages",
+          "when": "explorerResourceIsFolder == true"
+        },
+        {
+          "command": "confluence-smart-publisher.organizeFiles",
+          "when": "explorerResourceIsFolder == true"
         }
       ]
     },

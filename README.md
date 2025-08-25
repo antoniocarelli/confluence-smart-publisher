@@ -107,6 +107,7 @@ Enhanced support for **Material for MkDocs** format conversion with **CommonMark
 - **Smart snippets**: Automatic suggestions of XML code blocks for custom tags, with completion of required and optional attributes, speeding up document writing. Just type `csp` and the options will appear like magic! [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/smart-snippets)
 - **Html Entities Decode**: Automatic conversion of HTML entities to special characters when downloading pages. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/decode-html)
 - **Set title emoji**: Easily add emojis to your page titles directly in VSCode. [📚 Documentation](https://antoniocarelli.github.io/confluence-smart-publisher/docs/set-title-emoji)
+- **📁 Organize Files by Confluence Hierarchy**: Automatically organize downloaded Confluence files into folders that mirror the original page hierarchy. Perfect for managing large collections of downloaded pages. [📚 Documentation](docs/organize-files-feature.md)
 
 > All commands are available in the "Confluence Smart Publisher" submenu when you right-click on a `.confluence` file, an `.md` file, or any folder.
 
